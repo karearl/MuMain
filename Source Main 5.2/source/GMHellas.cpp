@@ -884,7 +884,7 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
     case MONSTER_SCHRIKER_6:
     case MONSTER_SCHRIKER_7:
         OpenMonsterModel(MONSTER_MODEL_SHRIKER);
-        c = CreateCharacter(Key, MODEL_SHRIKER, PositionX, PositionY);
+        c = CreateCharacter(Key, MODEL_SCHRIKER, PositionX, PositionY);
         c->Weapon[0].Type = MODEL_DOUBLE_BLADE;
         c->Weapon[0].Level = 0;
         c->Weapon[1].Type = MODEL_DOUBLE_BLADE;
@@ -900,7 +900,7 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
     case MONSTER_ILLUSION_OF_KUNDUN_5:
     case MONSTER_ILLUSION_OF_KUNDUN_6:
         OpenMonsterModel(MONSTER_MODEL_SHRIKER);
-        c = CreateCharacter(Key, MODEL_SHRIKER, PositionX, PositionY);
+        c = CreateCharacter(Key, MODEL_SCHRIKER, PositionX, PositionY);
         c->Weapon[0].Type = MODEL_DOUBLE_BLADE;
         c->Weapon[0].Level = 0;
         c->Weapon[1].Type = MODEL_DOUBLE_BLADE;
@@ -947,7 +947,7 @@ bool    SettingHellasMonsterLinkBone(CHARACTER* c, int Type)
         c->Weapon[0].LinkBone = 60;
         c->Weapon[1].LinkBone = 60;
         return true;
-    case MODEL_SHRIKER:
+    case MODEL_SCHRIKER:
         c->Weapon[0].LinkBone = 41;
         c->Weapon[1].LinkBone = 51;
         return true;
@@ -1462,7 +1462,7 @@ bool MoveHellasMonsterVisual(OBJECT* o, BMD* b)
         o->BlendMeshLight = sinf(WorldTime * 0.001f) * 0.7f + 0.3f;
         return true;
 
-    case MODEL_SHRIKER:
+    case MODEL_SCHRIKER:
         if (o->CurrentAction != MONSTER01_DIE)
         {
             if (rand_fps_check(2))
@@ -1931,7 +1931,7 @@ bool RenderHellasMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
         }
         return true;
 
-    case MODEL_SHRIKER:
+    case MODEL_SCHRIKER:
         if (o->CurrentAction != MONSTER01_DIE)
         {
             vec3_t Pos1, Pos2;
@@ -2210,7 +2210,7 @@ bool RenderHellasMonsterObjectMesh(OBJECT* o, BMD* b)
         b->RenderMesh(0, RENDER_CHROME | RENDER_BRIGHT, 0.8f, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
         success = true;
     }
-    else if (o->Type == MODEL_SHRIKER)
+    else if (o->Type == MODEL_SCHRIKER)
     {
         if (o->CurrentAction == MONSTER01_DIE)
         {

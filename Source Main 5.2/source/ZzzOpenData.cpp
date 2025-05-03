@@ -2041,9 +2041,9 @@ void OpenNpc(int Type)
         gLoadData.AccessModel(MODEL_NPC_QUARREL, L"Data\\Npc\\", L"WereQuarrel");
         gLoadData.OpenTexture(MODEL_NPC_QUARREL, L"Monster\\");
         break;
-    case MODEL_NPC_CASTEL_GATE:
-        gLoadData.AccessModel(MODEL_NPC_CASTEL_GATE, L"Data\\Npc\\", L"cry2doorhead");
-        gLoadData.OpenTexture(MODEL_NPC_CASTEL_GATE, L"Npc\\");
+    case MODEL_NPC_CASTLE_GATE:
+        gLoadData.AccessModel(MODEL_NPC_CASTLE_GATE, L"Data\\Npc\\", L"cry2doorhead");
+        gLoadData.OpenTexture(MODEL_NPC_CASTLE_GATE, L"Npc\\");
         break;
     case MODEL_CURSEDTEMPLE_ENTER_NPC:
         gLoadData.AccessModel(MODEL_CURSEDTEMPLE_ENTER_NPC, L"Data\\Npc\\", L"mirazu");
@@ -2307,7 +2307,7 @@ void DeleteMonsters()
         ReleaseBuffer(i);
 }
 
-void OpenMonsterModel(EMonsterModelType Type)
+void OpenMonsterModel(int Type) // EMonsterModelType
 {
     g_ErrorReport.Write(L"OpenMonsterModel(%d)\r\n", Type);
 
