@@ -3,7 +3,7 @@ void OpenTextData();
 void DeleteNpcs();
 void OpenNpc(int Type);
 void DeleteMonsters();
-void OpenMonsterModel(EMonsterModelType Type);
+void OpenMonsterModel(int Type); // EMonsterModelType
 
 void OpenModel(int Type, wchar_t* Dir, wchar_t* ModelFileName, ...);
 void OpenInterfaceData();

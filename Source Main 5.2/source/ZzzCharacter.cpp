@@ -62,6 +62,11 @@
 CHARACTER* CharactersClient;
 CHARACTER CharacterView;
 CHARACTER* Hero;
+
+MonsterConfigData g_MonsterConfig[MAX_MONSTER_TYPE_INDEX];
+std::unordered_map<int, int> g_CharacterKeyToIndexMap;
+std::vector<int> g_FreeCharacterIndices;
+
 Script_Skill MonsterSkill[MODEL_MONSTER_END];
 extern CKanturuDirection KanturuDirection;
 float g_fBoneSave[10][3][4];
@@ -3723,7 +3728,7 @@ void CreateWeaponBlur(CHARACTER* c, OBJECT* o, BMD* b)
                     Level = 99;
                 }
             }
-            else if (o->Type == MODEL_SHRIKER)
+            else if (o->Type == MODEL_SCHRIKER)
             {
                 if (o->CurrentAction >= MONSTER01_ATTACK1 && o->CurrentAction <= MONSTER01_ATTACK2)
                 {
@@ -3804,7 +3809,7 @@ void CreateWeaponBlur(CHARACTER* c, OBJECT* o, BMD* b)
             }
 
             if ((o->Type != MODEL_PLAYER || Type == MODEL_KATACHE || Type == MODEL_GLADIUS || Type == MODEL_SWORD_OF_SALAMANDER || Type == MODEL_LEGENDARY_SWORD || Type == MODEL_SERPENT_SPEAR)
-                && o->Type != MODEL_AEGIS && o->Type != MODEL_DEATH_CENTURION && o->Type != MODEL_SHRIKER
+                && o->Type != MODEL_AEGIS && o->Type != MODEL_DEATH_CENTURION && o->Type != MODEL_SCHRIKER
                 )
             {
                 b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], Pos1, p, true);
@@ -11065,7 +11070,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         }
     }
     break;
-    case MODEL_NPC_CASTEL_GATE:
+    case MODEL_NPC_CASTLE_GATE:
     {
         vec3_t vPos, vRelative;
         float fLumi, fScale;
@@ -11860,39 +11865,7 @@ void CreateCharacterPointer(CHARACTER* c, int Type, unsigned char PositionX, uns
     }
 }
 
-CHARACTER* CreateCharacter(int Key, int Type, unsigned char PositionX, unsigned char PositionY, float Rotation)
-{
-    for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
-    {
-        CHARACTER* c = &CharactersClient[i];
-        OBJECT* o = &c->Object;
-        if (o->Live && c->Key == Key)
-        {
-            CreateCharacterPointer(c, Type, PositionX, PositionY, Rotation);
-            g_CharacterClearBuff(o);
-            return c;
-        }
-    }
 
-    for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
-    {
-        CHARACTER* c = &CharactersClient[i];
-        OBJECT* o = &c->Object;
-        if (!o->Live)
-        {
-            BoneManager::UnregisterBone(c);
-            DeletePet(c);
-            DeleteCloth(c, o);
-            DeleteParts(c);
-            CreateCharacterPointer(c, Type, PositionX, PositionY, Rotation);
-            g_CharacterClearBuff(o);
-            c->Key = Key;
-            return c;
-        }
-    }
-
-    return &CharactersClient[MAX_CHARACTERS_CLIENT];
-}
 
 void SetCharacterScale(CHARACTER* c)
 {
@@ -12211,7 +12184,39 @@ CHARACTER* FindCharacterByID(wchar_t* szName)
     return NULL;
 }
 
+CHARACTER* CreateCharacter(int Key, int Type, unsigned char PositionX, unsigned char PositionY, float Rotation)
+{
+    for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
+    {
+        CHARACTER* c = &CharactersClient[i];
+        OBJECT* o = &c->Object;
+        if (o->Live && c->Key == Key)
+        {
+            CreateCharacterPointer(c, Type, PositionX, PositionY, Rotation);
+            g_CharacterClearBuff(o);
+            return c;
+        }
+    }
 
+    for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
+    {
+        CHARACTER* c = &CharactersClient[i];
+        OBJECT* o = &c->Object;
+        if (!o->Live)
+        {
+            BoneManager::UnregisterBone(c);
+            DeletePet(c);
+            DeleteCloth(c, o);
+            DeleteParts(c);
+            CreateCharacterPointer(c, Type, PositionX, PositionY, Rotation);
+            g_CharacterClearBuff(o);
+            c->Key = Key;
+            return c;
+        }
+    }
+
+    return &CharactersClient[MAX_CHARACTERS_CLIENT];
+}
 
 CHARACTER* FindCharacterByKey(int Key)
 {
@@ -12920,1861 +12925,146 @@ void Setting_Monster(CHARACTER* c, EMonsterType Type, int PositionX, int Positio
 CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Key)
 {
     CHARACTER* c = NULL;
-    OBJECT* o;
-    int Level;
+    OBJECT* o = NULL;
+	g_ConsoleDebug->Write(MCD_RECEIVE, L"[CreateMonster] %d %d %d %d", Type, PositionX, PositionY, Key);
+    // --- Check Special Handlers First ---
+    // These functions handle creation for specific maps/events and return the character
+    // or NULL if the type doesn't belong to them. They should call Setting_Monster internally.
+    // NOTE: These handlers might need updating if they rely on the old CreateMonster logic.
+    c = g_CursedTemple->CreateCharacters(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = CreateHellasMonster(Type, PositionX, PositionY, Key);             if (c) goto ApplySettingsAndReturn;
+    c = battleCastle::CreateBattleCastleMonster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = M31HuntingGround::CreateHuntingGroundMonster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = M34CryingWolf2nd::CreateCryingWolf2ndMonster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = M34CryWolf1st::CreateCryWolf1stMonster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = M33Aida::CreateAidaMonster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = M37Kanturu1st::CreateKanturu1stMonster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = M38Kanturu2nd::Create_Kanturu2nd_Monster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = M39Kanturu3rd::CreateKanturu3rdMonster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = SEASON3A::CGM3rdChangeUp::Instance().CreateBalgasBarrackMonster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = g_NewYearsDayEvent->CreateMonster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = SEASON3B::GMNewTown::CreateNewTownMonster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = SEASON3C::GMSwampOfQuiet::CreateSwampOfQuietMonster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = g_09SummerEvent->CreateMonster(Type, PositionX, PositionY, Key); if (c) goto ApplySettingsAndReturn;
+    c = TheMapProcess().CreateMonster(Type, PositionX, PositionY, Key);   if (c) goto ApplySettingsAndReturn;
+    // --- End Special Handlers ---
 
-    c = g_CursedTemple->CreateCharacters(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
-    }
-    c = CreateHellasMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
-    }
 
-    c = battleCastle::CreateBattleCastleMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
-    }
+    // --- Standard Monster Creation using Config Data (Fallback) ---
 
-    c = M31HuntingGround::CreateHuntingGroundMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
+    // 1. Validate Type index and get config data
+    int typeIndex = static_cast<int>(Type);
+    if (typeIndex < 0 || typeIndex >= MAX_MONSTER_TYPE_INDEX) {
+        wchar_t message[100];
+        swprintf(message, L"Error: Invalid Monster Type %d in CreateMonster!\n", typeIndex);
+        OutputDebugString(message);
+        return &CharactersClient[MAX_CHARACTERS_CLIENT]; // Return error indicator
     }
+    // Use const reference for efficiency, as we won't modify the config here
+    const MonsterConfigData& config = g_MonsterConfig[typeIndex];
 
-    c = M34CryingWolf2nd::CreateCryingWolf2ndMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
-    }
-
-    c = M34CryWolf1st::CreateCryWolf1stMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
-    }
-
-    c = M33Aida::CreateAidaMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
+    // 2. Check if this monster type is configured (modelType is the key indicator)
+    if (config.modelType == -1) {
+        wchar_t message[100];
+        swprintf(message, L"Warning: Monster Type %d (Index %d) not configured in g_MonsterConfig!\n", Type, typeIndex);
+        OutputDebugString(message);
+        return &CharactersClient[MAX_CHARACTERS_CLIENT]; // Return error pointer
     }
 
-    c = M37Kanturu1st::CreateKanturu1stMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
+    // 3. Load necessary model asset based on Kind
+    if (config.kind == KIND_NPC || config.kind == KIND_PET
+        /* Add other NPC-like kinds here */)
     {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
+        OpenNpc(config.modelType);
     }
-
-    c = M38Kanturu2nd::Create_Kanturu2nd_Monster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
+    else // Assume Monster, Trap, Operate, etc.
     {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
+        OpenMonsterModel(config.modelType);
     }
+    // Handle potential multiple model loads if needed (e.g., Dark Phoenix)
+    // This might require adding more fields to the config or handling in ApplyMonsterSpecificLogic
 
-    c = M39Kanturu3rd::CreateKanturu3rdMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
+    // 4. Get/Allocate Character Slot using the *model* type and Key
+    // Uses the optimized CreateCharacter function
+    c = CreateCharacter(Key, config.modelType, static_cast<unsigned char>(PositionX), static_cast<unsigned char>(PositionY)); // Assuming default rotation is fine
+    if (c == &CharactersClient[MAX_CHARACTERS_CLIENT]) // Check if CreateCharacter failed
     {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
+        // CreateCharacter likely failed because no slots were free or map inconsistency
+        return c; // Propagate the error
     }
+    o = &c->Object; // Get the object pointer AFTER CreateCharacter returns validly
 
-    c = SEASON3A::CGM3rdChangeUp::Instance().CreateBalgasBarrackMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
+    // 5. Apply settings from the config struct to the allocated character
+    wcscpy_s(c->ID, MAX_MONSTER_NAME + 1, config.name.c_str()); // Use wcscpy_s for safety
+    o->Scale = config.scale;
+    o->Kind = config.kind; // Set Kind directly from config
+    c->NotRotateOnMagicHit = config.notRotateOnMagicHit;
+    o->EnableShadow = config.enableShadow;
+    o->m_bRenderShadow = config.m_bRenderShadow; // Keep these synced or derive one from the other
+    o->HiddenMesh = config.hiddenMesh;
+    o->BlendMesh = config.blendMesh;
+    o->BlendMeshLight = config.blendMeshLight;
+    c->Level = config.initialLevel; // Set initial level from config
+    c->Blood = config.startsBloody; // Set initial blood state
+    o->m_fEdgeScale = config.m_fEdgeScale; // Set edge scale
+    o->m_bpcroom = config.m_bpcroom; // Set pc room flag
+    // ... apply other configured fields like alphaTarget, moveSpeed if added ...
+
+    // Apply weapons from config
+    c->Weapon[0].Type = (config.weapon1Type != -1) ? config.weapon1Type : -1;
+    c->Weapon[0].Level = config.weapon1Level;
+    c->Weapon[0].ExcellentFlags = config.weapon1ExcellentFlags;
+    c->Weapon[0].AncientDiscriminator = config.weapon1AncientDiscriminator;
+
+    c->Weapon[1].Type = (config.weapon2Type != -1) ? config.weapon2Type : -1;
+    c->Weapon[1].Level = config.weapon2Level;
+    c->Weapon[1].ExcellentFlags = config.weapon2ExcellentFlags;
+    c->Weapon[1].AncientDiscriminator = config.weapon2AncientDiscriminator;
+
+    // Set weapon link bones (using helper based on the *model* type)
+    //SetMonsterWeaponLinkBones(c, config.modelType);
+
+    // 6. Apply special effects / flags based on config flags
+    if (config.needsGoldenEffect) {
+        // Apply golden rendering logic (might involve BlendMesh or specific flags)
+        // Example:
+        o->BlendMesh = RENDER_METAL; // Use RENDER_ defines if available
+        o->BlendMeshLight = 1.f;
+        // Add RENDER_CHROME or other flags if necessary based on original logic
     }
-
-    c = g_NewYearsDayEvent->CreateMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
-    }
-
-    c = SEASON3B::GMNewTown::CreateNewTownMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
-    }
-
-    c = SEASON3C::GMSwampOfQuiet::CreateSwampOfQuietMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
-    }
-
-    c = g_09SummerEvent->CreateMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
-    }
-
-    c = TheMapProcess().CreateMonster(Type, PositionX, PositionY, Key);
-    if (c != NULL)
-    {
-        Setting_Monster(c, Type, PositionX, PositionY);
-        return c;
-    }
-
-    switch (Type)
-    {
-    case MONSTER_GUARDSMAN:
-        OpenNpc(MODEL_NPC_CLERK);        //
-        c = CreateCharacter(Key, MODEL_NPC_CLERK, PositionX, PositionY);
-        c->NotRotateOnMagicHit = true;
-        c->Object.Scale = 1.f;
-        c->Object.SubType = rand() % 2 + 10;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-        wcscpy(c->ID, L"Clerk");
-        break;
-#ifdef ADD_ELF_SUMMON
-    case 276:
-        OpenMonsterModel(MONSTER_MODEL_GOLDEN_TITAN);
-        c = CreateCharacter(Key, MODEL_GOLDEN_TITAN, PositionX, PositionY);
-        c->Object.Scale = 1.45f;
-        c->Weapon[0].Type = MODEL_DARK_BREAKER;//MODEL_SWORD+15;
-        c->Weapon[0].Level = 5;
-        break;
-#endif // ADD_ELF_SUMMON
-    case MONSTER_GATE_TO_KALIMA_1:
-    case MONSTER_GATE_TO_KALIMA_2:
-    case MONSTER_GATE_TO_KALIMA_3:
-    case MONSTER_GATE_TO_KALIMA_4:
-    case MONSTER_GATE_TO_KALIMA_5:
-    case MONSTER_GATE_TO_KALIMA_6:
-    case MONSTER_GATE_TO_KALIMA_7:
-        c = CreateCharacter(Key, MODEL_WARCRAFT, PositionX, PositionY);
-        c->NotRotateOnMagicHit = true;
-        c->Weapon[0].Type = -1;
-        c->Weapon[0].Level = 0;
-        c->Object.Scale = 1.f;
-        c->HideShadow = false;
-        o = &c->Object;
-        o->PriorAnimationFrame = 10.f;
-        o->AnimationFrame = 10;
-        o->BlendMesh = -1;
-        wcscpy(c->ID, L"");
-        break;
-    case MONSTER_CHAOS_CASTLE_1:
-    case MONSTER_CHAOS_CASTLE_3:
-    case MONSTER_CHAOS_CASTLE_5:
-    case MONSTER_CHAOS_CASTLE_7:
-    case MONSTER_CHAOS_CASTLE_9:
-    case MONSTER_CHAOS_CASTLE_11:
-    case MONSTER_CHAOS_CASTLE_13:
-    {
-        OpenMonsterModel(MONSTER_MODEL_CHAOSCASTLE_KNIGHT);
-        c = CreateCharacter(Key, MODEL_CHAOS_CASTLE_KNIGHT, PositionX, PositionY);
-        c->Object.Scale = 0.9f;
-        o = &c->Object;
-
-        c->Weapon[0].Type = MODEL_SWORD_OF_DESTRUCTION;
-        c->Weapon[0].Level = 0;
-        c->Weapon[1].Type = MODEL_SWORD_OF_DESTRUCTION;
-        c->Weapon[1].Level = 0;
-    }
-    break;
-
-    case MONSTER_CHAOS_CASTLE_2:
-    case MONSTER_CHAOS_CASTLE_4:
-    case MONSTER_CHAOS_CASTLE_6:
-    case MONSTER_CHAOS_CASTLE_8:
-    case MONSTER_CHAOS_CASTLE_10:
-    case MONSTER_CHAOS_CASTLE_12:
-    case MONSTER_CHAOS_CASTLE_14:
-    {
-        int randType = 0;
-
-        randType = rand() % 2;
-
-        OpenMonsterModel(randType == 0 ? MONSTER_MODEL_CHAOSCASTLE_ELF : MONSTER_MODEL_CHAOSCASTLE_WIZARD);
-        c = CreateCharacter(Key, MODEL_CHAOS_CASTLE_ELF + randType, PositionX, PositionY);
-        c->Object.Scale = 0.9f;
-        o = &c->Object;
-
-        c->Weapon[0].Type = -1;
-        c->Weapon[0].Level = 0;
-        c->Weapon[1].Type = -1;
-        c->Weapon[1].Level = 0;
-
-        if (randType == 0)
-        {
-            c->Weapon[0].Type = MODEL_GREAT_REIGN_CROSSBOW;
-            c->Weapon[0].Level = 0;
-        }
-        else
-        {
-            c->Weapon[0].Type = MODEL_LEGENDARY_STAFF;
-            c->Weapon[0].Level = 0;
+    if (config.isBloodCastleGateOrStatue) {
+        // Apply specific settings if needed (like bounding box override from original switch)
+        // Shadow already handled by config.enableShadow
+        if (Type == MONSTER_CASTLE_GATE) {
+            // Example: VectorCopy(Models[o->Type].BoundingBoxMin, o->BoundingBoxMin);
+            // Example: Vector(100.f, 100.f, 300.f, o->BoundingBoxMax);
         }
     }
-    break;
-    case MONSTER_MAGIC_SKELETON_1:
-    case MONSTER_MAGIC_SKELETON_2:
-    case MONSTER_MAGIC_SKELETON_3:
-    case MONSTER_MAGIC_SKELETON_4:
-    case MONSTER_MAGIC_SKELETON_5:
-    case MONSTER_MAGIC_SKELETON_6:
-    case MONSTER_MAGIC_SKELETON_7:
-    case MONSTER_MAGIC_SKELETON_8:
-        OpenMonsterModel(MONSTER_MODEL_MAGIC_SKELETON);
-        c = CreateCharacter(Key, MODEL_MAGIC_SKELETON, PositionX, PositionY);
-        c->Weapon[0].Type = MODEL_STAFF;
-        c->Weapon[0].Level = 11;
-        c->Object.Scale = 1.2f;
-        wcscpy(c->ID, L"마법해골");
-        break;
-    case MONSTER_CASTLE_GATE: // ???
-        OpenMonsterModel(MONSTER_MODEL_CASTLE_GATE);
-        c = CreateCharacter(Key, MODEL_CASTLE_GATE, PositionX, PositionY);
-        c->NotRotateOnMagicHit = true;
-        c->Object.Scale = 0.8f;
-        c->Object.EnableShadow = false;
-        wcscpy(c->ID, L"성문");
-        break;
-    case MONSTER_STATUE_OF_SAINT_1:
-        OpenMonsterModel(MONSTER_MODEL_STATUE_OF_SAINT);
-        c = CreateCharacter(Key, MODEL_STATUE_OF_SAINT, PositionX, PositionY);
-        c->NotRotateOnMagicHit = true;
-        c->Object.Scale = 0.8f;
-        c->Object.EnableShadow = false;
-        wcscpy(c->ID, L"성자의석관");
-        break;
-    case MONSTER_STATUE_OF_SAINT_2:
-        OpenMonsterModel(MONSTER_MODEL_STATUE_OF_SAINT);
-        c = CreateCharacter(Key, MODEL_STATUE_OF_SAINT, PositionX, PositionY);
-        c->NotRotateOnMagicHit = true;
-        c->Object.Scale = 0.8f;
-        c->Object.EnableShadow = false;
-        wcscpy(c->ID, L"성자의석관");
-        break;
-    case MONSTER_STATUE_OF_SAINT_3:
-        OpenMonsterModel(MONSTER_MODEL_STATUE_OF_SAINT);
-        c = CreateCharacter(Key, MODEL_STATUE_OF_SAINT, PositionX, PositionY);
-        c->NotRotateOnMagicHit = true;
-        c->Object.Scale = 0.8f;
-        c->Object.EnableShadow = false;
-        wcscpy(c->ID, L"성자의석관");
-        break;
-    case MONSTER_CHIEF_SKELETON_WARRIOR_1:
-    case MONSTER_CHIEF_SKELETON_WARRIOR_2:
-    case MONSTER_CHIEF_SKELETON_WARRIOR_3:
-    case MONSTER_CHIEF_SKELETON_WARRIOR_4:
-    case MONSTER_CHIEF_SKELETON_WARRIOR_5:
-    case MONSTER_CHIEF_SKELETON_WARRIOR_6:
-    case MONSTER_CHIEF_SKELETON_WARRIOR_7:
-    case MONSTER_CHIEF_SKELETON_WARRIOR_8:
-        OpenMonsterModel(MONSTER_MODEL_ORC);
-        c = CreateCharacter(Key, MODEL_ORC, PositionX, PositionY);
-        c->Object.Scale = 1.1f;
-        o = &c->Object;
-        break;
-    case MONSTER_CHIEF_SKELETON_ARCHER_1:
-    case MONSTER_CHIEF_SKELETON_ARCHER_2:
-    case MONSTER_CHIEF_SKELETON_ARCHER_3:
-    case MONSTER_CHIEF_SKELETON_ARCHER_4:
-    case MONSTER_CHIEF_SKELETON_ARCHER_5:
-    case MONSTER_CHIEF_SKELETON_ARCHER_6:
-    case MONSTER_CHIEF_SKELETON_ARCHER_7:
-    case MONSTER_CHIEF_SKELETON_ARCHER_8:
-        OpenMonsterModel(MONSTER_MODEL_ORC_ARCHER);
-        c = CreateCharacter(Key, MODEL_ORC_ARCHER, PositionX, PositionY);
-        c->Object.Scale = 1.1f;
-        c->Weapon[1].Type = MODEL_BATTLE_BOW;
-        c->Weapon[1].Level = 1;
-        o = &c->Object;
-        break;
-    case MONSTER_DARK_SKULL_SOLDIER_1:
-    case MONSTER_DARK_SKULL_SOLDIER_2:
-    case MONSTER_DARK_SKULL_SOLDIER_3:
-    case MONSTER_DARK_SKULL_SOLDIER_4:
-    case MONSTER_DARK_SKULL_SOLDIER_5:
-    case MONSTER_DARK_SKULL_SOLDIER_6:
-    case MONSTER_DARK_SKULL_SOLDIER_7:
-    case MONSTER_DARK_SKULL_SOLDIER_8:
-        OpenMonsterModel(MONSTER_MODEL_DARK_SKULL_SOLDIER);
-        c = CreateCharacter(Key, MODEL_DARK_SKULL_SOLDIER, PositionX, PositionY);
-        c->Weapon[0].Type = MODEL_CRESCENT_AXE;
-        c->Weapon[0].Level = 0;
-        c->Weapon[1].Type = MODEL_CRESCENT_AXE;
-        c->Weapon[1].Level = 0;
-        c->Object.Scale = 1.0f;
-        wcscpy(c->ID, L"흑해골전사");
-        break;
-    case MONSTER_GIANT_OGRE_1:
-    case MONSTER_GIANT_OGRE_2:
-    case MONSTER_GIANT_OGRE_3:
-    case MONSTER_GIANT_OGRE_4:
-    case MONSTER_GIANT_OGRE_5:
-    case MONSTER_GIANT_OGRE_6:
-    case MONSTER_GIANT_OGRE_7:
-    case MONSTER_GIANT_OGRE_8:
-        OpenMonsterModel(MONSTER_MODEL_GIANT_OGRE);
-        c = CreateCharacter(Key, MODEL_GIANT_OGRE, PositionX, PositionY);
-        c->Object.Scale = 0.8f;
-        wcscpy(c->ID, L"자이언트오우거");
-        break;
-    case MONSTER_RED_SKELETON_KNIGHT_1:
-    case MONSTER_RED_SKELETON_KNIGHT_2:
-    case MONSTER_RED_SKELETON_KNIGHT_3:
-    case MONSTER_RED_SKELETON_KNIGHT_4:
-    case MONSTER_RED_SKELETON_KNIGHT_5:
-    case MONSTER_RED_SKELETON_KNIGHT_6:
-    case MONSTER_RED_SKELETON_KNIGHT_7:
-    case MONSTER_RED_SKELETON_KNIGHT_8:
-        OpenMonsterModel(MONSTER_MODEL_RED_SKELETON_KNIGHT);
-        c = CreateCharacter(Key, MODEL_RED_SKELETON_KNIGHT, PositionX, PositionY);
-        c->Weapon[0].Type = MODEL_CHAOS_DRAGON_AXE;
 
-        if (!int((7 + (gMapManager.WorldActive - WD_11BLOODCASTLE_END)) / 3))
-            c->Weapon[0].Level = 8;
-        else
-            c->Weapon[0].Level = 0;
+    // 7. Apply any truly unique logic not covered by the config struct
+    // This includes rand() calls, CreateJoint, setting BodyParts for NPCs, etc.
+    ApplyMonsterSpecificLogic(c, Type, config);
 
-        c->Object.Scale = 1.19f;
-        wcscpy(c->ID, L"붉은해골기사");
-        break;
-    case MONSTER_GOLDEN_GOBLIN:
-        OpenMonsterModel(MONSTER_MODEL_GOBLIN);
-        c = CreateCharacter(Key, MODEL_GOBLIN, PositionX, PositionY);
-        c->Weapon[0].Type = MODEL_AXE;
-        c->Weapon[0].Level = 9;
-        c->Object.Scale = 0.8f;
-        wcscpy(c->ID, L"고블린");
-        break;
-    case MONSTER_GOLDEN_DERKON:
-        OpenMonsterModel(MONSTER_MODEL_DRAGON);
-        c = CreateCharacter(Key, MODEL_DRAGON_, PositionX, PositionY);
-        wcscpy(c->ID, L"드래곤");
-        c->Object.Scale = 0.9f;
-        break;
-    case MONSTER_GOLDEN_LIZARD_KING:
-        OpenMonsterModel(MONSTER_MODEL_LIZARD);
-        c = CreateCharacter(Key, MODEL_LIZARD, PositionX, PositionY);
-        c->Object.Scale = 1.4f;
-        c->Weapon[0].Type = MODEL_CHAOS_LIGHTNING_STAFF;
-        c->Weapon[0].ExcellentFlags = 63;
-        break;
-    case MONSTER_GOLDEN_VEPAR:
-        OpenMonsterModel(MONSTER_MODEL_VEPAR);
-        c = CreateCharacter(Key, MODEL_VEPAR, PositionX, PositionY);
-        c->Object.Scale = 1.f;
-        break;
-    case MONSTER_GOLDEN_TANTALLOS: //??
-        OpenMonsterModel(MONSTER_MODEL_TANTALLOS);
-        c = CreateCharacter(Key, MODEL_TANTALLOS, PositionX, PositionY);
-        c->Object.BlendMesh = 2;
-        c->Object.BlendMeshLight = 1.f;
-        o = &c->Object;
-        c->Object.Scale = 1.8f;
-        c->Weapon[0].Type = MODEL_SWORD_OF_DESTRUCTION;
-        c->Weapon[0].ExcellentFlags = 63;
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
-        break;
-    case MONSTER_GOLDEN_WHEEL:
-        OpenMonsterModel(MONSTER_MODEL_GOLDEN_WHEEL);
-        c = CreateCharacter(Key, MODEL_GOLDEN_WHEEL, PositionX, PositionY);
-        c->Object.Scale = 1.4f;
-        c->Weapon[0].Type = MODEL_AQUAGOLD_CROSSBOW;
-        c->Weapon[0].ExcellentFlags = 63;
-        //c->Weapon[0].Type = MODEL_BOW+16;
-        o = &c->Object;
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
-        break;
-    case MONSTER_MOLT:
-        OpenMonsterModel(MONSTER_MODEL_MOLT);
-        c = CreateCharacter(Key, MODEL_MOLT, PositionX, PositionY);
-        c->Object.Scale = 1.4f;
-        break;
-
-    case MONSTER_ALQUAMOS:
-        OpenMonsterModel(MONSTER_MODEL_ALQUAMOS);
-        c = CreateCharacter(Key, MODEL_ALQUAMOS, PositionX, PositionY);
-        c->Object.Scale = 1.f;
-        c->Object.BlendMesh = 0;
-        break;
-    case MONSTER_QUEEN_RAINER:
-        OpenMonsterModel(MONSTER_MODEL_QUEEN_RAINER);
-        c = CreateCharacter(Key, MODEL_QUEEN_RAINER, PositionX, PositionY);
-        c->Object.Scale = 1.3f;
-        c->Object.BlendMesh = -2;
-        c->Object.BlendMeshLight = 1.f;
-        c->Object.m_bRenderShadow = false;
-        break;
-    case MONSTER_OMEGA_WING:
-    case MONSTER_MEGA_CRUST:
-    case MONSTER_ALPHA_CRUST:
-        OpenMonsterModel(MONSTER_MODEL_CRUST);
-        c = CreateCharacter(Key, MODEL_CRUST, PositionX, PositionY);
-        if (MONSTER_MEGA_CRUST == Type)
-        {
-            c->Object.Scale = 1.1f;
-            c->Weapon[0].Type = MODEL_THUNDER_BLADE;
-            c->Weapon[0].Level = 5;
-            c->Weapon[1].Type = MODEL_LEGENDARY_SHIELD;
-            c->Weapon[1].Level = 0;
-        }
-        else
-        {
-            c->Object.Scale = 1.3f;
-            c->Weapon[0].Type = MODEL_THUNDER_BLADE;
-            c->Weapon[0].Level = 9;
-            c->Weapon[1].Type = MODEL_LEGENDARY_SHIELD;
-            c->Weapon[1].Level = 9;
-        }
-        c->Object.BlendMesh = 1;
-        c->Object.BlendMeshLight = 1.f;
-        //Models[MODEL_MONSTER01+52].StreamMesh = 1;
-        break;
-
-    case MONSTER_PHANTOM_KNIGHT:
-        OpenMonsterModel(MONSTER_MODEL_PHANTOM_KNIGHT);
-        c = CreateCharacter(Key, MODEL_PHANTOM_KNIGHT, PositionX, PositionY);
-        c->Object.Scale = 1.45f;
-        c->Weapon[0].Type = MODEL_DARK_BREAKER;//MODEL_SWORD+15;
-        c->Weapon[0].Level = 5;
-        break;
-
-    case MONSTER_DRAKAN:
-    case MONSTER_GREAT_DRAKAN:
-        OpenMonsterModel(MONSTER_MODEL_DRAKAN);
-        c = CreateCharacter(Key, MODEL_DRAKAN, PositionX, PositionY);
-        c->NotRotateOnMagicHit = true;
-        if (Type == MONSTER_GREAT_DRAKAN)
-        {
-            c->Object.Scale = 1.0f;
-        }
-        else
-        {
-            c->Object.Scale = 0.8f;
-        }
-        Models[c->Object.Type].Meshs[0].NoneBlendMesh = true;
-        Models[c->Object.Type].Meshs[1].NoneBlendMesh = false;
-        Models[c->Object.Type].Meshs[2].NoneBlendMesh = false;
-        Models[c->Object.Type].Meshs[3].NoneBlendMesh = true;
-        Models[c->Object.Type].Meshs[4].NoneBlendMesh = true;
-        break;
-    case MONSTER_DARK_PHOENIX:
-    {
-        OpenMonsterModel(MONSTER_MODEL_DARK_PHOENIX_SHIELD);
-        OpenMonsterModel(MONSTER_MODEL_DARK_PHOENIX);
-        c = CreateCharacter(Key, MODEL_DARK_PHEONIX_SHIELD, PositionX, PositionY);
-        c->NotRotateOnMagicHit = true;
-        c->Object.Scale = 1.0f;
-        Models[MODEL_DARK_PHEONIX_SHIELD].StreamMesh = 0;
-    }
-    break;
-    case MONSTER_ORC_ARCHER:
-        OpenMonsterModel(MONSTER_MODEL_ORC_ARCHER);
-        c = CreateCharacter(Key, MODEL_ORC_ARCHER, PositionX, PositionY);
-        c->Object.Scale = 1.2f;
-        c->Weapon[1].Type = MODEL_BATTLE_BOW;
-        c->Weapon[1].Level = 3;
-        o = &c->Object;
-        o->HiddenMesh = 1;
-        break;
-    case MONSTER_ORC_ARCHER_OF_DOOM:
-        OpenMonsterModel(MONSTER_MODEL_ORC_ARCHER);
-        c = CreateCharacter(Key, MODEL_ORC_ARCHER, PositionX, PositionY);
-        c->Object.Scale = 1.2f;
-        c->Weapon[1].Type = MODEL_BATTLE_BOW;
-        c->Weapon[1].Level = 5;
-        o = &c->Object;
-        o->HiddenMesh = 1;
-        break;
-    case MONSTER_ELITE_ORC:
-        OpenMonsterModel(MONSTER_MODEL_ORC);
-        c = CreateCharacter(Key, MODEL_ORC, PositionX, PositionY);
-        c->Object.Scale = 1.3f;
-        o = &c->Object;
-        o->HiddenMesh = 2;
-        break;
-    case MONSTER_ORC_SOLDIER_OF_DOOM:
-        OpenMonsterModel(MONSTER_MODEL_ORC);
-        c = CreateCharacter(Key, MODEL_ORC, PositionX, PositionY);
-        c->Object.Scale = 1.3f;
-        o = &c->Object;
-        o->HiddenMesh = 2;
-        break;
-    case MONSTER_CURSED_KING:
-    case MONSTER_WHITE_WIZARD:
-        OpenMonsterModel(MONSTER_MODEL_CURSED_KING);
-        c = CreateCharacter(Key, MODEL_CURSED_KING, PositionX, PositionY);
-        c->Object.Scale = 1.7f;
-        o = &c->Object;
-        break;
-    case MONSTER_EVIL_GOBLIN:
-        OpenMonsterModel(MONSTER_MODEL_EVIL_GOBLIN);
-        c = CreateCharacter(Key, MODEL_EVIL_GOBLIN, PositionX, PositionY);
-        c->Object.Scale = 0.9f;
-        wcscpy(c->ID, L"저주받은 고블린");
-        o = &c->Object;
-        break;
-    case MONSTER_CURSED_SANTA:
-        OpenMonsterModel(MONSTER_MODEL_CURSED_SANTA);
-        c = CreateCharacter(Key, MODEL_CURSED_SANTA, PositionX, PositionY);
-        c->Object.Scale = 1.7f;
-        wcscpy(c->ID, L"저주받은 산타");
-        o = &c->Object;
-        break;
-    case MONSTER_MUTANT_HERO:
-    case MONSTER_MUTANT:
-        OpenMonsterModel(MONSTER_MODEL_MUTANT);
-        c = CreateCharacter(Key, MODEL_MUTANT, PositionX, PositionY);
-        c->Object.Scale = 1.5f;
-        o = &c->Object;
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
-        break;
-    case MONSTER_DEATH_BEAM_KNIGHT:
-    case MONSTER_BEAM_KNIGHT:
-        OpenMonsterModel(MONSTER_MODEL_BEAM_KNIGHT);
-        c = CreateCharacter(Key, MODEL_BEAM_KNIGHT, PositionX, PositionY);
-        if (Type == MONSTER_DEATH_BEAM_KNIGHT)
-        {
-            c->Object.Scale = 1.9f;
-            c->Object.BlendMesh = -2;
-            c->Object.BlendMeshLight = 1.f;
-        }
-        else
-        {
-            c->Object.Scale = 1.5f;
-        }
-        o = &c->Object;
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
-        break;
-    case MONSTER_BLOODY_WOLF:
-        OpenMonsterModel(MONSTER_MODEL_BLOODY_WOLF);
-        c = CreateCharacter(Key, MODEL_BLOODY_WOLF, PositionX, PositionY);
-        c->Object.Scale = 2.2f;
-        o = &c->Object;
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
-        break;
-    case MONSTER_TANTALLOS:
-    case MONSTER_ZAIKAN:
-        OpenMonsterModel(MONSTER_MODEL_TANTALLOS);
-        c = CreateCharacter(Key, MODEL_TANTALLOS, PositionX, PositionY);
-        c->Object.BlendMesh = 2;
-        c->Object.BlendMeshLight = 1.f;
-        o = &c->Object;
-        if (Type == MONSTER_TANTALLOS)
-        {
-            c->Object.Scale = 1.8f;
-            c->Weapon[0].Type = MODEL_SWORD_OF_DESTRUCTION;
-        }
-        else
-        {
-            c->Object.Scale = 2.1f;
-            o->SubType = 1;
-            c->Weapon[0].Type = MODEL_STAFF_OF_DESTRUCTION;
-        }
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
-        break;
-    case MONSTER_IRON_WHEEL:
-        OpenMonsterModel(MONSTER_MODEL_GOLDEN_WHEEL);
-        c = CreateCharacter(Key, MODEL_GOLDEN_WHEEL, PositionX, PositionY);
-        c->Object.Scale = 1.4f;
-        c->Weapon[0].Type = MODEL_AQUAGOLD_CROSSBOW;
-        //c->Weapon[0].Type = MODEL_BOW+16;
-        o = &c->Object;
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
-        break;
-    case MONSTER_SILVER_VALKYRIE:
-        OpenMonsterModel(MONSTER_MODEL_VALKYRIE);
-        c = CreateCharacter(Key, MODEL_VALKYRIE, PositionX, PositionY);
-        c->Object.Scale = 1.4f;
-        c->Weapon[0].Type = MODEL_BLUEWING_CROSSBOW;
-        break;
-    case MONSTER_GREAT_BAHAMUT:
-        OpenMonsterModel(MONSTER_MODEL_BAHAMUT);
-        c = CreateCharacter(Key, MODEL_BAHAMUT, PositionX, PositionY);
-        c->Object.Scale = 1.f;
-        c->Level = 1;
-        break;
-    case MONSTER_SEA_WORM:
-        OpenMonsterModel(MONSTER_MODEL_SEA_WORM);
-        c = CreateCharacter(Key, MODEL_SEA_WORM, PositionX, PositionY);
-        c->Object.Scale = 1.8f;
-        break;
-    case MONSTER_HYDRA:
-        OpenMonsterModel(MONSTER_MODEL_HYDRA);
-        c = CreateCharacter(Key, MODEL_HYDRA, PositionX, PositionY);
-        c->Object.Scale = 1.f;
-        c->Object.BlendMesh = 5;
-        c->Object.BlendMeshLight = 0.f;
-        break;
-    case MONSTER_LIZARD_KING:
-        OpenMonsterModel(MONSTER_MODEL_LIZARD);
-        c = CreateCharacter(Key, MODEL_LIZARD, PositionX, PositionY);
-        c->Object.Scale = 1.4f;
-        c->Weapon[0].Type = MODEL_STAFF_OF_RESURRECTION;
-        break;
-    case MONSTER_VALKYRIE:
-        OpenMonsterModel(MONSTER_MODEL_VALKYRIE);
-        c = CreateCharacter(Key, MODEL_VALKYRIE, PositionX, PositionY);
-        c->Object.Scale = 1.1f;
-        c->Weapon[0].Type = MODEL_BLUEWING_CROSSBOW;
-        c->Object.BlendMesh = 0;
-        c->Object.BlendMeshLight = 1.f;
-        break;
-    case MONSTER_VEPAR:
-        OpenMonsterModel(MONSTER_MODEL_VEPAR);
-        c = CreateCharacter(Key, MODEL_VEPAR, PositionX, PositionY);
-        c->Object.Scale = 1.f;
-        break;
-    case MONSTER_BAHAMUT:
-        OpenMonsterModel(MONSTER_MODEL_BAHAMUT);
-        c = CreateCharacter(Key, MODEL_BAHAMUT, PositionX, PositionY);
-        c->Object.Scale = 0.6f;
-        break;
-    case MONSTER_BALI:
-        OpenMonsterModel(MONSTER_MODEL_BALI);
-        c = CreateCharacter(Key, MODEL_BALI, PositionX, PositionY);
-        wcscpy(c->ID, L"발리");
-        c->Object.Scale = 0.12f;
-        break;
-    case MONSTER_GOLDEN_DRAGON:
-        OpenMonsterModel(MONSTER_MODEL_DRAGON);
-        c = CreateCharacter(Key, MODEL_DRAGON_, PositionX, PositionY);
-        wcscpy(c->ID, L"드래곤");
-        c->Object.Scale = 0.9f;
-        break;
-    case MONSTER_GOLDEN_BUDGE_DRAGON:
-        OpenMonsterModel(MONSTER_MODEL_BUDGE_DRAGON);
-        c = CreateCharacter(Key, MODEL_BUDGE_DRAGON, PositionX, PositionY);
-        wcscpy(c->ID, L"황금버지드래곤");
-        c->Object.Scale = 0.7f;
-        break;
-    case MONSTER_RED_DRAGON:
-        OpenMonsterModel(MONSTER_MODEL_DRAGON);
-        c = CreateCharacter(Key, MODEL_DRAGON_, PositionX, PositionY);
-        wcscpy(c->ID, L"쿤둔");
-        c->Object.Scale = 1.3f;
-        Vector(200.f, 150.f, 280.f, c->Object.BoundingBoxMax);
-        break;
-    case MONSTER_DEATH_COW:
-        OpenMonsterModel(MONSTER_MODEL_DEATH_COW);
-        c = CreateCharacter(Key, MODEL_DEATH_COW, PositionX, PositionY);
-        wcscpy(c->ID, L"데쓰 카우");
-        c->Weapon[0].Type = MODEL_GREAT_HAMMER;
-        //c->Weapon[0].Type = MODEL_SWORD+14;
-        c->Object.Scale = 1.1f;
-        //c->Level = 1;
-        break;
-    case MONSTER_DEATH_KNIGHT:
-        OpenMonsterModel(MONSTER_MODEL_DEATH_KNIGHT);
-        c = CreateCharacter(Key, MODEL_DEATH_KNIGHT, PositionX, PositionY);
-        wcscpy(c->ID, L"데쓰 나이트");
-        c->Weapon[0].Type = MODEL_GIANT_SWORD;
-        c->Weapon[0].Type = MODEL_LIGHTING_SWORD;
-        //c->Weapon[1].Type = MODEL_SHIELD+8;
-        c->Object.Scale = 1.3f;
-        //c->Level = 1;
-        break;
-    case MONSTER_POISON_SHADOW:
-        OpenMonsterModel(MONSTER_MODEL_SHADOW);
-        c = CreateCharacter(Key, MODEL_SHADOW, PositionX, PositionY);
-        wcscpy(c->ID, L"포이즌 쉐도우");
-        c->Object.Scale = 1.2f;
-        c->Level = 1;
-        break;
-    case MONSTER_BALROG:
-    case MONSTER_METAL_BALROG:	//발록2
-        OpenMonsterModel(MONSTER_MODEL_BALROG);
-        c = CreateCharacter(Key, MODEL_BALROG, PositionX, PositionY);
-        wcscpy(c->ID, L"발록");
-        c->Weapon[0].Type = MODEL_BILL_OF_BALROG;
-        c->Weapon[0].Level = 9;
-        c->Object.Scale = 1.6f;
-        break;
-    case MONSTER_DEVIL:
-        OpenMonsterModel(MONSTER_MODEL_DEVIL);
-        c = CreateCharacter(Key, MODEL_DEVIL, PositionX, PositionY);
-        wcscpy(c->ID, L"데빌");
-        c->Object.Scale = 1.1f;
-        break;
-    case MONSTER_SHADOW:
-        OpenMonsterModel(MONSTER_MODEL_SHADOW);
-        c = CreateCharacter(Key, MODEL_SHADOW, PositionX, PositionY);
-        wcscpy(c->ID, L"쉐도우");
-        c->Object.Scale = 1.2f;
-        break;
-        /*OpenMonsterModel(MONSTER_MODEL_GIANT);
-        c = CreateCharacter(Key,MODEL_MONSTER01+7,PositionX,PositionY);
-        wcscpy(c->ID,"블러드 고스트");
-        c->Object.AlphaTarget = 0.4f;
-        c->MoveSpeed = 15;
-        c->Blood = true;
-        c->Object.Scale = 1.1f;
-        c->Level = 2;*/
-    case MONSTER_DEATH_GORGON:
-        OpenMonsterModel(MONSTER_MODEL_GORGON);
-        c = CreateCharacter(Key, MODEL_GORGON, PositionX, PositionY);
-        wcscpy(c->ID, L"데쓰 고르곤");
-        c->Object.Scale = 1.3f;
-        c->Weapon[0].Type = MODEL_CRESCENT_AXE;
-        c->Weapon[1].Type = MODEL_CRESCENT_AXE;
-        c->Object.BlendMesh = 1;
-        c->Object.BlendMeshLight = 1.f;
-        c->Level = 2;
-        break;
-    case MONSTER_CURSED_WIZARD:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        wcscpy(c->ID, L"저주받은 법사");
-        c->BodyPart[BODYPART_HELM].Type = MODEL_LEGENDARY_HELM;
-        c->BodyPart[BODYPART_ARMOR].Type = MODEL_LEGENDARY_ARMOR;
-        c->BodyPart[BODYPART_PANTS].Type = MODEL_LEGENDARY_PANTS;
-        c->BodyPart[BODYPART_GLOVES].Type = MODEL_LEGENDARY_GLOVES;
-        c->BodyPart[BODYPART_BOOTS].Type = MODEL_LEGENDARY_BOOTS;
-        c->Weapon[0].Type = MODEL_LEGENDARY_STAFF;
-        c->Weapon[1].Type = MODEL_LEGENDARY_SHIELD;
-        Level = 9;
-        c->BodyPart[BODYPART_HELM].Level = Level;
-        c->BodyPart[BODYPART_ARMOR].Level = Level;
-        c->BodyPart[BODYPART_PANTS].Level = Level;
-        c->BodyPart[BODYPART_GLOVES].Level = Level;
-        c->BodyPart[BODYPART_BOOTS].Level = Level;
-        //c->Weapon[0].Level = Level;
-        //c->Weapon[1].Level = Level;
-        c->PK = PVP_MURDERER2;
-        SetCharacterScale(c);
-        if (gMapManager.InDevilSquare() == true)
-        {
-            c->Object.Scale = 1.0f;
-        }
-        break;
-        /*OpenMonsterModel(MONSTER_MODEL_HELL_HOUND);
-        c = CreateCharacter(Key,MODEL_MONSTER01+5,PositionX,PositionY);
-        wcscpy(c->ID,"자이언트");
-        c->Weapon[0].Type = MODEL_AXE+2;
-        c->Weapon[1].Type = MODEL_AXE+2;
-        c->Object.Scale = 0.7f;
-        Vector(50.f,50.f,80.f,c->Object.BoundingBoxMax);
-        break;*/
-    case MONSTER_ELITE_GOBLIN:
-        OpenMonsterModel(MONSTER_MODEL_GOBLIN);
-        c = CreateCharacter(Key, MODEL_GOBLIN, PositionX, PositionY);
-        c->Weapon[0].Type = MODEL_MORNING_STAR;
-        c->Weapon[1].Type = MODEL_HORN_SHIELD;
-        c->Object.Scale = 1.2f;
-        c->Level = 1;
-        wcscpy(c->ID, L"고블린 대장");
-        break;
-    case MONSTER_STONE_GOLEM:
-        OpenMonsterModel(MONSTER_MODEL_STONE_GOLEM);
-        c = CreateCharacter(Key, MODEL_STONE_GOLEM, PositionX, PositionY);
-        wcscpy(c->ID, L"돌괴물");
-        break;
-    case MONSTER_AGON:
-        OpenMonsterModel(MONSTER_MODEL_AGON);
-        c = CreateCharacter(Key, MODEL_AGON, PositionX, PositionY);
-        wcscpy(c->ID, L"아곤");
-        c->Object.Scale = 1.3f;
-        c->Weapon[0].Type = MODEL_SERPENT_SWORD;
-        c->Weapon[1].Type = MODEL_SERPENT_SWORD;
-        break;
-    case MONSTER_FOREST_MONSTER:
-        OpenMonsterModel(MONSTER_MODEL_FOREST_MONSTER);
-        c = CreateCharacter(Key, MODEL_FOREST_MONSTER, PositionX, PositionY);
-        wcscpy(c->ID, L"숲의괴물");
-        c->Object.Scale = 0.75f;
-        break;
-    case MONSTER_HUNTER:
-        OpenMonsterModel(MONSTER_MODEL_HUNTER);
-        c = CreateCharacter(Key, MODEL_HUNTER, PositionX, PositionY);
-        wcscpy(c->ID, L"헌터");
-        c->Weapon[0].Type = MODEL_ARQUEBUS;
-        c->Object.Scale = 0.95f;
-        break;
-    case MONSTER_BEETLE_MONSTER:
-        OpenMonsterModel(MONSTER_MODEL_BEETLE_MONSTER);
-        c = CreateCharacter(Key, MODEL_BEETLE_MONSTER, PositionX, PositionY);
-        c->Weapon[0].Type = MODEL__SPEAR;
-        c->Object.Scale = 0.8f;
-        wcscpy(c->ID, L"풍뎅이괴물");
-        c->Object.BlendMesh = 1;
-        break;
-    case MONSTER_CHAIN_SCORPION:
-        OpenMonsterModel(MONSTER_MODEL_CHAIN_SCORPION);
-        c = CreateCharacter(Key, MODEL_CHAIN_SCORPION, PositionX, PositionY);
-        c->Object.Scale = 1.1f;
-        wcscpy(c->ID, L"고리전갈");
-        break;
-    case MONSTER_GOBLIN:
-        OpenMonsterModel(MONSTER_MODEL_GOBLIN);
-        c = CreateCharacter(Key, MODEL_GOBLIN, PositionX, PositionY);
-        c->Weapon[0].Type = MODEL_AXE;
-        c->Object.Scale = 0.8f;
-        wcscpy(c->ID, L"고블린");
-        break;
-    case MONSTER_ICE_QUEEN:
-        OpenMonsterModel(MONSTER_MODEL_ICE_QUEEN);
-        c = CreateCharacter(Key, MODEL_ICE_QUEEN, PositionX, PositionY);
-        c->Weapon[0].Type = MODEL_ANGELIC_STAFF;
-        c->Object.BlendMesh = 2;
-        c->Object.BlendMeshLight = 1.f;
-        c->Object.Scale = 1.1f;
-        c->Object.LightEnable = false;
-        c->Level = 3;
-        wcscpy(c->ID, L"아이스퀸");
-        break;
-    case MONSTER_WORM:
-        OpenMonsterModel(MONSTER_MODEL_WORM);
-        c = CreateCharacter(Key, MODEL_WORM, PositionX, PositionY);
-        wcscpy(c->ID, L"웜");
-        break;
-    case MONSTER_HOMMERD:
-        OpenMonsterModel(MONSTER_MODEL_HOMMERD);
-        c = CreateCharacter(Key, MODEL_HOMMERD, PositionX, PositionY);
-        c->Weapon[0].Type = MODEL_LARKAN_AXE;
-        c->Weapon[1].Type = MODEL_BIG_ROUND_SHIELD;
-        c->Object.Scale = 1.15f;
-        wcscpy(c->ID, L"호머드");
-        break;
-    case MONSTER_ICE_MONSTER:
-        OpenMonsterModel(MONSTER_MODEL_ICE_MONSTER);
-        c = CreateCharacter(Key, MODEL_ICE_MONSTER, PositionX, PositionY);
-        c->Object.BlendMesh = 0;
-        c->Object.BlendMeshLight = 1.f;
-        wcscpy(c->ID, L"얼음괴물");
-        break;
-    case MONSTER_ASSASSIN:
-        OpenMonsterModel(MONSTER_MODEL_ASSASSIN);
-        c = CreateCharacter(Key, MODEL_ASSASSIN, PositionX, PositionY);
-        c->Object.Scale = 0.95f;
-        wcscpy(c->ID, L"암살자");
-        break;
-    case MONSTER_ELITE_YETI:
-        OpenMonsterModel(MONSTER_MODEL_ELITE_YETI);
-        c = CreateCharacter(Key, MODEL_ELITE_YETI, PositionX, PositionY);
-        wcscpy(c->ID, L"설인 대장");
-        c->Object.Scale = 1.4f;
-        break;
-    case MONSTER_YETI:
-        OpenMonsterModel(MONSTER_MODEL_YETI);
-        c = CreateCharacter(Key, MODEL_YETI, PositionX, PositionY);
-        wcscpy(c->ID, L"설인");
-        c->Object.Scale = 1.1f;
-        break;
-    case MONSTER_GORGON:
-        OpenMonsterModel(MONSTER_MODEL_GORGON);
-        c = CreateCharacter(Key, MODEL_GORGON, PositionX, PositionY);
-        wcscpy(c->ID, L"고르곤");
-        c->Object.Scale = 1.5f;
-        c->Weapon[0].Type = MODEL_GORGON_STAFF;
-        c->Object.BlendMesh = 1;
-        c->Object.BlendMeshLight = 1.f;
-        break;
-    case MONSTER_SPIDER:
-        OpenMonsterModel(MONSTER_MODEL_SPIDER);
-        c = CreateCharacter(Key, MODEL_SPIDER, PositionX, PositionY);
-        wcscpy(c->ID, L"거미");
-        c->Object.Scale = 0.4f;
-        break;
-    case MONSTER_CYCLOPS:
-        OpenMonsterModel(MONSTER_MODEL_CYCLOPS);
-        c = CreateCharacter(Key, MODEL_CYCLOPS, PositionX, PositionY);
-        wcscpy(c->ID, L"싸이크롭스");
-        c->Weapon[0].Type = MODEL_CRESCENT_AXE;
-        //c->Weapon[1].Type = MODEL_MACE+2;
-        //c->Object.HiddenMesh = 2;
-        break;
-    case MONSTER_BULL_FIGHTER:
-    case MONSTER_ELITE_BULL_FIGHTER:
-    case MONSTER_POISON_BULL:
-    default:
-        OpenMonsterModel(MONSTER_MODEL_BULL_FIGHTER);
-        c = CreateCharacter(Key, MODEL_BULL_FIGHTER, PositionX, PositionY);
-        if (Type == MONSTER_BULL_FIGHTER)
-        {
-            c->Object.HiddenMesh = 0;
-            wcscpy(c->ID, L"소뿔전사");
-            c->Object.Scale = 0.8f;
-            c->Weapon[0].Type = MODEL_NIKKEA_AXE;
-        }
-        else if (Type == MONSTER_ELITE_BULL_FIGHTER)
-        {
-            c->Weapon[0].Type = MODEL_BERDYSH;
-            wcscpy(c->ID, L"소뿔전사 대장");
-            c->Object.Scale = 1.15f;
-            c->Level = 1;
-        }
-        else if (Type == MONSTER_POISON_BULL)
-        {
-            c->Weapon[0].Type = MODEL_GREAT_SCYTHE;
-            wcscpy(c->ID, L"포이즌 소뿔전사");
-            c->Object.Scale = 1.f;
-            c->Level = 2;
-
-            g_CharacterRegisterBuff((&c->Object), eDeBuff_Poison);
-        }
-        break;
-    case MONSTER_GHOST:
-        OpenMonsterModel(MONSTER_MODEL_GHOST);
-        c = CreateCharacter(Key, MODEL_GHOST_MONSTER, PositionX, PositionY);
-        wcscpy(c->ID, L"고스트");
-        c->Object.AlphaTarget = 0.4f;
-        c->MoveSpeed = 15;
-        c->Blood = true;
-        break;
-    case MONSTER_LARVA:
-        OpenMonsterModel(MONSTER_MODEL_LARVA);
-        c = CreateCharacter(Key, MODEL_LARVA, PositionX, PositionY);
-        wcscpy(c->ID, L"유충");
-        c->Object.Scale = 0.6f;
-        break;
-    case MONSTER_HELL_SPIDER:
-        OpenMonsterModel(MONSTER_MODEL_HELL_SPIDER);
-        c = CreateCharacter(Key, MODEL_HELL_SPIDER, PositionX, PositionY);
-        wcscpy(c->ID, L"헬스파이더");
-        c->Weapon[0].Type = MODEL_SERPENT_STAFF;
-        c->Object.Scale = 1.1f;
-        break;
-    case MONSTER_HOUND:
-    case MONSTER_HELL_HOUND:
-        OpenMonsterModel(MONSTER_MODEL_HOUND);
-        c = CreateCharacter(Key, MODEL_HOUND, PositionX, PositionY);
-        if (Type == MONSTER_HOUND)
-        {
-            c->Object.HiddenMesh = 0;
-            wcscpy(c->ID, L"하운드");
-            c->Object.Scale = 0.85f;
-            c->Weapon[0].Type = MODEL_SWORD_OF_ASSASSIN;
-        }
-        if (Type == MONSTER_HELL_HOUND)
-        {
-            c->Object.HiddenMesh = 1;
-            c->Weapon[0].Type = MODEL_FALCHION;
-            c->Weapon[1].Type = MODEL_PLATE_SHIELD;
-            wcscpy(c->ID, L"헬하운드");
-            c->Object.Scale = 1.1f;
-            c->Level = 1;
-        }
-        break;
-
-    case MONSTER_BUDGE_DRAGON:
-        OpenMonsterModel(MONSTER_MODEL_BUDGE_DRAGON);
-        c = CreateCharacter(Key, MODEL_BUDGE_DRAGON, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown2");
-        c->Object.Scale = 0.5f;
-        break;
-
-    case MONSTER_DARK_KNIGHT:
-        OpenMonsterModel(MONSTER_MODEL_DARK_KNIGHT);
-        c = CreateCharacter(Key, MODEL_DARK_KNIGHT, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown10");
-        c->Object.Scale = 0.8f;
-        c->Level = 1;
-        c->Weapon[0].Type = MODEL_DOUBLE_BLADE;
-        break;
-    case MONSTER_LICH:
-    case MONSTER_THUNDER_LICH:
-        OpenMonsterModel(MONSTER_MODEL_LICH);
-        c = CreateCharacter(Key, MODEL_LICH, PositionX, PositionY);
-        if (Type == MONSTER_LICH)
-        {
-            wcscpy(c->ID, L"리치");
-            c->Weapon[0].Type = MODEL_SERPENT_STAFF;
-            c->Object.Scale = 0.85f;
-        }
-        else
-        {
-            wcscpy(c->ID, L"썬더 리치");
-            c->Weapon[0].Type = MODEL_THUNDER_STAFF;
-            c->Level = 1;
-            c->Object.Scale = 1.1f;
-        }
-        break;
-    case MONSTER_GIANT:
-        OpenMonsterModel(MONSTER_MODEL_GIANT);
-        c = CreateCharacter(Key, MODEL_GIANT, PositionX, PositionY);
-        wcscpy(c->ID, L"자이언트");
-        c->Weapon[0].Type = MODEL_DOUBLE_AXE;
-        c->Weapon[1].Type = MODEL_DOUBLE_AXE;
-        c->Object.Scale = 1.6f;
-        break;
-
-    case MONSTER_SKELETON_WARRIOR:
-    case MONSTER_DEATH_KING:
-    case MONSTER_DEATH_BONE:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        wcscpy(c->ID, L"해골전사");
-        c->Object.SubType = MODEL_SKELETON1;
-        c->Blood = true;
-        if (Type == 14)
-        {
-            c->Object.Scale = 0.95f;
-            c->Weapon[0].Type = MODEL_GLADIUS;
-            c->Weapon[1].Type = MODEL_BUCKLER;
-        }
-        else if (Type == 56)
-        {
-            c->Object.Scale = 0.8f;
-            c->Weapon[0].Type = MODEL_GREAT_SCYTHE;
-        }
-        else
-        {
-            c->Level = 1;
-            c->Object.Scale = 1.4f;
-            c->Weapon[0].Type = MODEL_BILL_OF_BALROG;
-        }
-        break;
-    case MONSTER_SKELETON_ARCHER:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        wcscpy(c->ID, L"해골궁수");
-        c->Object.Scale = 1.1f;
-        c->Weapon[1].Type = MODEL_ELVEN_BOW;
-        c->Object.SubType = MODEL_SKELETON2;
-        c->Level = 1;
-        c->Blood = true;
-        break;
-    case MONSTER_ELITE_SKELETON:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        wcscpy(c->ID, L"해골전사 대장");
-        c->Object.Scale = 1.2f;
-        c->Weapon[0].Type = MODEL_TOMAHAWK;
-        c->Weapon[1].Type = MODEL_SKULL_SHIELD;
-        c->Object.SubType = MODEL_SKELETON3;
-        c->Level = 1;
-        c->Blood = true;
-        break;
-    case MONSTER_ELITE_SKILL_SOLDIER:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        ::wcscpy(c->ID, L"엘리트 해골전사");
-        c->Object.Scale = 0.95f;
-        c->Object.SubType = MODEL_SKELETON_PCBANG;
-        break;
-    case MONSTER_JACK_OLANTERN:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        ::wcscpy(c->ID, L"잭 오랜턴");
-        c->Object.Scale = 0.95f;
-        c->Object.SubType = MODEL_HALLOWEEN;
-        break;
-    case MONSTER_SANTA:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        ::wcscpy(c->ID, L"크리스마스 걸");
-        c->Object.Scale = 0.85f;
-        c->Object.SubType = MODEL_XMAS_EVENT_CHANGE_GIRL;
-        break;
-    case MONSTER_GAMEMASTER:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        ::wcscpy(c->ID, L"GameMaster");
-        c->Object.Scale = 1.0f;
-        c->Object.SubType = MODEL_GM_CHARACTER;
-        break;
-    case MONSTER_GOLDEN_TITAN:
-        OpenMonsterModel(MONSTER_MODEL_TITAN);
-        c = CreateCharacter(Key, MODEL_TITAN, PositionX, PositionY);
-        wcscpy(c->ID, L"타이탄");
-        c->Object.Scale = 1.8f;
-        c->Object.BlendMesh = 2;
-        c->Object.BlendMeshLight = 1.f;
-        o = &c->Object;
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
-        break;
-    case MONSTER_GOLDEN_SOLDIER:
-    case MONSTER_SOLDIER:
-        OpenMonsterModel(MONSTER_MODEL_SOLDIER);
-        c = CreateCharacter(Key, MODEL_SOLDIER, PositionX, PositionY);
-        wcscpy(c->ID, L"솔져");
-        c->Weapon[1].Type = MODEL_AQUAGOLD_CROSSBOW;
-        if (Type == 54)
-            c->Object.Scale = 1.1f;
-        else
-            c->Object.Scale = 1.3f;
-        break;
-    case MONSTER_LANCE_TRAP:
-        c = CreateCharacter(Key, 39, PositionX, PositionY);
-        break;
-    case MONSTER_IRON_STICK_TRAP:
-        c = CreateCharacter(Key, 40, PositionX, PositionY);
-        break;
-    case MONSTER_FIRE_TRAP:
-        c = CreateCharacter(Key, 51, PositionX, PositionY);
-        break;
-    case MONSTER_METEORITE_TRAP:
-        c = CreateCharacter(Key, 25, PositionX, PositionY);
-        break;
-    case MONSTER_LASER_TRAP:
-        c = CreateCharacter(Key, 51, PositionX, PositionY);
-        break;
-    case MONSTER_SOCCERBALL:
-        c = CreateCharacter(Key, MODEL_BALL, PositionX, PositionY);
-        o = &c->Object;
-        o->BlendMesh = 2;
-        o->Scale = 1.8f;
-        c->Level = 1;
-        break;
-    case MONSTER_PET_TRAINER:
-        OpenNpc(MODEL_NPC_BREEDER);
-        c = CreateCharacter(Key, MODEL_NPC_BREEDER, PositionX, PositionY);
-        wcscpy(c->ID, L"조련사 NPC");
-        break;
-
-#ifdef _PVP_MURDERER_HERO_ITEM
-    case 227:
-        OpenNpc(MODEL_MASTER);
-        c = CreateCharacter(Key, MODEL_MASTER, PositionX, PositionY);
-        wcscpy(c->ID, L"살인마상점");
-        break;
-
-    case 228:
-        OpenNpc(MODEL_HERO_SHOP);
-        c = CreateCharacter(Key, MODEL_HERO_SHOP, PositionX, PositionY);
-        wcscpy(c->ID, L"영웅상점");
-        break;
-#endif	// _PVP_MURDERER_HERO_ITEM
-
-    case MONSTER_MARLON:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        wcscpy(c->ID, L"말론");
-        c->BodyPart[BODYPART_HELM].Type = MODEL_PLATE_HELM;
-        c->BodyPart[BODYPART_HELM].Level = 7;
-        c->BodyPart[BODYPART_ARMOR].Type = MODEL_PLATE_ARMOR;
-        c->BodyPart[BODYPART_ARMOR].Level = 7;
-        c->BodyPart[BODYPART_PANTS].Type = MODEL_PLATE_PANTS;
-        c->BodyPart[BODYPART_PANTS].Level = 7;
-        c->BodyPart[BODYPART_GLOVES].Type = MODEL_PLATE_GLOVES;
-        c->BodyPart[BODYPART_GLOVES].Level = 7;
-        c->BodyPart[BODYPART_BOOTS].Type = MODEL_PLATE_BOOTS;
-        c->BodyPart[BODYPART_BOOTS].Level = 7;
-        c->Weapon[0].Type = MODEL_BERDYSH;
-        c->Weapon[0].Level = 8;
-        c->Weapon[1].Type = -1;
-        SetCharacterScale(c);
-        break;
-    case MONSTER_ALEX:
-        OpenNpc(MODEL_MERCHANT_MAN);
-        c = CreateCharacter(Key, MODEL_MERCHANT_MAN, PositionX, PositionY);
-        wcscpy(c->ID, L"로랜추가상인");
-        c->BodyPart[BODYPART_HELM].Type = MODEL_MERCHANT_MAN_HEAD;
-        c->BodyPart[BODYPART_ARMOR].Type = MODEL_MERCHANT_MAN_UPPER + 1;
-        c->BodyPart[BODYPART_GLOVES].Type = MODEL_MERCHANT_MAN_GLOVES + 1;
-        c->BodyPart[BODYPART_BOOTS].Type = MODEL_MERCHANT_MAN_BOOTS;
-        break;
-    case MONSTER_THOMPSON_THE_MERCHANT:
-        OpenNpc(MODEL_DEVIAS_TRADER);
-        c = CreateCharacter(Key, MODEL_DEVIAS_TRADER, PositionX, PositionY);
-        wcscpy(c->ID, L"데비추가상인");
-        break;
-
-    case MONSTER_ARCHANGEL:
-        OpenNpc(MODEL_NPC_ARCHANGEL);
-        c = CreateCharacter(Key, MODEL_NPC_ARCHANGEL, PositionX, PositionY);
-        o = &c->Object;
-        o->Scale = 1.f;
-        o->Kind = KIND_NPC;
-        break;
-    case MONSTER_MESSENGER_OF_ARCH:
-        OpenNpc(MODEL_NPC_ARCHANGEL_MESSENGER);
-        c = CreateCharacter(Key, MODEL_NPC_ARCHANGEL_MESSENGER, PositionX, PositionY);
-        o = &c->Object;
-        o->Scale = 1.f;
-        o->Kind = KIND_NPC;
-        break;
-
-    case MONSTER_GOBLIN_GATE:
-        OpenMonsterModel(MONSTER_MODEL_GOBLIN);
-        c = CreateCharacter(Key, MODEL_GOBLIN, PositionX, PositionY);
-        c->Weapon[0].Type = MODEL_STAFF;
-        c->Weapon[0].Level = 4;
-        c->Object.Scale = 1.5f;
-        c->Object.Kind = KIND_NPC;
-        SetAction(&c->Object, 0);
-        break;
-
-    case MONSTER_SEVINA_THE_PRIESTESS:
-        OpenNpc(MODEL_NPC_SEVINA);
-        c = CreateCharacter(Key, MODEL_NPC_SEVINA, PositionX, PositionY);
-        o = &c->Object;
-        o->Scale = 1.f;
-        o->Kind = KIND_NPC;
-        break;
-
-    case MONSTER_GOLDEN_ARCHER:
-        OpenNpc(MODEL_PLAYER);
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        o = &c->Object;
-        o->SubType = MODEL_SKELETON2;
-        o->Scale = 1.0f;
-        o->Kind = KIND_NPC;
-        c->Level = 8;
-        break;
-    case MONSTER_CHARON:
-        OpenNpc(MODEL_NPC_DEVILSQUARE);
-        c = CreateCharacter(Key, MODEL_NPC_DEVILSQUARE, PositionX, PositionY);
-        break;
-    case MONSTER_OSBOURNE:
-        OpenNpc(MODEL_REFINERY_NPC);
-        c = CreateCharacter(Key, MODEL_REFINERY_NPC, PositionX, PositionY);
-        o = &c->Object;
-        break;
-    case MONSTER_JERRIDON://환원
-        OpenNpc(MODEL_RECOVERY_NPC);
-        c = CreateCharacter(Key, MODEL_RECOVERY_NPC, PositionX, PositionY);
-        o = &c->Object;
-        break;
-    case MONSTER_CHAOS_GOBLIN:
-        OpenNpc(MODEL_MIX_NPC);
-        c = CreateCharacter(Key, MODEL_MIX_NPC, PositionX, PositionY);
-        o = &c->Object;
-        o->BlendMesh = 1;
-        break;
-    case MONSTER_ARENA_GUARD:
-        OpenNpc(MODEL_TOURNAMENT);
-        c = CreateCharacter(Key, MODEL_TOURNAMENT, PositionX, PositionY);
-        break;
-    case MONSTER_BAZ_THE_VAULT_KEEPER:
-        OpenNpc(MODEL_STORAGE);
-        c = CreateCharacter(Key, MODEL_STORAGE, PositionX, PositionY);
-        break;
-    case MONSTER_GUILD_MASTER:
-        OpenNpc(MODEL_MASTER);
-        c = CreateCharacter(Key, MODEL_MASTER, PositionX, PositionY);
-        wcscpy(c->ID, L"마스터");
-        break;
-    case MONSTER_LAHAP:
-        OpenNpc(MODEL_NPC_SERBIS);
-        c = CreateCharacter(Key, MODEL_NPC_SERBIS, PositionX, PositionY);
-        wcscpy(c->ID, L"세르비스");
-        break;
-    case MONSTER_ELF_SOLDIER:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        MakeElfHelper(c);
-        wcscpy(c->ID, L"페이아");
-        o = &c->Object;
-        CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 42, o, 15.f);
-        break;
-    case MONSTER_ELF_LALA:
-        OpenNpc(MODEL_ELF_WIZARD);
-        c = CreateCharacter(Key, MODEL_ELF_WIZARD, PositionX, PositionY);
-        wcscpy(c->ID, L"라라 요정");
-        o = &c->Object;
-        o->BlendMesh = 1;
-        o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 140.f;
-        break;
-    case MONSTER_EO_THE_CRAFTSMAN:
-        OpenNpc(MODEL_ELF_MERCHANT);
-        c = CreateCharacter(Key, MODEL_ELF_MERCHANT, PositionX, PositionY);
-        wcscpy(c->ID, L"장인");
-        break;
-    case MONSTER_CAREN_THE_BARMAID:
-        OpenNpc(MODEL_SNOW_MERCHANT);
-        c = CreateCharacter(Key, MODEL_SNOW_MERCHANT, PositionX, PositionY);
-        wcscpy(c->ID, L"술집마담");
-        break;
-    case MONSTER_IZABEL_THE_WIZARD:
-        OpenNpc(MODEL_SNOW_WIZARD);
-        c = CreateCharacter(Key, MODEL_SNOW_WIZARD, PositionX, PositionY);
-        wcscpy(c->ID, L"마법사");
-        break;
-    case MONSTER_ZIENNA_THE_WEAPONS_MERCHANT:
-        OpenNpc(MODEL_SNOW_SMITH);
-        c = CreateCharacter(Key, MODEL_SNOW_SMITH, PositionX, PositionY);
-        wcscpy(c->ID, L"무기상인");
-        break;
-    case MONSTER_CROSSBOW_GUARD:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        wcscpy(c->ID, L"경비병");
-        c->BodyPart[BODYPART_HELM].Type = MODEL_PLATE_HELM;
-        c->BodyPart[BODYPART_ARMOR].Type = MODEL_PLATE_ARMOR;
-        c->BodyPart[BODYPART_PANTS].Type = MODEL_PLATE_PANTS;
-        c->BodyPart[BODYPART_GLOVES].Type = MODEL_PLATE_GLOVES;
-        c->BodyPart[BODYPART_BOOTS].Type = MODEL_PLATE_BOOTS;
-        c->Weapon[0].Type = MODEL_LIGHT_CROSSBOW;
-        c->Weapon[1].Type = MODEL_BOLT;
-        SetCharacterScale(c);
-        break;
-    case MONSTER_WANDERING_MERCHANT_MARTIN:
-        OpenNpc(MODEL_MERCHANT_MAN);
-        c = CreateCharacter(Key, MODEL_MERCHANT_MAN, PositionX, PositionY);
-        wcscpy(c->ID, L"떠돌이 상인");
-        c->BodyPart[BODYPART_HELM].Type = MODEL_MERCHANT_MAN_HEAD + 1;
-        c->BodyPart[BODYPART_ARMOR].Type = MODEL_MERCHANT_MAN_UPPER + 1;
-        c->BodyPart[BODYPART_GLOVES].Type = MODEL_MERCHANT_MAN_GLOVES + 1;
-        c->BodyPart[BODYPART_BOOTS].Type = MODEL_MERCHANT_MAN_BOOTS + 1;
-        break;
-    case MONSTER_BERDYSH_GUARD:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        wcscpy(c->ID, L"경비병");
-        c->BodyPart[BODYPART_HELM].Type = MODEL_PLATE_HELM;
-        c->BodyPart[BODYPART_ARMOR].Type = MODEL_PLATE_ARMOR;
-        c->BodyPart[BODYPART_PANTS].Type = MODEL_PLATE_PANTS;
-        c->BodyPart[BODYPART_GLOVES].Type = MODEL_PLATE_GLOVES;
-        c->BodyPart[BODYPART_BOOTS].Type = MODEL_PLATE_BOOTS;
-        c->Weapon[0].Type = MODEL_BERDYSH;
-        SetCharacterScale(c);
-        break;
-    case MONSTER_WANDERING_MERCHANT_HAROLD:
-        OpenNpc(MODEL_MERCHANT_MAN);
-        c = CreateCharacter(Key, MODEL_MERCHANT_MAN, PositionX, PositionY);
-        wcscpy(c->ID, L"떠돌이 상인");
-        c->BodyPart[BODYPART_HELM].Type = MODEL_MERCHANT_MAN_HEAD;
-        c->BodyPart[BODYPART_ARMOR].Type = MODEL_MERCHANT_MAN_UPPER;
-        c->BodyPart[BODYPART_GLOVES].Type = MODEL_MERCHANT_MAN_GLOVES;
-        c->BodyPart[BODYPART_BOOTS].Type = MODEL_MERCHANT_MAN_BOOTS;
-        break;
-    case MONSTER_HANZO_THE_BLACKSMITH:
-        OpenNpc(MODEL_SMITH);
-        c = CreateCharacter(Key, MODEL_SMITH, PositionX, PositionY);
-        wcscpy(c->ID, L"대장장이 한스");
-        c->Object.Scale = 0.95f;
-        break;
-    case MONSTER_POTION_GIRL_AMY:
-        OpenNpc(MODEL_MERCHANT_GIRL);
-        c = CreateCharacter(Key, MODEL_MERCHANT_GIRL, PositionX, PositionY);
-        wcscpy(c->ID, L"물약파는 소녀");
-        c->BodyPart[BODYPART_HELM].Type = MODEL_MERCHANT_GIRL_HEAD;
-        c->BodyPart[BODYPART_ARMOR].Type = MODEL_MERCHANT_GIRL_UPPER;
-        c->BodyPart[BODYPART_PANTS].Type = MODEL_MERCHANT_GIRL_LOWER;
-        break;
-    case MONSTER_PASI_THE_MAGE:
-        OpenNpc(MODEL_SCIENTIST);
-        c = CreateCharacter(Key, MODEL_SCIENTIST, PositionX, PositionY);
-        wcscpy(c->ID, L"마법사 파시");
-        break;
-    case MONSTER_LUMEN_THE_BARMAID:
-        OpenNpc(MODEL_MERCHANT_FEMALE);
-        c = CreateCharacter(Key, MODEL_MERCHANT_FEMALE, PositionX, PositionY);
-        wcscpy(c->ID, L"술집마담 리아먼");
-        c->BodyPart[BODYPART_HELM].Type = MODEL_MERCHANT_FEMALE_HEAD + 1;
-        c->BodyPart[BODYPART_ARMOR].Type = MODEL_MERCHANT_FEMALE_UPPER + 1;
-        c->BodyPart[BODYPART_PANTS].Type = MODEL_MERCHANT_FEMALE_LOWER + 1;
-        c->BodyPart[BODYPART_BOOTS].Type = MODEL_MERCHANT_FEMALE_BOOTS + 1;
-        break;
-    case MONSTER_WOLF_STATUS:
-        OpenNpc(MODEL_CRYWOLF_STATUE);
-        c = CreateCharacter(Key, MODEL_CRYWOLF_STATUE, PositionX, PositionY);
-        wcscpy(c->ID, L"석상");
-        c->Object.Live = false;
-        break;
-    case MONSTER_WOLF_ALTAR1:
-        OpenNpc(MODEL_CRYWOLF_ALTAR1);
-        c = CreateCharacter(Key, MODEL_CRYWOLF_ALTAR1, PositionX, PositionY);
-        wcscpy(c->ID, L"제단1");
-        c->Object.Position[2] -= 10.0f;
-        c->Object.HiddenMesh = -2;
-        c->Object.Visible = false;
-        c->Object.EnableShadow = false;
-        break;
-    case MONSTER_WOLF_ALTAR2:
-        OpenNpc(MODEL_CRYWOLF_ALTAR2);
-        c = CreateCharacter(Key, MODEL_CRYWOLF_ALTAR2, PositionX, PositionY);
-        wcscpy(c->ID, L"제단2");
-        c->Object.HiddenMesh = -2;
-        c->Object.Position[2] -= 10.0f;
-        c->Object.Visible = false;
-        c->Object.EnableShadow = false;
-        break;
-    case MONSTER_WOLF_ALTAR3:
-        OpenNpc(MODEL_CRYWOLF_ALTAR3);
-        c = CreateCharacter(Key, MODEL_CRYWOLF_ALTAR3, PositionX, PositionY);
-        wcscpy(c->ID, L"제단3");
-        c->Object.HiddenMesh = -2;
-        c->Object.Position[2] -= 10.0f;
-        c->Object.Visible = false;
-        c->Object.EnableShadow = false;
-        break;
-    case MONSTER_WOLF_ALTAR4:
-        OpenNpc(MODEL_CRYWOLF_ALTAR4);
-        c = CreateCharacter(Key, MODEL_CRYWOLF_ALTAR4, PositionX, PositionY);
-        wcscpy(c->ID, L"제단4");
-        c->Object.HiddenMesh = -2;
-        c->Object.Position[2] -= 10.0f;
-        c->Object.Visible = false;
-        c->Object.EnableShadow = false;
-        break;
-    case MONSTER_WOLF_ALTAR5:
-        OpenNpc(MODEL_CRYWOLF_ALTAR5);
-        c = CreateCharacter(Key, MODEL_CRYWOLF_ALTAR5, PositionX, PositionY);
-        wcscpy(c->ID, L"제단5");
-        c->Object.HiddenMesh = -2;
-        c->Object.Position[2] -= 10.0f;
-        c->Object.Visible = false;
-        c->Object.EnableShadow = false;
-        break;
-    case MONSTER_ELPHIS:
-        OpenNpc(MODEL_SMELTING_NPC);
-        c = CreateCharacter(Key, MODEL_SMELTING_NPC, PositionX + 1, PositionY - 1);
-        wcscpy(c->ID, L"제련의탑NPC");
-        c->Object.Scale = 2.5f;
-        c->Object.EnableShadow = false;
-        c->Object.m_bRenderShadow = false;
-        break;
-    case MONSTER_FIREWORKS_GIRL:
-        OpenNpc(MODEL_WEDDING_NPC);
-        c = CreateCharacter(Key, MODEL_WEDDING_NPC, PositionX, PositionY);
-        wcscpy(c->ID, L"WeddingNPC");
-        c->Object.Scale = 1.1f;
-        c->Object.EnableShadow = false;
-        c->Object.m_bRenderShadow = false;
-        break;
-    case MONSTER_LUKE_THE_HELPER:
-    case MONSTER_LEO_THE_HELPER:
-    case MONSTER_HELPER_ELLEN:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        wcscpy(c->ID, L"HelperName");
-        c->BodyPart[BODYPART_HELM].Type = MODEL_PLATE_HELM;
-        c->BodyPart[BODYPART_ARMOR].Type = MODEL_PLATE_ARMOR;
-        c->BodyPart[BODYPART_PANTS].Type = MODEL_PLATE_PANTS;
-        c->BodyPart[BODYPART_GLOVES].Type = MODEL_PLATE_GLOVES;
-        c->BodyPart[BODYPART_BOOTS].Type = MODEL_PLATE_BOOTS;
-        c->Weapon[0].Type = -1;
-        SetCharacterScale(c);
-        c->Object.m_bpcroom = true;
-        break;
-    case MONSTER_ORACLE_LAYLA:
-        OpenNpc(MODEL_KALIMA_SHOP);
-        c = CreateCharacter(Key, MODEL_KALIMA_SHOP, PositionX, PositionY);
-        c->Object.Position[2] += 140.0f;
-        wcscpy(c->ID, L"KalimaShop");
-        break;
-    case MONSTER_CHAOS_CARD_MASTER:
-    {
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        wcscpy(c->ID, L"ChaosCard");
-        c->BodyPart[BODYPART_HELM].Type = MODEL_VENOM_MIST_HELM;
-        c->BodyPart[BODYPART_ARMOR].Type = MODEL_VENOM_MIST_ARMOR;
-        c->BodyPart[BODYPART_PANTS].Type = MODEL_VENOM_MIST_PANTS;
-        c->BodyPart[BODYPART_GLOVES].Type = MODEL_VENOM_MIST_GLOVES;
-        c->BodyPart[BODYPART_BOOTS].Type = MODEL_VENOM_MIST_BOOTS;
-        c->Wing.Type = MODEL_WINGS_OF_HEAVEN;
-        int iLevel = 9;
-        c->BodyPart[BODYPART_HELM].Level = iLevel;
-        c->BodyPart[BODYPART_ARMOR].Level = iLevel;
-        c->BodyPart[BODYPART_PANTS].Level = iLevel;
-        c->BodyPart[BODYPART_GLOVES].Level = iLevel;
-        c->BodyPart[BODYPART_BOOTS].Level = iLevel;
-        c->Weapon[0].Type = -1;
-        SetCharacterScale(c);
-        c->Object.SubType = Type;
-    }
-    break;
-    case MONSTER_PAMELA_THE_SUPPLIER:
-    {
-        OpenNpc(MODEL_BC_NPC1);
-        c = CreateCharacter(Key, MODEL_BC_NPC1, PositionX, PositionY);
-        wcscpy(c->ID, L"공성 NPC");
-        c->Object.Scale = 1.0f;
-        c->Object.Angle[2] = 0.f;
-        CreateObject(MODEL_BC_BOX, c->Object.Position, c->Object.Angle);
-    }
-    break;
-    case MONSTER_ANGELA_THE_SUPPLIER:
-    {
-        OpenNpc(MODEL_BC_NPC2);
-        c = CreateCharacter(Key, MODEL_BC_NPC2, PositionX, PositionY);
-        wcscpy(c->ID, L"공성 NPC");
-        c->Object.Scale = 1.0f;
-        c->Object.Angle[2] = 90.f;
-        CreateObject(MODEL_BC_BOX, c->Object.Position, c->Object.Angle);
-    }
-    break;
-    case MONSTER_PRIEST_DEVIN:
-        OpenNpc(MODEL_NPC_DEVIN);
-        c = CreateCharacter(Key, MODEL_NPC_DEVIN, PositionX, PositionY);
-        wcscpy(c->ID, L"사제데빈");
-        break;
-    case MONSTER_WEREWOLF_QUARREL:
-        OpenNpc(MODEL_NPC_QUARREL);
-        c = CreateCharacter(Key, MODEL_NPC_QUARREL, PositionX, PositionY);
-        wcscpy(c->ID, L"웨어울프쿼렐");
-        c->Object.Scale = 1.9f;
-        break;
-    case MONSTER_GATEKEEPER:
-        OpenNpc(MODEL_NPC_CASTEL_GATE);
-        c = CreateCharacter(Key, MODEL_NPC_CASTEL_GATE, PositionX, PositionY, 90.f);
-        wcscpy(c->ID, L"성문");
-        o = &c->Object;
-        o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 240.f;
-        c->Object.Scale = 1.2f;
-        c->Object.m_fEdgeScale = 1.1f;
-        c->Object.EnableShadow = false;
-        c->Object.m_bRenderShadow = false;
-        break;
-    case MONSTER_LUNAR_RABBIT:
-    {
-        OpenMonsterModel(MONSTER_MODEL_LUNAR_RABBIT);
-        c = CreateCharacter(Key, MODEL_LUNAR_RABBIT, PositionX, PositionY);
-        wcscpy(c->ID, L"달토끼");
-        c->Object.Scale = 0.8f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-        c->Object.SubType = rand() % 3;
-        c->Object.m_iAnimation = 0;
-
-        BoneManager::RegisterBone(c, L"Rabbit_1", 3);		// Bip01 Spine
-        BoneManager::RegisterBone(c, L"Rabbit_2", 16);		// Bip01 Head
-        BoneManager::RegisterBone(c, L"Rabbit_3", 15);		// Bip01 Neck1
-        BoneManager::RegisterBone(c, L"Rabbit_4", 2);		// Bip01 Pelvis
+    // 8. Register bones if specified in config (AFTER character is mostly set up)
+    for (const auto& bonePair : config.bonesToRegister) {
+        BoneManager::RegisterBone(c, bonePair.first, bonePair.second);
     }
 
-    break;
-    case MONSTER_CHERRY_BLOSSOM_SPIRIT:
-    {
-        OpenNpc(MODEL_NPC_CHERRYBLOSSOM);
-        c = CreateCharacter(Key, MODEL_NPC_CHERRYBLOSSOM, PositionX, PositionY);
-        c->Object.Scale = 0.65f;
-        c->Object.m_fEdgeScale = 1.08f;
-        o = &c->Object;
-        o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 170.f;
-        wcscpy(c->ID, L"벚꽃의정령");
-    }
-    break;
-    case MONSTER_CHERRY_BLOSSOM_TREE:
-    {
-        OpenNpc(MODEL_NPC_CHERRYBLOSSOMTREE);
-        c = CreateCharacter(Key, MODEL_NPC_CHERRYBLOSSOMTREE, PositionX, PositionY);
-        c->Object.Scale = 1.0f;
-        c->Object.m_fEdgeScale = 0.0f;
-        c->Object.m_bRenderShadow = false;
-        wcscpy(c->ID, L"벚꽃나무");
-    }
-    break;
-
-    case MONSTER_DAVID:
-        OpenNpc(MODEL_LUCKYITEM_NPC);
-        c = CreateCharacter(Key, MODEL_LUCKYITEM_NPC, PositionX, PositionY);
-        wcscpy(c->ID, L"Lucky Item NPC");
-        c->Object.Scale = 0.95f;
-        c->Object.m_fEdgeScale = 1.2f;
-        Models[MODEL_LUCKYITEM_NPC].Actions[0].PlaySpeed = 0.45f;
-        Models[MODEL_LUCKYITEM_NPC].Actions[1].PlaySpeed = 0.5f;
-
-        //	Models[MODEL_LUCKYITEM_NPC].Actions[0].PlaySpeed = 50.0f;
-        //	Models[MODEL_LUCKYITEM_NPC].Actions[1].PlaySpeed = 50.0f;
-        break;
-    case MONSTER_SEED_MASTER:
-        OpenNpc(MODEL_SEED_MASTER);
-        c = CreateCharacter(Key, MODEL_SEED_MASTER, PositionX, PositionY);
-        wcscpy(c->ID, L"시드마스터");
-        c->Object.Scale = 1.1f;
-        c->Object.m_fEdgeScale = 1.2f;
-        break;
-    case MONSTER_SEED_RESEARCHER:
-        OpenNpc(MODEL_SEED_INVESTIGATOR);
-        c = CreateCharacter(Key, MODEL_SEED_INVESTIGATOR, PositionX, PositionY);
-        wcscpy(c->ID, L"시드연구가");
-        c->Object.Scale = 0.9f;
-        c->Object.m_fEdgeScale = 1.15f;
-        //Models[MODEL_SEED_INVESTIGATOR].Actions[0].PlaySpeed = 0.2f;
-        //Models[MODEL_SEED_INVESTIGATOR].Actions[1].PlaySpeed = 0.1f;
-        break;
-    case MONSTER_REINIT_HELPER:
-    {
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        //c->Class = 2;
-        wcscpy(c->ID, L"초기화 도우미");
-
-        c->BodyPart[BODYPART_HELM].Type = MODEL_PLATE_HELM;
-        c->BodyPart[BODYPART_ARMOR].Type = MODEL_PLATE_ARMOR;
-        c->BodyPart[BODYPART_PANTS].Type = MODEL_PLATE_PANTS;
-        c->BodyPart[BODYPART_GLOVES].Type = MODEL_PLATE_GLOVES;
-        c->BodyPart[BODYPART_BOOTS].Type = MODEL_PLATE_BOOTS;
-
-        c->Object.m_fEdgeScale = 1.15f;
-        c->Weapon[0].Type = MODEL_LIGHT_CROSSBOW;
-        c->Weapon[1].Type = MODEL_BOLT;
-        SetCharacterScale(c);
-    }
-    break;
-    case MONSTER_TRANSFORMED_SNOWMAN:
-        OpenNpc(MODEL_XMAS2008_SNOWMAN);
-        c = CreateCharacter(Key, MODEL_XMAS2008_SNOWMAN, PositionX, PositionY);
-        ::wcscpy(c->ID, L"Unknown");
-        c->Object.LifeTime = 100;
-        c->Object.Scale = 1.3f;
-        break;
-#ifdef PJH_ADD_PANDA_CHANGERING
-    case MONSTER_TRANSFORMED_PANDA:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        ::wcscpy(c->ID, L"Unknown");
-        c->Object.SubType = MODEL_PANDA;
-        break;
-#endif //PJH_ADD_PANDA_CHANGERING
-    case MONSTER_TRANSFORMED_SKELETON:
-        c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        ::wcscpy(c->ID, L"Unknown");
-        c->Object.SubType = MODEL_SKELETON_CHANGED;
-        break;
-    case MONSTER_LITTLE_SANTA_YELLOW:
-    case MONSTER_LITTLE_SANTA_GREEN:
-    case MONSTER_LITTLE_SANTA_RED:
-    case MONSTER_LITTLE_SANTA_BLUE:
-    case MONSTER_LITTLE_SANTA_WHITE:
-    case MONSTER_LITTLE_SANTA_BLACK:
-    case MONSTER_LITTLE_SANTA_ORANGE:
-    case MONSTER_LITTLE_SANTA_PINK:
-    {
-        int _Model_NpcIndex = MODEL_LITTLESANTA + (Type - 468);
-
-        OpenNpc(_Model_NpcIndex);
-        c = CreateCharacter(Key, _Model_NpcIndex, PositionX, PositionY);
-
-        c->Object.Scale = 0.43f;
-
-        for (int i = 0; i < 5; i++)
-        {
-            if (i < 2 || i == 4)
-            {
-                //xmassanta_stand_1~2 || xmassanta_idle3
-                Models[_Model_NpcIndex].Actions[i].PlaySpeed = 0.4f;
-            }
-            else// if(i >= 2 && i < 4)
-            {
-                //xmassanta_idle1~2
-                Models[_Model_NpcIndex].Actions[i].PlaySpeed = 0.5f;
-            }
-        }
-        wcscpy(c->ID, L"little santa");
-    }
-    break;
-    case MONSTER_DELGADO:
-        //델가도
-        OpenNpc(MODEL_NPC_SERBIS);
-        c = CreateCharacter(Key, MODEL_NPC_SERBIS, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        break;
-    case MONSTER_GATEKEEPER_TITUS:
-        // 결투장 문지기 NPC 타이투스
-        OpenNpc(MODEL_DUEL_NPC_TITUS);
-        c = CreateCharacter(Key, MODEL_DUEL_NPC_TITUS, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 1.1f;
-        c->Object.m_fEdgeScale = 1.2f;
-        break;
-    case MONSTER_MOSS_THE_MERCHANT:
-    {
-        OpenNpc(MODEL_GAMBLE_NPC_MOSS);
-        c = CreateCharacter(Key, MODEL_GAMBLE_NPC_MOSS, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.LifeTime = 100;
-        c->Object.Scale = 0.8f;
-        c->Object.m_fEdgeScale = 1.1f;
-
-        for (int i = 0; i < 6; i++)
-        {
-            Models[MODEL_GAMBLE_NPC_MOSS].Actions[i].PlaySpeed = 0.33f;
-        }
-    }
-    break;
-    case MONSTER_GOLDEN_RABBIT:
-        OpenMonsterModel(MONSTER_MODEL_RABBIT);
-        c = CreateCharacter(Key, MODEL_RABBIT, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 1.0f * 0.95f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-        break;
-    case MONSTER_GOLDEN_DARK_KNIGHT:
-        OpenMonsterModel(MONSTER_MODEL_DARK_KNIGHT);
-        c = CreateCharacter(Key, MODEL_DARK_KNIGHT, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 0.8f;
-        c->Level = 1;
-        c->Weapon[0].Type = MODEL_DOUBLE_BLADE;
-        break;
-        break;
-    case MONSTER_GOLDEN_DEVIL:
-        OpenMonsterModel(MONSTER_MODEL_DEVIL);
-        c = CreateCharacter(Key, MODEL_DEVIL, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 1.1f;
-        break;
-    case MONSTER_GOLDEN_STONE_GOLEM:
-        OpenMonsterModel(MONSTER_MODEL_GOLDEN_STONE_GOLEM);
-        c = CreateCharacter(Key, MODEL_GOLDEN_STONE_GOLEM, PositionX, PositionY);
-        c->Object.Scale = 1.35f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-        BoneManager::RegisterBone(c, L"Monster101_L_Arm", 12);
-        BoneManager::RegisterBone(c, L"Monster101_R_Arm", 20);
-        BoneManager::RegisterBone(c, L"Monster101_Head", 6);
-        break;
-    case MONSTER_GOLDEN_CRUST:
-        OpenMonsterModel(MONSTER_MODEL_CRUST);
-        c = CreateCharacter(Key, MODEL_CRUST, PositionX, PositionY);
-        c->Object.Scale = 1.1f;
-        c->Weapon[0].Type = MODEL_THUNDER_BLADE;
-        c->Weapon[0].Level = 5;
-        c->Weapon[1].Type = MODEL_LEGENDARY_SHIELD;
-        c->Weapon[1].Level = 0;
-        c->Object.BlendMesh = 1;
-        c->Object.BlendMeshLight = 1.f;
-        break;
-    case MONSTER_GOLDEN_SATYROS:
-        OpenMonsterModel(MONSTER_MODEL_SATYROS);
-        c = CreateCharacter(Key, MODEL_SATYROS, PositionX, PositionY);
-        c->Object.Scale = 1.3f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-        wcscpy(c->ID, L"Unknown");
-        break;
-    case MONSTER_GOLDEN_TWIN_TAIL:
-        OpenMonsterModel(MONSTER_MODEL_TWIN_TAIL);
-        c = CreateCharacter(Key, MODEL_TWIN_TAIL, PositionX, PositionY);
-        c->Object.Scale = 1.3f;
-        c->Object.Angle[0] = 0.0f;
-        c->Object.Gravity = 0.0f;
-        c->Object.Distance = (float)(rand() % 20) / 10.0f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-        BoneManager::RegisterBone(c, L"Twintail_Hair24", 16);
-        BoneManager::RegisterBone(c, L"Twintail_Hair32", 24);
-        break;
-    case MONSTER_GOLDEN_IRON_KNIGHT:
-        OpenMonsterModel(MONSTER_MODEL_IRON_KNIGHT);
-        c = CreateCharacter(Key, MODEL_IRON_KNIGHT, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 1.5f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-        break;
-    case MONSTER_GOLDEN_NAPIN:
-        OpenMonsterModel(MONSTER_MODEL_NAPIN);
-        c = CreateCharacter(Key, MODEL_NAPIN, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 0.95f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-        break;
-    case MONSTER_GOLDEN_GREAT_DRAGON:
-        OpenMonsterModel(MONSTER_MODEL_DRAGON);
-        c = CreateCharacter(Key, MODEL_DRAGON_, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 0.88f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-        break;
-    case MONSTER_LUGARD:
-        OpenNpc(MODEL_DOPPELGANGER_NPC_LUGARD);
-        c = CreateCharacter(Key, MODEL_DOPPELGANGER_NPC_LUGARD, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 1.1f;
-        c->Object.m_fEdgeScale = 1.2f;
-        break;
-    case MONSTER_COMPENSATION_BOX:
-        OpenNpc(MODEL_DOPPELGANGER_NPC_BOX);
-        c = CreateCharacter(Key, MODEL_DOPPELGANGER_NPC_BOX, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 2.3f;
-        c->Object.m_fEdgeScale = 1.1f;
-        break;
-    case MONSTER_GOLDEN_COMPENSATION_BOX:
-        OpenNpc(MODEL_DOPPELGANGER_NPC_GOLDENBOX);
-        c = CreateCharacter(Key, MODEL_DOPPELGANGER_NPC_GOLDENBOX, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 3.3f;
-        c->Object.m_fEdgeScale = 1.1f;
-        break;
-    case MONSTER_GENS_DUPRIAN:
-        OpenNpc(MODAL_GENS_NPC_DUPRIAN);
-        c = CreateCharacter(Key, MODAL_GENS_NPC_DUPRIAN, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 1.0f;
-        break;
-    case MONSTER_GENS_VANERT:
-        OpenNpc(MODAL_GENS_NPC_BARNERT);
-        c = CreateCharacter(Key, MODAL_GENS_NPC_BARNERT, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 1.0f;
-        break;
-    case MONSTER_CHRISTINE_THE_GENERAL_GOODS_MERCHANT:
-        OpenNpc(MODEL_UNITEDMARKETPLACE_CHRISTIN);
-        c = CreateCharacter(Key, MODEL_UNITEDMARKETPLACE_CHRISTIN, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 1.1f;
-        c->Object.m_fEdgeScale = 1.2f;
-        break;
-    case MONSTER_JEWELER_RAUL:
-        OpenNpc(MODEL_UNITEDMARKETPLACE_RAUL);
-        c = CreateCharacter(Key, MODEL_UNITEDMARKETPLACE_RAUL, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 1.0f;
-        c->Object.m_fEdgeScale = 1.15f;
-        break;
-    case MONSTER_MARKET_UNION_MEMBER_JULIA:
-        OpenNpc(MODEL_UNITEDMARKETPLACE_JULIA);
-        c = CreateCharacter(Key, MODEL_UNITEDMARKETPLACE_JULIA, PositionX, PositionY);
-        wcscpy(c->ID, L"Unknown");
-        c->Object.Scale = 1.0f;
-        c->Object.m_fEdgeScale = 1.1f;
-        break;
-
-    case MONSTER_MERCENARY_GUILD_FELICIA:
-        OpenNpc(MODEL_TERSIA);
-        c = CreateCharacter(Key, MODEL_TERSIA, PositionX, PositionY);
-        wcscpy(c->ID, L"길드관리인 테르시아");
-        c->Object.Scale = 0.93f;
-        break;
-    case MONSTER_PRIESTESS_VEINA:
-        OpenNpc(MODEL_BENA);
-        c = CreateCharacter(Key, MODEL_BENA, PositionX, PositionY);
-        wcscpy(c->ID, L"신녀 베이나");
-        c->Object.Position[2] += 145.0f;
-        break;
-    case MONSTER_WANDERING_MERCHANT_ZYRO:
-    {
-        OpenNpc(MODEL_ZAIRO);
-        c = CreateCharacter(Key, MODEL_ZAIRO, PositionX, PositionY);
-        wcscpy(c->ID, L"떠돌이상인 자이로");
-        c->Object.LifeTime = 100;
-        c->Object.Scale = 0.8f;
-        c->Object.m_fEdgeScale = 1.1f;
-        int i;
-        for (i = 0; i < 6; ++i)
-            Models[MODEL_ZAIRO].Actions[i].PlaySpeed = 0.33f;
-    }
-    break;
-    case MONSTER_LEINA_THE_GENERAL_GOODS_MERCHANT:
-        OpenNpc(MODEL_KARUTAN_NPC_REINA);
-        c = CreateCharacter(Key, MODEL_KARUTAN_NPC_REINA, PositionX, PositionY);
-        wcscpy(c->ID, L"잡화상인 레이나");
-        c->Object.Scale = 1.1f;
-        c->Object.m_fEdgeScale = 1.2f;
-        break;
-    case MONSTER_WEAPONS_MERCHANT_BOLO:
-        OpenNpc(MODEL_KARUTAN_NPC_VOLVO);
-        c = CreateCharacter(Key, MODEL_KARUTAN_NPC_VOLVO, PositionX, PositionY);
-        wcscpy(c->ID, L"무기상인 볼로");
-        c->Object.Scale = 0.9f;
-        break;
-
+ApplySettingsAndReturn:
+    // 9. Call the simplified Setting_Monster (handles post-config setup)
+    // This label allows the special handlers at the top to jump here too.
+    if (c != NULL && c != &CharactersClient[MAX_CHARACTERS_CLIENT]) {
+        // Call the original Setting_Monster OR a potentially simplified version
+        // Setting_Monster_Optimized(c, Type, PositionX, PositionY);
+        Setting_Monster(c, Type, PositionX, PositionY); // Assuming original Setting_Monster still needed for some logic
     }
 
-    Setting_Monster(c, Type, PositionX, PositionY);
-
-    return c;
+    return c; // Return the created/found character (or error pointer)
 }
 
 CHARACTER* CreateHero(int Index, CLASS_TYPE Class, int Skin, float x, float y, float Rotate)
 {
+	g_ConsoleDebug->Write(MCD_RECEIVE, L"[CreateHero] %d %d %d %f %f %f", Index, Class, Skin, x, y, Rotate);
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
     CreateCharacterPointer(c, MODEL_PLAYER, 0, 0, Rotate);
@@ -14831,6 +13121,7 @@ CHARACTER* CreateHero(int Index, CLASS_TYPE Class, int Skin, float x, float y, f
 CHARACTER* CreateHellGate(char* ID, int Key, EMonsterType Index, int x, int y, int CreateFlag)
 {
     CHARACTER* portal = CreateMonster(Index, x, y, Key);
+    
     portal->Level = Index - 152 + 1;
     wchar_t portalText[100];
     wchar_t name[sizeof portal->ID];
@@ -15213,4 +13504,3796 @@ bool IsPlayer(CHARACTER* c)
 bool IsMonster(CHARACTER* c)
 {
     return c && c->Object.Kind == KIND_MONSTER;
+}
+
+
+void InitializeMonsterData()
+{
+    // Clear existing data (important if re-initializing)
+    for (int i = 0; i < MAX_MONSTER_TYPE_INDEX; ++i) {
+        g_MonsterConfig[i] = MonsterConfigData(); // Reset to default values
+    }
+
+    int index; // Reusable index variable
+
+    index = MONSTER_BULL_FIGHTER; // 0
+	g_MonsterConfig[index].modelType = MODEL_BULL_FIGHTER;
+	g_MonsterConfig[index].name = L"Bull Fighter";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].hiddenMesh = 0;
+	g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].weapon1Type = MODEL_NIKKEA_AXE;
+
+    index = MONSTER_HOUND; // 1
+	g_MonsterConfig[index].modelType = MODEL_HOUND;
+	g_MonsterConfig[index].name = L"Hound";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].hiddenMesh = 0;
+    g_MonsterConfig[index].scale = 0.85f;
+	g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_ASSASSIN;
+
+	index = MONSTER_BUDGE_DRAGON; // 2
+	g_MonsterConfig[index].modelType = MODEL_BUDGE_DRAGON;
+	g_MonsterConfig[index].name = L"Budge Dragon";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+
+    index = MONSTER_SPIDER; // 3
+	g_MonsterConfig[index].modelType = MODEL_SPIDER;
+	g_MonsterConfig[index].name = L"Spider";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+
+    index = MONSTER_ELITE_BULL_FIGHTER; // 4
+	g_MonsterConfig[index].modelType = MODEL_BULL_FIGHTER;
+	g_MonsterConfig[index].name = L"Elite Bull Fighter";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.2f;
+
+	index = MONSTER_HELL_HOUND; // 5
+    g_MonsterConfig[index].modelType = MODEL_HOUND;
+	g_MonsterConfig[index].name = L"Hell Hound";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].hiddenMesh = 1;
+	g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon1Type = MODEL_FALCHION;
+    g_MonsterConfig[index].weapon2Type = MODEL_PLATE_SHIELD;
+    g_MonsterConfig[index].initialLevel = 1;
+
+	index = MONSTER_LICH; // 6
+	g_MonsterConfig[index].modelType = MODEL_LICH;
+	g_MonsterConfig[index].name = L"Lich";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.85f;
+	g_MonsterConfig[index].weapon1Type = MODEL_SERPENT_STAFF;
+
+	index = MONSTER_GIANT; // 7
+	g_MonsterConfig[index].modelType = MODEL_GIANT;
+	g_MonsterConfig[index].name = L"Giant";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.6f;
+	g_MonsterConfig[index].weapon1Type = MODEL_DOUBLE_AXE;
+	g_MonsterConfig[index].weapon2Type = MODEL_DOUBLE_AXE;
+
+	index = MONSTER_POISON_BULL; // 8
+	g_MonsterConfig[index].modelType = MODEL_BULL_FIGHTER;
+	g_MonsterConfig[index].name = L"Poison Bull";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+	g_MonsterConfig[index].initialLevel = 1;
+
+    index = MONSTER_THUNDER_LICH; // 9
+	g_MonsterConfig[index].modelType = MODEL_LICH;
+	g_MonsterConfig[index].name = L"Thunder Lich";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.1f;
+	g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_STAFF;
+	g_MonsterConfig[index].initialLevel = 1;
+
+    index = MONSTER_DARK_KNIGHT; // 10
+	g_MonsterConfig[index].modelType = MODEL_DARK_KNIGHT;
+	g_MonsterConfig[index].name = L"Dark Knight";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].weapon1Type = MODEL_DOUBLE_BLADE;
+    g_MonsterConfig[index].initialLevel = 1;
+
+	index = MONSTER_GHOST; // 11
+	g_MonsterConfig[index].modelType = MODEL_GHOST;
+	g_MonsterConfig[index].name = L"Ghost";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.4f;
+
+    index = MONSTER_LARVA; // 12
+	g_MonsterConfig[index].modelType = MODEL_LARVA;
+	g_MonsterConfig[index].name = L"Larva";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.6f;
+
+    index = MONSTER_HELL_SPIDER; // 13
+	g_MonsterConfig[index].modelType = MODEL_SPIDER;
+	g_MonsterConfig[index].name = L"Hell Spider";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.1f;
+	g_MonsterConfig[index].weapon1Type = MODEL_SERPENT_STAFF;
+
+    index = MONSTER_SKELETON_WARRIOR; // 14
+	g_MonsterConfig[index].modelType = MODEL_PLAYER;
+	g_MonsterConfig[index].name = L"Skeleton Warrior";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.95f;
+	g_MonsterConfig[index].weapon1Type = MODEL_GLADIUS;
+    g_MonsterConfig[index].weapon2Type = MODEL_BUCKLER;
+
+    index = MONSTER_SKELETON_ARCHER; // 15
+	g_MonsterConfig[index].modelType = MODEL_PLAYER;
+	g_MonsterConfig[index].name = L"Skeleton Archer";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon1Type = MODEL_ELVEN_BOW;
+
+
+    index = MONSTER_ELITE_SKELETON; // 16
+	g_MonsterConfig[index].modelType = MODEL_PLAYER;
+	g_MonsterConfig[index].name = L"Elite Skeleton";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.2f;
+	g_MonsterConfig[index].weapon1Type = MODEL_TOMAHAWK;
+	g_MonsterConfig[index].weapon2Type = MODEL_SKULL_SHIELD;
+
+    index = MONSTER_CYCLOPS; // 17
+	g_MonsterConfig[index].modelType = MODEL_CYCLOPS;
+	g_MonsterConfig[index].name = L"Cyclops";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
+
+    index = MONSTER_GORGON; // 18
+	g_MonsterConfig[index].modelType = MODEL_GORGON;
+	g_MonsterConfig[index].name = L"Gorgon";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.5f;
+	g_MonsterConfig[index].weapon1Type = MODEL_GORGON_STAFF;
+
+    index = MONSTER_YETI; // 19
+	g_MonsterConfig[index].modelType = MODEL_YETI;
+	g_MonsterConfig[index].name = L"Yeti";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+
+    index = MONSTER_ELITE_YETI; // 20
+    g_MonsterConfig[index].modelType = MODEL_ELITE_YETI;
+	g_MonsterConfig[index].name = L"Elite Yeti";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.4f;
+
+    index = MONSTER_ASSASSIN; // 21
+	g_MonsterConfig[index].modelType = MODEL_ASSASSIN;
+	g_MonsterConfig[index].name = L"Assassin";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.95f;
+
+    index = MONSTER_ICE_MONSTER; // 22
+	g_MonsterConfig[index].modelType = MODEL_ICE_MONSTER;
+	g_MonsterConfig[index].name = L"Ice Monster";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+
+    index = MONSTER_HOMMERD; // 23
+	g_MonsterConfig[index].modelType = MODEL_HOMMERD;
+	g_MonsterConfig[index].name = L"Hommerd";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.15f;
+	g_MonsterConfig[index].weapon1Type = MODEL_LARKAN_AXE;
+	g_MonsterConfig[index].weapon2Type = MODEL_BIG_ROUND_SHIELD;
+
+    index = MONSTER_WORM; // 24
+	g_MonsterConfig[index].modelType = MODEL_WORM;
+	g_MonsterConfig[index].name = L"Worm";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+
+    index = MONSTER_ICE_QUEEN; // 25
+	g_MonsterConfig[index].modelType = MODEL_ICE_QUEEN;
+	g_MonsterConfig[index].name = L"Ice Queen";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon1Type = MODEL_ANGELIC_STAFF;
+
+    index = MONSTER_GOBLIN; // 26
+	g_MonsterConfig[index].modelType = MODEL_GOBLIN;
+	g_MonsterConfig[index].name = L"Goblin";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].weapon1Type = MODEL_AXE;
+
+    index = MONSTER_CHAIN_SCORPION; // 27
+	g_MonsterConfig[index].modelType = MODEL_CHAIN_SCORPION;
+	g_MonsterConfig[index].name = L"Chain Scorpion";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.1f;
+
+    index = MONSTER_BEETLE_MONSTER; // 28
+	g_MonsterConfig[index].modelType = MODEL_BEETLE_MONSTER;
+	g_MonsterConfig[index].name = L"Beetle Monster";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].weapon1Type = MODEL__SPEAR;
+
+    index = MONSTER_HUNTER; // 29
+	g_MonsterConfig[index].modelType = MODEL_HUNTER;
+	g_MonsterConfig[index].name = L"Hunter";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.95f;
+	g_MonsterConfig[index].weapon1Type = MODEL_ARQUEBUS;
+
+    index = MONSTER_FOREST_MONSTER; // 30
+	g_MonsterConfig[index].modelType = MODEL_FOREST_MONSTER;
+	g_MonsterConfig[index].name = L"Forest Monster";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.75f;
+
+    index = MONSTER_AGON; // 31
+	g_MonsterConfig[index].modelType = MODEL_AGON;
+	g_MonsterConfig[index].name = L"Agon";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.3f;
+	g_MonsterConfig[index].weapon1Type = MODEL_SERPENT_SWORD;
+	g_MonsterConfig[index].weapon2Type = MODEL_SERPENT_SWORD;
+
+    index = MONSTER_STONE_GOLEM; // 32
+	g_MonsterConfig[index].modelType = MODEL_STONE_GOLEM;
+	g_MonsterConfig[index].name = L"Stone Golem";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+
+    index = MONSTER_ELITE_GOBLIN; // 33
+	g_MonsterConfig[index].modelType = MODEL_GOBLIN;
+	g_MonsterConfig[index].name = L"Elite Goblin";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.2f;
+	g_MonsterConfig[index].weapon1Type = MODEL_MORNING_STAR;
+    g_MonsterConfig[index].weapon2Type = MODEL_HORN_SHIELD;
+
+    index = MONSTER_CURSED_WIZARD; // 34
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+	g_MonsterConfig[index].name = L"Cursed Wizard";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = MODEL_LEGENDARY_STAFF;
+	g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
+	g_MonsterConfig[index].helmType = MODEL_LEGENDARY_HELM;
+	g_MonsterConfig[index].armorType = MODEL_LEGENDARY_ARMOR;
+	g_MonsterConfig[index].glovesType = MODEL_LEGENDARY_GLOVES;
+	g_MonsterConfig[index].bootsType = MODEL_LEGENDARY_BOOTS;
+
+    index = MONSTER_DEATH_GORGON; // 35
+	g_MonsterConfig[index].modelType = MODEL_GORGON;
+	g_MonsterConfig[index].name = L"Death Gorgon";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.3f;
+	g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
+	g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
+
+    index = MONSTER_SHADOW; // 36
+	g_MonsterConfig[index].modelType = MODEL_SHADOW;
+	g_MonsterConfig[index].name = L"Shadow";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.2f;
+
+    index = MONSTER_DEVIL; // 37
+	g_MonsterConfig[index].modelType = MODEL_DEVIL;
+	g_MonsterConfig[index].name = L"Devil";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.1f;
+
+    index = MONSTER_BALROG; // 38
+	g_MonsterConfig[index].modelType = MODEL_BALROG;
+	g_MonsterConfig[index].name = L"Balrog";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.6f;
+	g_MonsterConfig[index].weapon1Type = MODEL_BILL_OF_BALROG;
+	g_MonsterConfig[index].weapon1Level = 9;
+
+    index = MONSTER_POISON_SHADOW; // 39
+	g_MonsterConfig[index].modelType = MODEL_SHADOW;
+	g_MonsterConfig[index].name = L"Poison Shadow";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.2f;
+
+    index = MONSTER_DEATH_KNIGHT; // 40
+	g_MonsterConfig[index].modelType = MODEL_DARK_KNIGHT;
+	g_MonsterConfig[index].name = L"Death Knight";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.3f;
+	g_MonsterConfig[index].weapon1Type = MODEL_GIANT_SWORD;
+    g_MonsterConfig[index].weapon2Type = MODEL_LIGHTING_SWORD;
+
+    index = MONSTER_DEATH_COW; // 41
+    g_MonsterConfig[index].modelType = MODEL_DEATH_COW;
+	g_MonsterConfig[index].name = L"Death Cow";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon1Type = MODEL_GREAT_HAMMER;
+
+    index = MONSTER_RED_DRAGON; // 42
+    g_MonsterConfig[index].modelType = MODEL_DRAGON_; // ?
+	g_MonsterConfig[index].name = L"Red Dragon";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.3f;
+
+    index = MONSTER_GOLDEN_BUDGE_DRAGON; // 43
+	g_MonsterConfig[index].modelType = MODEL_BUDGE_DRAGON;
+	g_MonsterConfig[index].name = L"Golden Budge Dragon";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.7f;
+
+    index = MONSTER_GOLDEN_DRAGON; // 44
+	g_MonsterConfig[index].modelType = MODEL_DRAGON_; // ?
+	g_MonsterConfig[index].name = L"Golden Dragon";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+
+    index = MONSTER_BAHAMUT; // 45
+	g_MonsterConfig[index].modelType = MODEL_BAHAMUT;
+	g_MonsterConfig[index].name = L"Bahamut";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.6f;
+
+    index = MONSTER_VEPAR; // 46
+	g_MonsterConfig[index].modelType = MODEL_VEPAR;
+	g_MonsterConfig[index].name = L"Vepar";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_VALKYRIE; // 47
+	g_MonsterConfig[index].modelType = MODEL_VALKYRIE;
+	g_MonsterConfig[index].name = L"Valkyrie";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon1Type = MODEL_BLUEWING_CROSSBOW;
+
+    index = MONSTER_LIZARD_KING; // 48
+    g_MonsterConfig[index].modelType = MODEL_LIZARD;
+	g_MonsterConfig[index].name = L"Lizard King";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.4f;
+	g_MonsterConfig[index].weapon1Type = MODEL_STAFF_OF_RESURRECTION;
+
+    index = MONSTER_HYDRA; // 49
+	g_MonsterConfig[index].modelType = MODEL_HYDRA;
+	g_MonsterConfig[index].name = L"Hydra";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_SEA_WORM; // 50
+	g_MonsterConfig[index].modelType = MODEL_SEA_WORM;
+	g_MonsterConfig[index].name = L"Sea Worm";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.8f;
+
+    index = MONSTER_GREAT_BAHAMUT; // 51
+	g_MonsterConfig[index].modelType = MODEL_BAHAMUT;
+	g_MonsterConfig[index].name = L"Great Bahamut";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_SILVER_VALKYRIE; // 52
+	g_MonsterConfig[index].modelType = MODEL_VALKYRIE;
+	g_MonsterConfig[index].name = L"Silver Valkyrie";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.4f;
+    g_MonsterConfig[index].weapon1Type = MODEL_BLUEWING_CROSSBOW;
+
+    index = MONSTER_GOLDEN_TITAN; // 53
+	g_MonsterConfig[index].modelType = MODEL_TITAN;
+	g_MonsterConfig[index].name = L"Golden Titan";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.8f;
+
+    index = MONSTER_GOLDEN_SOLDIER; // 54
+	g_MonsterConfig[index].modelType = MODEL_SOLDIER;
+	g_MonsterConfig[index].name = L"Golden Soldier";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon1Type = MODEL_AQUAGOLD_CROSSBOW;
+
+    index = MONSTER_DEATH_KING; // 55
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+	g_MonsterConfig[index].name = L"Death King";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.4f;
+    g_MonsterConfig[index].weapon1Type = MODEL_BILL_OF_BALROG;
+
+    index = MONSTER_DEATH_BONE; // 56
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+	g_MonsterConfig[index].name = L"Death Bone";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].weapon1Type = MODEL_GREAT_SCYTHE;
+
+    index = MONSTER_IRON_WHEEL; // 57
+    g_MonsterConfig[index].modelType = MODEL_GOLDEN_WHEEL;
+	g_MonsterConfig[index].name = L"Iron Wheel";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.4f;
+    g_MonsterConfig[index].weapon1Type = MODEL_AQUAGOLD_CROSSBOW;
+
+    index = MONSTER_TANTALLOS; // 58
+	g_MonsterConfig[index].modelType = MODEL_TANTALLOS;
+	g_MonsterConfig[index].name = L"Tantalos";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.8f;
+    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+
+    index = MONSTER_ZAIKAN; // 59
+    g_MonsterConfig[index].modelType = MODEL_TANTALLOS;
+	g_MonsterConfig[index].name = L"Zaikan";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.8f;
+	g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+
+    index = MONSTER_BLOODY_WOLF; // 60
+	g_MonsterConfig[index].modelType = MODEL_BLOODY_WOLF;
+	g_MonsterConfig[index].name = L"Bloody Wolf";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 2.2f;
+
+    index = MONSTER_BEAM_KNIGHT; // 61
+	g_MonsterConfig[index].modelType = MODEL_BEAM_KNIGHT;
+	g_MonsterConfig[index].name = L"Beam Knight";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.5f;
+
+    index = MONSTER_MUTANT; // 62
+	g_MonsterConfig[index].modelType = MODEL_MUTANT;
+	g_MonsterConfig[index].name = L"Mutant";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.5f;
+
+    index = MONSTER_DEATH_BEAM_KNIGHT; // 63
+	g_MonsterConfig[index].modelType = MODEL_BEAM_KNIGHT;
+	g_MonsterConfig[index].name = L"Death Beam Knight";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.9f;
+
+    index = MONSTER_ORC_ARCHER; // 64
+	g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
+	g_MonsterConfig[index].name = L"Orc Archer";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.2f;
+    g_MonsterConfig[index].weapon1Type = MODEL_BATTLE_BOW;
+
+    index = MONSTER_ELITE_ORC; // 65
+	g_MonsterConfig[index].modelType = MODEL_ORC;
+	g_MonsterConfig[index].name = L"Elite Orc";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.3f;
+
+    index = MONSTER_CURSED_KING; // 66
+    g_MonsterConfig[index].modelType = MODEL_CURSED_KING;
+	g_MonsterConfig[index].name = L"Cursed King";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.7f;
+
+    index = MONSTER_METAL_BALROG; // 67
+	g_MonsterConfig[index].modelType = MODEL_BALROG;
+	g_MonsterConfig[index].name = L"Metal Balrog";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.6f;
+	g_MonsterConfig[index].weapon1Type = MODEL_BILL_OF_BALROG;
+	g_MonsterConfig[index].weapon1Level = 9;
+
+    index = MONSTER_MOLT; // 68
+	g_MonsterConfig[index].modelType = MODEL_MOLT;
+	g_MonsterConfig[index].name = L"Molt";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.4f;
+
+    index = MONSTER_ALQUAMOS; // 69
+	g_MonsterConfig[index].modelType = MODEL_ALQUAMOS;
+	g_MonsterConfig[index].name = L"Alquamos";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_QUEEN_RAINER; // 70
+	g_MonsterConfig[index].modelType = MODEL_QUEEN_RAINER;
+	g_MonsterConfig[index].name = L"Queen Rainer";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.3f;
+
+    index = MONSTER_MEGA_CRUST; // 71
+    g_MonsterConfig[index].modelType = MODEL_CRUST;
+	g_MonsterConfig[index].name = L"Mega Crust";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_BLADE;
+    g_MonsterConfig[index].weapon1Level = 5;
+	g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
+	g_MonsterConfig[index].weapon2Level = 9;
+
+    index = MONSTER_PHANTOM_KNIGHT; // 72
+	g_MonsterConfig[index].modelType = MODEL_PHANTOM_KNIGHT;
+	g_MonsterConfig[index].name = L"Phantom Knight";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.4f;
+    g_MonsterConfig[index].weapon1Type = MODEL_DARK_BREAKER;
+	g_MonsterConfig[index].weapon1Level = 5;
+
+    index = MONSTER_DRAKAN; // 73
+	g_MonsterConfig[index].modelType = MODEL_DRAKAN;
+	g_MonsterConfig[index].name = L"Drakan";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.8f;
+
+    index = MONSTER_ALPHA_CRUST; // 74
+	g_MonsterConfig[index].modelType = MODEL_CRUST;
+	g_MonsterConfig[index].name = L"Alpha Crust";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.3f;
+	g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_BLADE;
+	g_MonsterConfig[index].weapon1Level = 5;
+	g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
+	g_MonsterConfig[index].weapon2Level = 9;
+
+    index = MONSTER_GREAT_DRAKAN; // 75
+	g_MonsterConfig[index].modelType = MODEL_DRAKAN;
+	g_MonsterConfig[index].name = L"Great Drakan";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_DARK_PHOENIX_SHIELD; // 76
+    // ??
+
+    index = MONSTER_DARK_PHOENIX; // 77
+    g_MonsterConfig[index].modelType = MODEL_DARK_PHEONIX_SHIELD; // what..?
+	g_MonsterConfig[index].name = L"Dark Phoenix";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_GOLDEN_GOBLIN; // 78
+	g_MonsterConfig[index].modelType = MODEL_GOBLIN;
+	g_MonsterConfig[index].name = L"Golden Goblin";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].weapon1Type = MODEL_AXE;
+    g_MonsterConfig[index].weapon1Level = 9;
+
+    index = MONSTER_GOLDEN_DERKON; // 79
+    g_MonsterConfig[index].modelType = MODEL_DRAGON_;
+	g_MonsterConfig[index].name = L"Golden Derkon";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.9f;
+
+    index = MONSTER_GOLDEN_LIZARD_KING; // 80
+	g_MonsterConfig[index].modelType = MODEL_LIZARD;
+	g_MonsterConfig[index].name = L"Golden Lizard King";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.4f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_LIGHTNING_STAFF;
+    g_MonsterConfig[index].weapon1ExcellentFlags = 63; // magic!
+
+    index = MONSTER_GOLDEN_VEPAR; // 81
+	g_MonsterConfig[index].modelType = MODEL_VEPAR;
+	g_MonsterConfig[index].name = L"Golden Vepar";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_GOLDEN_TANTALLOS; // 82
+	g_MonsterConfig[index].modelType = MODEL_TANTALLOS;
+	g_MonsterConfig[index].name = L"Golden Tantalos";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.8f;
+	g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+	g_MonsterConfig[index].weapon1ExcellentFlags = 63; // magic!
+
+    index = MONSTER_GOLDEN_WHEEL; // 83
+	g_MonsterConfig[index].modelType = MODEL_GOLDEN_WHEEL;
+	g_MonsterConfig[index].name = L"Golden Wheel";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.4f;
+	g_MonsterConfig[index].weapon1Type = MODEL_AQUAGOLD_CROSSBOW;
+	g_MonsterConfig[index].weapon1ExcellentFlags = 63; // magic!
+
+    index = MONSTER_CHIEF_SKELETON_WARRIOR_1; // 84
+    g_MonsterConfig[index].modelType = MODEL_ORC;
+	g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.1f;
+
+    index = MONSTER_CHIEF_SKELETON_ARCHER_1; // 85
+	g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
+	g_MonsterConfig[index].name = L"Chief Skeleton Archer";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.1f;
+	g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
+	g_MonsterConfig[index].weapon2Level = 1;
+
+    index = MONSTER_DARK_SKULL_SOLDIER_1; // 86
+    g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
+	g_MonsterConfig[index].name = L"Dark Skull Soldier";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
+    g_MonsterConfig[index].weapon1Level = 0;
+	g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
+	g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_GIANT_OGRE_1; // 87
+	g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
+	g_MonsterConfig[index].name = L"Giant Ogre";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.8f;
+
+    index = MONSTER_RED_SKELETON_KNIGHT_1; // 88
+	g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
+	g_MonsterConfig[index].name = L"Red Skeleton Knight";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.19f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+
+    index = MONSTER_MAGIC_SKELETON_1; // 89
+	g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
+	g_MonsterConfig[index].name = L"Magic Skeleton";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.2f;
+    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
+    g_MonsterConfig[index].weapon1Level = 11;
+
+    index = MONSTER_CHIEF_SKELETON_WARRIOR_2; // 90
+	g_MonsterConfig[index].modelType = MODEL_ORC;
+	g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.1f;
+
+    index = MONSTER_CHIEF_SKELETON_ARCHER_2; // 91
+	g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
+	g_MonsterConfig[index].name = L"Chief Skeleton Archer";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.1f;
+	g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
+	g_MonsterConfig[index].weapon2Level = 1;
+
+    index = MONSTER_DARK_SKULL_SOLDIER_2; // 92
+	g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
+	g_MonsterConfig[index].name = L"Dark Skull Soldier";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+	g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
+	g_MonsterConfig[index].weapon1Level = 0;
+	g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
+	g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_GIANT_OGRE_2; // 93
+	g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
+	g_MonsterConfig[index].name = L"Giant Ogre";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.8f;
+
+    index = MONSTER_RED_SKELETON_KNIGHT_2; // 94
+    g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
+    g_MonsterConfig[index].name = L"Red Skeleton Knight";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.19f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+
+    index = MONSTER_MAGIC_SKELETON_2; // 95
+    g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"Magic Skeleton";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.2f;
+    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
+    g_MonsterConfig[index].weapon1Level = 11;
+
+    index = MONSTER_CHIEF_SKELETON_WARRIOR_3; // 96
+    g_MonsterConfig[index].modelType = MODEL_ORC;
+    g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+
+    index = MONSTER_CHIEF_SKELETON_ARCHER_3; // 97
+    g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"Chief Skeleton Archer";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
+    g_MonsterConfig[index].weapon2Level = 1;
+
+    index = MONSTER_DARK_SKULL_SOLDIER_3; // 98
+    g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
+    g_MonsterConfig[index].name = L"Dark Skull Soldier";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_GIANT_OGRE_3; // 99
+    g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"Giant Ogre";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.8f;
+
+    index = MONSTER_LANCE_TRAP; // 100
+    g_MonsterConfig[index].modelType = 39; // magic!
+	g_MonsterConfig[index].kind = KIND_TRAP;
+
+    index = MONSTER_IRON_STICK_TRAP; // 101
+    g_MonsterConfig[index].modelType = 40; // magic!
+    g_MonsterConfig[index].kind = KIND_TRAP;
+
+    index = MONSTER_FIRE_TRAP; // 102
+    g_MonsterConfig[index].modelType = 51; // magic!
+    g_MonsterConfig[index].kind = KIND_TRAP;
+
+    index = MONSTER_METEORITE_TRAP; // 103
+    g_MonsterConfig[index].modelType = 25; // magic!
+    g_MonsterConfig[index].kind = KIND_TRAP;
+
+    index = MONSTER_TRAP; // 104
+    g_MonsterConfig[index].kind = KIND_TRAP;
+
+
+    index = MONSTER_CANON_TRAP; // 105
+    g_MonsterConfig[index].kind = KIND_TRAP;
+
+
+    index = MONSTER_LASER_TRAP; // 106
+    g_MonsterConfig[index].modelType = 51; // magic!
+    g_MonsterConfig[index].kind = KIND_TRAP;
+
+    index = MONSTER_RED_SKELETON_KNIGHT_3; // 111
+    g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
+    g_MonsterConfig[index].name = L"Red Skeleton Knight";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.19f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+
+    index = MONSTER_MAGIC_SKELETON_3; // 112
+    g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"Magic Skeleton";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.2f;
+    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
+    g_MonsterConfig[index].weapon1Level = 11;
+
+    index = MONSTER_CHIEF_SKELETON_WARRIOR_4; // 113
+    g_MonsterConfig[index].modelType = MODEL_ORC;
+    g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+
+    index = MONSTER_CHIEF_SKELETON_ARCHER_4; // 114
+    g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"Chief Skeleton Archer";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
+    g_MonsterConfig[index].weapon2Level = 1;
+
+    index = MONSTER_DARK_SKULL_SOLDIER_4; // 115
+    g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
+    g_MonsterConfig[index].name = L"Dark Skull Soldier";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_GIANT_OGRE_4; // 116
+    g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"Giant Ogre";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.8f;
+
+    index = MONSTER_RED_SKELETON_KNIGHT_4; // 117
+    g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
+    g_MonsterConfig[index].name = L"Red Skeleton Knight";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.19f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+
+    index = MONSTER_MAGIC_SKELETON_4; // 118
+    g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"Magic Skeleton";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.2f;
+    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
+    g_MonsterConfig[index].weapon1Level = 11;
+
+    index = MONSTER_CHIEF_SKELETON_WARRIOR_5; // 119
+    g_MonsterConfig[index].modelType = MODEL_ORC;
+    g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+
+    index = MONSTER_CHIEF_SKELETON_ARCHER_5; // 120
+    g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"Chief Skeleton Archer";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
+    g_MonsterConfig[index].weapon2Level = 1;
+
+    index = MONSTER_DARK_SKULL_SOLDIER_5; // 121
+    g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
+    g_MonsterConfig[index].name = L"Dark Skull Soldier";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_GIANT_OGRE_5; // 122
+    g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"Giant Ogre";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.8f;
+
+    index = MONSTER_RED_SKELETON_KNIGHT_5; // 123
+    g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
+    g_MonsterConfig[index].name = L"Red Skeleton Knight";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.19f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+
+    index = MONSTER_MAGIC_SKELETON_5; // 124
+    g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"Magic Skeleton";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.2f;
+    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
+    g_MonsterConfig[index].weapon1Level = 11;
+
+    index = MONSTER_CHIEF_SKELETON_WARRIOR_6; // 125
+    g_MonsterConfig[index].modelType = MODEL_ORC;
+    g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+
+    index = MONSTER_CHIEF_SKELETON_ARCHER_6; // 126
+    g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"Chief Skeleton Archer";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
+    g_MonsterConfig[index].weapon2Level = 1;
+
+    index = MONSTER_DARK_SKULL_SOLDIER_6; // 127
+    g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
+    g_MonsterConfig[index].name = L"Dark Skull Soldier";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_GIANT_OGRE_6; // 128
+    g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"Giant Ogre";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.8f;
+
+    index = MONSTER_RED_SKELETON_KNIGHT_6; // 129
+    g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
+    g_MonsterConfig[index].name = L"Red Skeleton Knight";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.19f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+
+    index = MONSTER_MAGIC_SKELETON_6; // 130
+    g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"Magic Skeleton";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.2f;
+    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
+    g_MonsterConfig[index].weapon1Level = 11;
+
+    index = MONSTER_CASTLE_GATE; // 131
+	g_MonsterConfig[index].modelType = MODEL_CASTLE_GATE;
+	g_MonsterConfig[index].name = L"Castle Gate";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+
+    index = MONSTER_STATUE_OF_SAINT_1; // 132
+	g_MonsterConfig[index].modelType = MODEL_STATUE_OF_SAINT;
+	g_MonsterConfig[index].name = L"Statue of Saint";
+	g_MonsterConfig[index].kind = KIND_OPERATE;
+	g_MonsterConfig[index].scale = 0.8f;
+
+    index = MONSTER_STATUE_OF_SAINT_2; // 133
+    g_MonsterConfig[index].modelType = MODEL_STATUE_OF_SAINT;
+    g_MonsterConfig[index].name = L"Statue of Saint";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 0.8f;
+
+    index = MONSTER_STATUE_OF_SAINT_3; // 134
+    g_MonsterConfig[index].modelType = MODEL_STATUE_OF_SAINT;
+    g_MonsterConfig[index].name = L"Statue of Saint";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 0.8f;
+
+    index = MONSTER_WHITE_WIZARD; // 135
+    g_MonsterConfig[index].modelType = MODEL_CURSED_KING;
+	g_MonsterConfig[index].name = L"White Wizard";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.7f;
+
+    index = MONSTER_ORC_SOLDIER_OF_DOOM; // 136
+	g_MonsterConfig[index].modelType = MODEL_ORC;
+	g_MonsterConfig[index].name = L"Orc Soldier of Doom";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.3f;
+
+    index = MONSTER_ORC_ARCHER_OF_DOOM; // 137
+	g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
+	g_MonsterConfig[index].name = L"Orc Archer of Doom";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.2f;
+	g_MonsterConfig[index].weapon1Type = MODEL_BATTLE_BOW;
+    g_MonsterConfig[index].weapon1Level = 5;
+
+    index = MONSTER_CHIEF_SKELETON_WARRIOR_7; // 138
+    g_MonsterConfig[index].modelType = MODEL_ORC;
+    g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+
+    index = MONSTER_CHIEF_SKELETON_ARCHER_7; // 139
+    g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"Chief Skeleton Archer";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
+    g_MonsterConfig[index].weapon2Level = 1;
+
+    index = MONSTER_DARK_SKULL_SOLDIER_7; // 140
+    g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
+    g_MonsterConfig[index].name = L"Dark Skull Soldier";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_GIANT_OGRE_7; // 141
+    g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"Giant Ogre";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.8f;
+
+    index = MONSTER_RED_SKELETON_KNIGHT_7; // 142
+    g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
+    g_MonsterConfig[index].name = L"Red Skeleton Knight";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.19f;
+    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+
+    index = MONSTER_MAGIC_SKELETON_7; // 143
+    g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"Magic Skeleton";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.2f;
+    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
+    g_MonsterConfig[index].weapon1Level = 11;
+
+    index = MONSTER_DEATH_ANGEL_1; // 144
+	g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
+	g_MonsterConfig[index].name = L"Death Angel";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_DEATH_CENTURION_1; // 145
+	g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
+	g_MonsterConfig[index].name = L"Death Centurion";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_BLOOD_SOLDIER_1; // 146
+	g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
+	g_MonsterConfig[index].name = L"Blood Soldier";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_AEGIS_1; // 147
+	g_MonsterConfig[index].modelType = MODEL_AEGIS;
+	g_MonsterConfig[index].name = L"Aegis";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_ROGUE_CENTURION_1; // 148
+	g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
+	g_MonsterConfig[index].name = L"Rogue Centurion";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_NECRON_1; // 149
+    g_MonsterConfig[index].modelType = MODEL_NECRON;
+	g_MonsterConfig[index].name = L"Necron";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_BALI; // 150
+	g_MonsterConfig[index].modelType = MODEL_BALI;
+	g_MonsterConfig[index].name = L"Bali";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.12f;
+
+    index = MONSTER_SOLDIER; // 151
+	g_MonsterConfig[index].modelType = MODEL_SOLDIER;
+	g_MonsterConfig[index].name = L"Soldier";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.3f;
+    g_MonsterConfig[index].weapon2Type = MODEL_AQUAGOLD_CROSSBOW;
+
+    index = MONSTER_GATE_TO_KALIMA_1; // 152
+    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
+	g_MonsterConfig[index].name = L"Gate to Kalima";
+	g_MonsterConfig[index].kind = KIND_OPERATE;
+	g_MonsterConfig[index].scale = 1.0f;
+	g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
+	g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].notRotateOnMagicHit = true;
+
+    index = MONSTER_GATE_TO_KALIMA_2; // 153
+    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
+    g_MonsterConfig[index].name = L"Gate to Kalima";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].notRotateOnMagicHit = true;
+
+    index = MONSTER_GATE_TO_KALIMA_3; // 154
+    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
+    g_MonsterConfig[index].name = L"Gate to Kalima";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].notRotateOnMagicHit = true;
+
+    index = MONSTER_GATE_TO_KALIMA_4; // 155
+    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
+    g_MonsterConfig[index].name = L"Gate to Kalima";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].notRotateOnMagicHit = true;
+
+    index = MONSTER_GATE_TO_KALIMA_5; // 156
+    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
+    g_MonsterConfig[index].name = L"Gate to Kalima";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].notRotateOnMagicHit = true;
+
+    index = MONSTER_GATE_TO_KALIMA_6; // 157
+    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
+    g_MonsterConfig[index].name = L"Gate to Kalima";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].notRotateOnMagicHit = true;
+
+    index = MONSTER_GATE_TO_KALIMA_7; // 158
+    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
+    g_MonsterConfig[index].name = L"Gate to Kalima";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].notRotateOnMagicHit = true;
+
+    index = MONSTER_SCHRIKER_1; // 160
+    g_MonsterConfig[index].modelType = MODEL_SCHRIKER;
+	g_MonsterConfig[index].name = L"Schriker";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_ILLUSION_OF_KUNDUN_1; // 161
+	g_MonsterConfig[index].modelType = MODEL_ILLUSION_OF_KUNDUN;
+	g_MonsterConfig[index].name = L"Illusion of Kundun";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 1.0f;
+	g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+
+    index = MONSTER_CHAOS_CASTLE_1; // 162
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
+	g_MonsterConfig[index].name = L"Chaos Castle Knight";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+	g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
+	g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHAOS_CASTLE_2; // 163
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
+	g_MonsterConfig[index].name = L"Chaos Castle Elf";
+	g_MonsterConfig[index].kind = KIND_MONSTER;
+	g_MonsterConfig[index].scale = 0.9f;
+	g_MonsterConfig[index].weapon1Type = -1; // magic!
+	g_MonsterConfig[index].weapon1Level = 0;
+	g_MonsterConfig[index].weapon2Type = -1; // magic!
+	g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHAOS_CASTLE_3; // 164
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
+    g_MonsterConfig[index].name = L"Chaos Castle Knight";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHAOS_CASTLE_4; // 165
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
+    g_MonsterConfig[index].name = L"Chaos Castle Elf";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = -1; // magic!
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = -1; // magic!
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHAOS_CASTLE_5; // 166
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
+    g_MonsterConfig[index].name = L"Chaos Castle Knight";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHAOS_CASTLE_6; // 167
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
+    g_MonsterConfig[index].name = L"Chaos Castle Elf";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = -1; // magic!
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = -1; // magic!
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHAOS_CASTLE_7; // 168
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
+    g_MonsterConfig[index].name = L"Chaos Castle Knight";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHAOS_CASTLE_8; // 169
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
+    g_MonsterConfig[index].name = L"Chaos Castle Elf";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = -1; // magic!
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = -1; // magic!
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHAOS_CASTLE_9; // 170
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
+    g_MonsterConfig[index].name = L"Chaos Castle Knight";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHAOS_CASTLE_10; // 171
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
+    g_MonsterConfig[index].name = L"Chaos Castle Elf";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = -1; // magic!
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = -1; // magic!
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHAOS_CASTLE_11; // 172
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
+    g_MonsterConfig[index].name = L"Chaos Castle Knight";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHAOS_CASTLE_12; // 173
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
+    g_MonsterConfig[index].name = L"Chaos Castle Elf";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = -1; // magic!
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = -1; // magic!
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_DEATH_ANGEL_2; // 174
+    g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
+    g_MonsterConfig[index].name = L"Death Angel";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_DEATH_CENTURION_2; // 175
+    g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"Death Centurion";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_BLOOD_SOLDIER_2; // 176
+    g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"Blood Soldier";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_AEGIS_2; // 177
+    g_MonsterConfig[index].modelType = MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"Aegis";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_ROGUE_CENTURION_2; // 178
+    g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
+    g_MonsterConfig[index].name = L"Rogue Centurion";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_NECRON_2; // 179
+    g_MonsterConfig[index].modelType = MODEL_NECRON;
+    g_MonsterConfig[index].name = L"Necron";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_SCHRIKER_2; // 180
+
+
+    index = MONSTER_ILLUSION_OF_KUNDUN_2; // 181
+
+
+    index = MONSTER_DEATH_ANGEL_3; // 182
+    g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
+    g_MonsterConfig[index].name = L"Death Angel";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_DEATH_CENTURION_3; // 183
+    g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"Death Centurion";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_BLOOD_SOLDIER_3; // 184
+    g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"Blood Soldier";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_AEGIS_3; // 185
+    g_MonsterConfig[index].modelType = MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"Aegis";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_ROGUE_CENTURION_3; // 186
+    g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
+    g_MonsterConfig[index].name = L"Rogue Centurion";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_NECRON_3; // 187
+    g_MonsterConfig[index].modelType = MODEL_NECRON;
+    g_MonsterConfig[index].name = L"Necron";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_SCHRIKER_3; // 188
+
+
+    index = MONSTER_ILLUSION_OF_KUNDUN_3; // 189
+
+
+    index = MONSTER_DEATH_ANGEL_4; // 190
+    g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
+    g_MonsterConfig[index].name = L"Death Angel";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_DEATH_CENTURION_4; // 191
+    g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"Death Centurion";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_BLOOD_SOLDIER_4; // 192
+    g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"Blood Soldier";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_AEGIS_4; // 193
+    g_MonsterConfig[index].modelType = MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"Aegis";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_ROGUE_CENTURION_4; // 194
+    g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
+    g_MonsterConfig[index].name = L"Rogue Centurion";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_NECRON_4; // 195
+    g_MonsterConfig[index].modelType = MODEL_NECRON;
+    g_MonsterConfig[index].name = L"Necron";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_SCHRIKER_4; // 196
+
+
+    index = MONSTER_ILLUSION_OF_KUNDUN_4; // 197
+
+
+    index = MONSTER_SOCCERBALL; // 200
+
+
+    index = MONSTER_WOLF_STATUS; // 204
+
+
+    index = MONSTER_WOLF_ALTAR1; // 205
+
+
+    index = MONSTER_WOLF_ALTAR2; // 206
+
+
+    index = MONSTER_WOLF_ALTAR3; // 207
+
+
+    index = MONSTER_WOLF_ALTAR4; // 208
+
+
+    index = MONSTER_WOLF_ALTAR5; // 209
+
+
+    index = MONSTER_SHIELD; // 215
+
+
+    index = MONSTER_CROWN; // 216
+
+
+    index = MONSTER_CROWN_SWITCH1; // 217
+
+
+    index = MONSTER_CROWN_SWITCH2; // 218
+
+
+    index = MONSTER_CASTLE_GATE_SWITCH; // 219
+
+
+    index = MONSTER_GUARD; // 220
+
+
+    index = MONSTER_SLINGSHOT_ATTACK; // 221
+
+
+    index = MONSTER_SLINGSHOT_DEFENSE; // 222
+
+
+    index = MONSTER_SENIOR; // 223
+
+
+    index = MONSTER_GUARDSMAN; // 224
+
+
+    index = MONSTER_PET_TRAINER; // 226
+
+    index = MONSTER_MARLON; // 229
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"말론";
+    g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
+    g_MonsterConfig[index].helmLevel = 7;
+    g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
+    g_MonsterConfig[index].armorLevel = 7;
+    g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
+    g_MonsterConfig[index].pantsLevel = 7;
+    g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
+    g_MonsterConfig[index].glovesLevel = 7;
+    g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
+    g_MonsterConfig[index].bootsLevel = 7;
+    g_MonsterConfig[index].weapon1Type = MODEL_BERDYSH;
+    g_MonsterConfig[index].weapon1Level = 8;
+	g_MonsterConfig[index].weapon2Type = -1; // magic!
+
+    index = MONSTER_ALEX; // 230
+    g_MonsterConfig[index].modelType = MODEL_MERCHANT_MAN;
+    g_MonsterConfig[index].name = L"로랜추가상인";
+    g_MonsterConfig[index].helmType = MODEL_MERCHANT_MAN_HEAD;
+    g_MonsterConfig[index].armorType = MODEL_MERCHANT_MAN_UPPER + 1;
+    g_MonsterConfig[index].glovesType = MODEL_MERCHANT_MAN_GLOVES + 1;
+    g_MonsterConfig[index].bootsType = MODEL_MERCHANT_MAN_BOOTS;
+
+    index = MONSTER_THOMPSON_THE_MERCHANT; // 231
+    g_MonsterConfig[index].modelType = MODEL_DEVIAS_TRADER;
+    g_MonsterConfig[index].name = L"데비추가상인";
+
+    index = MONSTER_ARCHANGEL; // 232
+    g_MonsterConfig[index].modelType = MODEL_NPC_ARCHANGEL;
+    g_MonsterConfig[index].kind = KIND_NPC;
+
+    index = MONSTER_MESSENGER_OF_ARCH; // 233
+    g_MonsterConfig[index].modelType = MODEL_NPC_ARCHANGEL_MESSENGER;
+    g_MonsterConfig[index].kind = KIND_NPC;
+
+    index = MONSTER_GOBLIN_GATE; // 234
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GOBLIN;
+    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
+    g_MonsterConfig[index].weapon1Level = 4;
+    g_MonsterConfig[index].scale = 1.5f;
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+
+    index = MONSTER_SEVINA_THE_PRIESTESS; // 235
+    g_MonsterConfig[index].modelType = MODEL_NPC_SEVINA;
+	g_MonsterConfig[index].name = L"Sevina the Priestess";
+    g_MonsterConfig[index].kind = KIND_NPC;
+	g_MonsterConfig[index].scale = 1.0f;
+
+
+    index = MONSTER_GOLDEN_ARCHER; // 236
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+	g_MonsterConfig[index].name = L"Golden Archer";
+	g_MonsterConfig[index].kind = KIND_NPC;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_CHARON; // 237
+    g_MonsterConfig[index].modelType = MODEL_NPC_DEVILSQUARE;
+	g_MonsterConfig[index].name = L"Charon";
+	g_MonsterConfig[index].kind = KIND_NPC;
+
+    index = MONSTER_CHAOS_GOBLIN; // 238
+    g_MonsterConfig[index].modelType = MODEL_MIX_NPC;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].blendMesh = 1;
+
+    index = MONSTER_ARENA_GUARD; // 239
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].modelType = MODEL_TOURNAMENT;
+
+        index = MONSTER_BAZ_THE_VAULT_KEEPER; // 240
+    g_MonsterConfig[index].modelType = MODEL_STORAGE;
+    g_MonsterConfig[index].kind = KIND_NPC;
+
+    index = MONSTER_GUILD_MASTER; // 241
+    g_MonsterConfig[index].modelType = MODEL_MASTER;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 241 - 마스터";
+
+
+    index = MONSTER_ELF_LALA; // 242
+    g_MonsterConfig[index].modelType = MODEL_ELF_WIZARD;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 242 - 라라 요정";
+    g_MonsterConfig[index].blendMesh = 1;
+
+    index = MONSTER_EO_THE_CRAFTSMAN; // 243
+    g_MonsterConfig[index].modelType = MODEL_ELF_WIZARD;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 243 - 라라 요정";
+    g_MonsterConfig[index].blendMesh = 1;
+
+    index = MONSTER_CAREN_THE_BARMAID; // 244
+    g_MonsterConfig[index].modelType = MODEL_SNOW_MERCHANT;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 244 - 술집마담";
+
+    index = MONSTER_IZABEL_THE_WIZARD; // 245
+    g_MonsterConfig[index].modelType = MODEL_SNOW_WIZARD;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 245 - 무기상인";
+
+
+    index = MONSTER_ZIENNA_THE_WEAPONS_MERCHANT; // 246 // ?_?
+	g_MonsterConfig[index].modelType = MODEL_SNOW_MERCHANT;
+	g_MonsterConfig[index].kind = KIND_NPC;
+	g_MonsterConfig[index].name = L"NPC 246 - 무기상인";
+
+    index = MONSTER_CROSSBOW_GUARD; // 247
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 247 - 경비병";
+    g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
+    g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
+    g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
+    g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
+    g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
+    g_MonsterConfig[index].weapon1Type = MODEL_LIGHT_CROSSBOW;
+    g_MonsterConfig[index].weapon2Type = MODEL_BOLT;
+
+    index = MONSTER_WANDERING_MERCHANT_MARTIN; // 248
+    g_MonsterConfig[index].modelType = MODEL_MERCHANT_MAN;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 248 - 떠돌이 상인";
+    g_MonsterConfig[index].helmType = MODEL_MERCHANT_MAN_HEAD + 1;
+    g_MonsterConfig[index].armorType = MODEL_MERCHANT_MAN_UPPER + 1;
+    g_MonsterConfig[index].glovesType = MODEL_MERCHANT_MAN_GLOVES + 1;
+    g_MonsterConfig[index].bootsType = MODEL_MERCHANT_MAN_BOOTS + 1;
+
+    index = MONSTER_BERDYSH_GUARD; // 249
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 249 - 경비병";
+    g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
+    g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
+    g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
+    g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
+    g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
+    g_MonsterConfig[index].weapon1Type = MODEL_BERDYSH;
+
+    index = MONSTER_WANDERING_MERCHANT_HAROLD; // 250
+    g_MonsterConfig[index].modelType = MODEL_MERCHANT_MAN;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 250 - 떠돌이 상인";
+    g_MonsterConfig[index].helmType = MODEL_MERCHANT_MAN_HEAD;
+    g_MonsterConfig[index].armorType = MODEL_MERCHANT_MAN_UPPER;
+    g_MonsterConfig[index].glovesType = MODEL_MERCHANT_MAN_GLOVES;
+    g_MonsterConfig[index].bootsType = MODEL_MERCHANT_MAN_BOOTS;
+
+    index = MONSTER_HANZO_THE_BLACKSMITH; // 251
+    g_MonsterConfig[index].modelType = MODEL_SMITH;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 251 - 대장장이 한스";
+    g_MonsterConfig[index].scale = 0.95f;
+
+    index = MONSTER_POTION_GIRL_AMY; // 253
+    g_MonsterConfig[index].modelType = MODEL_MERCHANT_GIRL;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 253 - 물약파는 소녀";
+    g_MonsterConfig[index].helmType = MODEL_MERCHANT_GIRL_HEAD;
+    g_MonsterConfig[index].armorType = MODEL_MERCHANT_GIRL_UPPER;
+    g_MonsterConfig[index].pantsType = MODEL_MERCHANT_GIRL_LOWER;
+
+    index = MONSTER_PASI_THE_MAGE; // 254
+    g_MonsterConfig[index].modelType = MODEL_SCIENTIST;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 254 - 마법사 파시";
+
+    index = MONSTER_LUMEN_THE_BARMAID; // 255
+    g_MonsterConfig[index].modelType = MODEL_MERCHANT_FEMALE;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 256 - 술집마담 리아먼";
+    g_MonsterConfig[index].helmType = MODEL_MERCHANT_FEMALE_HEAD + 1;
+    g_MonsterConfig[index].armorType = MODEL_MERCHANT_FEMALE_UPPER + 1;
+    g_MonsterConfig[index].glovesType = MODEL_MERCHANT_FEMALE_LOWER + 1;
+    g_MonsterConfig[index].bootsType = MODEL_MERCHANT_FEMALE_BOOTS + 1;
+
+    index = MONSTER_LAHAP; // 256
+
+
+    index = MONSTER_ELF_SOLDIER; // 257
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 257 - 페이아";
+
+    index = MONSTER_LUKE_THE_HELPER; // 258
+
+
+    index = MONSTER_ORACLE_LAYLA; // 259
+
+
+    index = MONSTER_DEATH_ANGEL_5; // 260
+    g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
+    g_MonsterConfig[index].name = L"Death Angel";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_DEATH_CENTURION_5; // 261
+    g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"Death Centurion";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_BLOOD_SOLDIER_5; // 262
+    g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"Blood Soldier";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_AEGIS_5; // 263
+    g_MonsterConfig[index].modelType = MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"Aegis";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_ROGUE_CENTURION_5; // 264
+    g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
+    g_MonsterConfig[index].name = L"Rogue Centurion";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_NECRON_5; // 265
+    g_MonsterConfig[index].modelType = MODEL_NECRON;
+    g_MonsterConfig[index].name = L"Necron";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_SCHRIKER_5; // 266
+
+
+    index = MONSTER_ILLUSION_OF_KUNDUN_5; // 267
+
+
+    index = MONSTER_DEATH_ANGEL_6; // 268
+    g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
+    g_MonsterConfig[index].name = L"Death Angel";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_DEATH_CENTURION_6; // 269
+    g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"Death Centurion";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_BLOOD_SOLDIER_6; // 270
+    g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"Blood Soldier";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_AEGIS_6; // 271
+    g_MonsterConfig[index].modelType = MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"Aegis";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_ROGUE_CENTURION_6; // 272
+    g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
+    g_MonsterConfig[index].name = L"Rogue Centurion";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_NECRON_6; // 273
+    g_MonsterConfig[index].modelType = MODEL_NECRON;
+    g_MonsterConfig[index].name = L"Necron";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_SCHRIKER_6; // 274
+
+
+    index = MONSTER_ILLUSION_OF_KUNDUN_7; // 275
+
+
+    index = MONSTER_CASTLE_GATE1; // 277
+
+
+    index = MONSTER_LIFE_STONE; // 278
+
+
+    index = MONSTER_GUARDIAN_STATUE; // 283
+
+
+    index = MONSTER_GUARDIAN; // 285
+
+
+    index = MONSTER_BATTLE_GUARD1; // 286
+
+
+    index = MONSTER_BATTLE_GUARD2; // 287
+
+
+    index = MONSTER_CANON_TOWER; // 288
+
+
+    index = MONSTER_LIZARD_WARRIOR; // 290
+
+
+    index = MONSTER_FIRE_GOLEM; // 291
+
+
+    index = MONSTER_QUEEN_BEE; // 292
+
+
+    index = MONSTER_POISON_GOLEM; // 293
+
+
+    index = MONSTER_AXE_WARRIOR; // 294
+
+
+    index = MONSTER_EROHIM; // 295
+
+
+    index = MONSTER_PK_DARK_KNIGHT; // 297
+
+
+    index = MONSTER_MUTANT_HERO; // 300
+
+
+    index = MONSTER_OMEGA_WING; // 301
+
+
+    index = MONSTER_AXE_HERO; // 302
+
+
+    index = MONSTER_GIGAS_GOLEM; // 303
+
+
+    index = MONSTER_WITCH_QUEEN; // 304
+
+
+    index = MONSTER_BLUE_GOLEM; // 305
+
+
+    index = MONSTER_DEATH_RIDER; // 306
+
+
+    index = MONSTER_FOREST_ORC; // 307
+
+
+    index = MONSTER_DEATH_TREE; // 308
+
+
+    index = MONSTER_HELL_MAINE; // 309
+
+
+    index = MONSTER_HAMMER_SCOUT; // 310
+
+
+    index = MONSTER_LANCE_SCOUT; // 311
+
+
+    index = MONSTER_BOW_SCOUT; // 312
+
+
+    index = MONSTER_WEREWOLF; // 313
+
+
+    index = MONSTER_SCOUTHERO; // 314
+
+
+    index = MONSTER_WEREWOLFHERO; // 315
+
+
+    index = MONSTER_VALAM; // 316
+
+
+    index = MONSTER_SOLAM; // 317
+
+
+    index = MONSTER_SCOUT; // 318
+
+
+    index = MONSTER_AEGIS_7; // 331
+    g_MonsterConfig[index].modelType = MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"Aegis";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_ROGUE_CENTURION_7; // 332
+    g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
+    g_MonsterConfig[index].name = L"Rogue Centurion";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_BLOOD_SOLDIER_7; // 333
+    g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"Blood Soldier";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_DEATH_ANGEL_7; // 334
+    g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
+    g_MonsterConfig[index].name = L"Death Angel";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_NECRON_7; // 335
+    g_MonsterConfig[index].modelType = MODEL_NECRON;
+    g_MonsterConfig[index].name = L"Necron";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_DEATH_CENTURION_7; // 336
+    g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"Death Centurion";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_SCHRIKER_7; // 337
+
+
+    index = MONSTER_ILLUSION_OF_KUNDUN_6; // 338
+
+
+    index = MONSTER_DARKELF; // 340
+
+
+    index = MONSTER_SORAM; // 341
+
+
+    index = MONSTER_BALRAM; // 344
+
+
+    index = MONSTER_DEATH_SPIRIT; // 345
+
+
+    index = MONSTER_BALLISTA; // 348
+
+
+    index = MONSTER_BALGASS; // 349
+
+
+    index = MONSTER_BERSERKER; // 350
+
+
+    index = MONSTER_SPLINTER_WOLF; // 351
+
+
+    index = MONSTER_IRON_RIDER; // 352
+
+
+    index = MONSTER_SATYROS; // 353
+
+
+    index = MONSTER_BLADE_HUNTER; // 354
+
+
+    index = MONSTER_KENTAUROS; // 355
+
+
+    index = MONSTER_GIGANTIS; // 356
+
+
+    index = MONSTER_GENOCIDER; // 357
+
+
+    index = MONSTER_PERSONA; // 358
+
+
+    index = MONSTER_TWIN_TALE; // 359
+
+
+    index = MONSTER_DREADFEAR; // 360
+
+
+    index = MONSTER_NIGHTMARE; // 361
+
+
+    index = MONSTER_MAYA_HAND_LEFT; // 362
+
+
+    index = MONSTER_MAYA_HAND_RIGHT; // 363
+
+
+    index = MONSTER_MAYA; // 364
+
+
+    index = MONSTER_POUCH_OF_BLESSING; // 365
+
+
+    index = MONSTER_GATEWAY_MACHINE; // 367
+
+
+    index = MONSTER_ELPHIS; // 368
+
+
+    index = MONSTER_OSBOURNE; // 369
+    g_MonsterConfig[index].modelType = MODEL_REFINERY_NPC;
+	g_MonsterConfig[index].name = L"Osbourne";
+	g_MonsterConfig[index].kind = KIND_NPC;
+
+    index = MONSTER_JERRIDON; // 370
+
+
+    index = MONSTER_LEO_THE_HELPER; // 371
+	g_MonsterConfig[index].modelType = MODEL_PLAYER;
+	g_MonsterConfig[index].name = L"Leo the Helper";
+	g_MonsterConfig[index].kind = KIND_NPC;
+	g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
+	g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
+	g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
+	g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
+	g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
+	g_MonsterConfig[index].weapon1Type = -1; // magic!
+	g_MonsterConfig[index].m_bpcroom = 1; // ?_?
+
+    index = MONSTER_ELITE_SKILL_SOLDIER; // 372
+
+
+    index = MONSTER_JACK_OLANTERN; // 373
+
+
+    index = MONSTER_SANTA; // 374
+
+
+    index = MONSTER_CHAOS_CARD_MASTER; // 375
+
+
+    index = MONSTER_PAMELA_THE_SUPPLIER; // 376
+
+
+    index = MONSTER_ANGELA_THE_SUPPLIER; // 377
+
+
+    index = MONSTER_GAMEMASTER; // 378
+
+
+    index = MONSTER_FIREWORKS_GIRL; // 379
+
+
+    index = MONSTER_STONE_STATUE; // 380
+
+
+    index = MONSTER_MU_ALLIES_GENERAL; // 381
+
+
+    index = MONSTER_ILLUSION_ELDER; // 382
+
+
+    index = MONSTER_ALLIANCE_ITEM_STORAGE; // 383
+
+
+    index = MONSTER_ILLUSION_ITEM_STORAGE; // 384
+
+
+    index = MONSTER_MIRAGE; // 385
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT1_LIGHTNING; // 386
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT2_LIGHTNING; // 389
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT3_LIGHTNING; // 392
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT4_LIGHTNING; // 395
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT5_LIGHTNING; // 398
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT6_LIGHTNING; // 401
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT1_ICE; // 387
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT2_ICE; // 390
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT3_ICE; // 393
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT4_ICE; // 396
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT5_ICE; // 399
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT6_ICE; // 402
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT1_POISON; // 388
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT2_POISON; // 391
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT3_POISON; // 394
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT4_POISON; // 397
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT5_POISON; // 400
+
+
+    index = MONSTER_ILLUSION_SORCERER_SPIRIT6_POISON; // 403
+
+
+    index = MONSTER_MU_ALLIES; // 404
+
+
+    index = MONSTER_ILLUSION_SORCERER; // 405
+
+
+    index = MONSTER_PRIEST_DEVIN; // 406
+
+
+    index = MONSTER_WEREWOLF_QUARREL; // 407
+
+
+    index = MONSTER_GATEKEEPER; // 408
+
+
+    index = MONSTER_BALRAM_TRAINEE_SOLDIER; // 409
+
+
+    index = MONSTER_DEATH_SPIRIT_TRAINEE_SOLDIER; // 410
+
+
+    index = MONSTER_SORAM_TRAINEE_SOLDIER; // 411
+
+
+    index = MONSTER_DARK_ELF_TRAINEE_SOLDIER; // 412
+
+
+    index = MONSTER_LUNAR_RABBIT; // 413
+
+
+    index = MONSTER_HELPER_ELLEN; // 414
+
+
+    index = MONSTER_SILVIA; // 415
+
+
+    index = MONSTER_RHEA; // 416
+
+
+    index = MONSTER_MARCE; // 417
+
+
+    index = MONSTER_STRANGE_RABBIT; // 418
+
+
+    index = MONSTER_POLLUTED_BUTTERFLY; // 419
+
+
+    index = MONSTER_HIDEOUS_RABBIT; // 420
+
+
+    index = MONSTER_WEREWOLF2; // 421
+
+
+    index = MONSTER_CURSED_LICH; // 422
+
+
+    index = MONSTER_TOTEM_GOLEM; // 423
+
+
+    index = MONSTER_GRIZZLY; // 424
+
+
+    index = MONSTER_CAPTAIN_GRIZZLY; // 425
+
+
+    index = MONSTER_CHAOS_CASTLE_13; // 426
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
+    g_MonsterConfig[index].name = L"Chaos Castle Knight";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHAOS_CASTLE_14; // 427
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
+    g_MonsterConfig[index].name = L"Chaos Castle Elf";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].weapon1Type = -1; // magic!
+    g_MonsterConfig[index].weapon1Level = 0;
+    g_MonsterConfig[index].weapon2Type = -1; // magic!
+    g_MonsterConfig[index].weapon2Level = 0;
+
+    index = MONSTER_CHIEF_SKELETON_WARRIOR_8; // 428
+
+
+    index = MONSTER_CHIEF_SKELETON_ARCHER_8; // 429
+
+
+    index = MONSTER_DARK_SKULL_SOLDIER_8; // 430
+
+
+    index = MONSTER_GIANT_OGRE_8; // 431
+
+
+    index = MONSTER_RED_SKELETON_KNIGHT_8; // 432
+
+
+    index = MONSTER_MAGIC_SKELETON_8; // 433
+
+
+    index = MONSTER_GIGANTIS2; // 434
+
+
+    index = MONSTER_BERSERK; // 435
+
+
+    index = MONSTER_BALRAM_TRAINEE; // 436
+
+
+    index = MONSTER_SORAM_TRAINEE; // 437
+
+
+    index = MONSTER_PERSONA_DS7; // 438
+
+
+    index = MONSTER_DREADFEAR2; // 439
+
+
+    index = MONSTER_DARK_ELF; // 440
+
+
+    index = MONSTER_SAPIUNUS; // 441
+
+
+    index = MONSTER_SAPIDUO; // 442
+
+
+    index = MONSTER_SAPITRES; // 443
+
+
+    index = MONSTER_SHADOW_PAWN; // 444
+
+
+    index = MONSTER_SHADOW_KNIGHT; // 445
+
+
+    index = MONSTER_SHADOW_LOOK; // 446
+
+
+    index = MONSTER_THUNDER_NAPIN; // 447
+
+
+    index = MONSTER_GHOST_NAPIN; // 448
+
+
+    index = MONSTER_BLAZE_NAPIN; // 449
+
+
+    index = MONSTER_CHERRY_BLOSSOM_SPIRIT; // 450
+    g_MonsterConfig[index].modelType = MODEL_NPC_CHERRYBLOSSOM;
+	g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 450 - 벚꽃의정령";
+    g_MonsterConfig[index].scale = 0.65f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.08f;
+
+
+    index = MONSTER_CHERRY_BLOSSOM_TREE; // 451
+
+
+    index = MONSTER_SEED_MASTER; // 452
+
+
+    index = MONSTER_SEED_RESEARCHER; // 453
+
+
+    index = MONSTER_ICE_WALKER; // 454
+
+
+    index = MONSTER_GIANT_MAMMOTH; // 455
+
+
+    index = MONSTER_ICE_GIANT; // 456
+
+
+    index = MONSTER_COOLUTIN; // 457
+
+
+    index = MONSTER_IRON_KNIGHT; // 458
+
+
+    index = MONSTER_SELUPAN; // 459
+
+
+    index = MONSTER_SPIDER_EGGS_1; // 460
+
+
+    index = MONSTER_SPIDER_EGGS_2; // 461
+
+
+    index = MONSTER_SPIDER_EGGS_3; // 462
+
+
+    index = MONSTER_FIRE_FLAME_GHOST; // 463
+
+
+    index = MONSTER_REINIT_HELPER; // 464
+
+
+    index = MONSTER_SANTA_CLAUSE; // 465
+
+
+    index = MONSTER_EVIL_GOBLIN; // 466
+
+
+    index = MONSTER_SNOWMAN; // 467
+
+
+    index = MONSTER_LITTLE_SANTA_YELLOW; // 468
+
+
+    index = MONSTER_LITTLE_SANTA_GREEN; // 469
+
+
+    index = MONSTER_LITTLE_SANTA_RED; // 470
+
+
+    index = MONSTER_LITTLE_SANTA_BLUE; // 471
+
+
+    index = MONSTER_LITTLE_SANTA_WHITE; // 472
+
+
+    index = MONSTER_LITTLE_SANTA_BLACK; // 473
+
+
+    index = MONSTER_LITTLE_SANTA_ORANGE; // 474
+
+
+    index = MONSTER_LITTLE_SANTA_PINK; // 475
+
+
+    index = MONSTER_CURSED_SANTA; // 476
+
+
+    index = MONSTER_TRANSFORMED_SNOWMAN; // 477
+
+
+    index = MONSTER_DELGADO; // 478
+
+
+    index = MONSTER_GATEKEEPER_TITUS; // 479
+
+
+    index = MONSTER_ZOMBIE_FIGHTER; // 480
+
+
+    index = MONSTER_ZOMBIER; // 481
+
+
+    index = MONSTER_GLADIATOR; // 482
+
+
+    index = MONSTER_HELL_GLADIATOR; // 483
+
+
+    index = MONSTER_SLAUGHTERER; // 484
+
+
+    index = MONSTER_ASH_SLAUGHTERER; // 485
+
+
+    index = MONSTER_BLOOD_ASSASSIN; // 486
+
+
+    index = MONSTER_CRUEL_BLOOD_ASSASSIN; // 487
+
+
+    index = MONSTER_COLD_BLOODED_ASSASSIN; // 488
+
+
+    index = MONSTER_BURNING_LAVA_GIANT; // 489
+
+
+    index = MONSTER_LAVA_GIANT; // 490
+
+
+    index = MONSTER_RUTHLESS_LAVA_GIANT; // 491
+
+
+    index = MONSTER_MOSS_THE_MERCHANT; // 492
+
+
+    index = MONSTER_GOLDEN_DARK_KNIGHT; // 493
+
+
+    index = MONSTER_GOLDEN_DEVIL; // 494
+
+
+    index = MONSTER_GOLDEN_STONE_GOLEM; // 495
+
+
+    index = MONSTER_GOLDEN_CRUST; // 496
+
+
+    index = MONSTER_GOLDEN_SATYROS; // 497
+
+
+    index = MONSTER_GOLDEN_TWIN_TAIL; // 498
+
+
+    index = MONSTER_GOLDEN_IRON_KNIGHT; // 499
+
+
+    index = MONSTER_GOLDEN_NAPIN; // 500
+
+
+    index = MONSTER_GOLDEN_GREAT_DRAGON; // 501
+
+
+    index = MONSTER_GOLDEN_RABBIT; // 502
+
+
+    index = MONSTER_TRANSFORMED_PANDA; // 503
+
+
+    index = MONSTER_GAYION_THE_GLADIATOR; // 504
+
+
+    index = MONSTER_JERRY; // 505
+
+
+    index = MONSTER_RAYMOND; // 506
+
+
+    index = MONSTER_LUCAS; // 507
+
+
+    index = MONSTER_FRED; // 508
+
+
+    index = MONSTER_HAMMERIZE; // 509
+
+
+    index = MONSTER_DUAL_BERSERKER; // 510
+
+
+    index = MONSTER_DEVIL_LORD; // 511
+
+
+    index = MONSTER_QUARTER_MASTER; // 512
+
+
+    index = MONSTER_COMBAT_INSTRUCTOR; // 513
+
+
+    index = MONSTER_ATICLES_HEAD; // 514
+
+
+    index = MONSTER_DARK_GHOST; // 515
+
+
+    index = MONSTER_BANSHEE; // 516
+
+
+    index = MONSTER_HEAD_MOUNTER; // 517
+
+
+    index = MONSTER_DEFENDER; // 518
+
+
+    index = MONSTER_FORSAKER; // 519
+
+
+    index = MONSTER_OCELOT_THE_LORD; // 520
+
+
+    index = MONSTER_ERIC_THE_GUARD; // 521
+
+
+    index = MONSTER_ADVISER_JERINTEU; // 522
+
+
+    //index = MONSTER_TRAP; // 
+
+    index = MONSTER_EVIL_GATE; // 524
+
+
+    index = MONSTER_LION_GATE; // 525
+
+
+    index = MONSTER_STATUE; // 526
+
+
+    index = MONSTER_STAR_GATE; // 527
+
+
+    index = MONSTER_RUSH_GATE; // 528
+
+
+    index = MONSTER_TERRIBLE_BUTCHER; // 529
+
+
+    index = MONSTER_MAD_BUTCHER; // 530
+
+
+    index = MONSTER_ICE_WALKER2; // 531
+
+
+    index = MONSTER_LARVA2; // 532
+
+
+    index = MONSTER_DOPPELGANGER; // 533
+
+
+    index = MONSTER_DOPPELGANGER_ELF; // 534
+
+
+    index = MONSTER_DOPPELGANGER_KNIGHT; // 535
+
+
+    index = MONSTER_DOPPELGANGER_WIZARD; // 536
+
+
+    index = MONSTER_DOPPELGANGER_MG; // 537
+
+
+    index = MONSTER_DOPPELGANGER_DL; // 538
+
+
+    index = MONSTER_DOPPELGANGER_SUM; // 539
+
+
+    index = MONSTER_LUGARD; // 540
+
+
+    index = MONSTER_COMPENSATION_BOX; // 541
+
+
+    index = MONSTER_GOLDEN_COMPENSATION_BOX; // 542
+
+
+    index = MONSTER_GENS_DUPRIAN; // 543
+
+
+    index = MONSTER_GENS_VANERT; // 544
+	g_MonsterConfig[index].modelType = MODAL_GENS_NPC_BARNERT;
+	g_MonsterConfig[index].name = L"NPC 544 - Gens Vanert";
+	g_MonsterConfig[index].kind = KIND_NPC;
+	g_MonsterConfig[index].scale = 1.0f;
+
+    index = MONSTER_CHRISTINE_THE_GENERAL_GOODS_MERCHANT; // 545
+
+
+    index = MONSTER_JEWELER_RAUL; // 546
+
+
+    index = MONSTER_MARKET_UNION_MEMBER_JULIA; // 547
+
+
+    index = MONSTER_TRANSFORMED_SKELETON; // 548
+
+
+    index = MONSTER_BLOODY_ORC; // 549
+
+
+    index = MONSTER_BLOODY_DEATH_RIDER; // 550
+
+
+    index = MONSTER_BLOODY_GOLEM; // 551
+
+
+    index = MONSTER_BLOODY_WITCH_QUEEN; // 552
+
+
+    index = MONSTER_BERSERKER_WARRIOR; // 553
+
+
+    index = MONSTER_KENTAUROS_WARRIOR; // 554
+
+
+    index = MONSTER_GIGANTIS_WARRIOR; // 555
+
+
+    index = MONSTER_GENOCIDER_WARRIOR; // 556
+
+
+    index = MONSTER_SAPI_QUEEN; // 557
+
+
+    index = MONSTER_ICE_NAPIN; // 558
+
+
+    index = MONSTER_SHADOW_MASTER; // 559
+
+
+    index = MONSTER_SAPI_QUEEN2; // 560
+
+
+    index = MONSTER_MEDUSA; // 561
+
+
+    index = MONSTER_DARK_MAMMOTH; // 562
+
+
+    index = MONSTER_DARK_GIANT; // 563
+
+
+    index = MONSTER_DARK_COOLUTIN; // 564
+
+
+    index = MONSTER_DARK_IRON_KNIGHT; // 565
+
+
+    index = MONSTER_MERCENARY_GUILD_FELICIA; // 566
+
+
+    index = MONSTER_PRIESTESS_VEINA; // 567
+
+
+    index = MONSTER_WANDERING_MERCHANT_ZYRO; // 568
+    g_MonsterConfig[index].modelType = MODEL_ZAIRO;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 568 - 떠돌이상인 자이로";
+    g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.1f;
+    /*for (int i = 0; i < 6; i++)
+    {
+        Models[MODEL_ZAIRO].Actions[i].PlaySpeed = 0.33f;
+    }*/
+
+
+    index = MONSTER_VENOMOUS_CHAIN_SCORPION; // 569
+
+
+    index = MONSTER_BONE_SCORPION; // 570
+
+
+    index = MONSTER_ORCUS; // 571
+
+
+    index = MONSTER_GOLLOCK; // 572
+
+
+    index = MONSTER_CRYPTA; // 573
+
+
+    index = MONSTER_CRYPOS; // 574
+
+
+    index = MONSTER_CONDRA; // 575
+
+
+    index = MONSTER_NARCONDRA; // 576
+
+
+    index = MONSTER_LEINA_THE_GENERAL_GOODS_MERCHANT; // 577
+
+
+    index = MONSTER_WEAPONS_MERCHANT_BOLO; // 578
+
+
+    index = MONSTER_DAVID; // 579
+
+
+    index = MONSTER_CURSED_STATUE; // 658
+
+
+    index = MONSTER_CAPTURED_STONE_STATUE_1; // 659
+
+
+    index = MONSTER_CAPTURED_STONE_STATUE_2; // 660
+
+
+    index = MONSTER_CAPTURED_STONE_STATUE_3; // 661
+
+
+    index = MONSTER_CAPTURED_STONE_STATUE_4; // 662
+
+
+    index = MONSTER_CAPTURED_STONE_STATUE_5; // 663
+
+
+    index = MONSTER_CAPTURED_STONE_STATUE_6; // 664
+
+
+    index = MONSTER_CAPTURED_STONE_STATUE_7; // 665
+
+
+    index = MONSTER_CAPTURED_STONE_STATUE_8; // 666
+
+
+    index = MONSTER_CAPTURED_STONE_STATUE_9; // 667
+
+
+    index = MONSTER_CAPTURED_STONE_STATUE_10; // 668
+
+
+
+
+
+    ;// --- Populate data based on the original switch ---
+    index = MONSTER_GUARDSMAN; // 224
+    g_MonsterConfig[index].modelType = MODEL_NPC_CLERK;
+    g_MonsterConfig[index].name = L"Clerk";
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].notRotateOnMagicHit = true;
+    // c->Object.SubType = rand() % 2 + 10; // Logic for ApplyMonsterSpecificLogic
+    // c->Weapon[0].Type = -1; // Default in struct
+    // c->Weapon[1].Type = -1; // Default in struct
+
+#ifdef ADD_ELF_SUMMON
+    index = 276;
+    g_MonsterConfig[index].modelType = MODEL_GOLDEN_TITAN; // Assumed model, verify
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.45f;
+    g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
+    g_MonsterConfig[index].weapon1Type = MODEL_DARK_BREAKER;
+    g_MonsterConfig[index].weapon1Level = 5; // Level affects appearance/glow
+#endif // ADD_ELF_SUMMON
+
+    // Kalima Gates (152-158)
+    for (index = MONSTER_GATE_TO_KALIMA_1; index <= MONSTER_GATE_TO_KALIMA_7; ++index) {
+        g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
+        g_MonsterConfig[index].name = L"";
+        g_MonsterConfig[index].scale = 1.0f;
+        g_MonsterConfig[index].kind = KIND_NPC;
+        g_MonsterConfig[index].notRotateOnMagicHit = true;
+        g_MonsterConfig[index].enableShadow = true;
+        g_MonsterConfig[index].blendMesh = -1;
+        // o->PriorAnimationFrame = 10.f; // Logic for ApplyMonsterSpecificLogic
+        // o->AnimationFrame = 10;      // Logic for ApplyMonsterSpecificLogic
+    }
+
+    // Chaos Castle Knights (162, 164, 166, 168, 170, 172, 426)
+    int cc_knights[] = { MONSTER_CHAOS_CASTLE_1, MONSTER_CHAOS_CASTLE_3, MONSTER_CHAOS_CASTLE_5, MONSTER_CHAOS_CASTLE_7, MONSTER_CHAOS_CASTLE_9, MONSTER_CHAOS_CASTLE_11, MONSTER_CHAOS_CASTLE_13 };
+    for (int typeVal : cc_knights) {
+        index = typeVal;
+        g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
+        //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+        g_MonsterConfig[index].scale = 0.9f;
+        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
+        g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+        g_MonsterConfig[index].weapon1Level = 0;
+        g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
+        g_MonsterConfig[index].weapon2Level = 0;
+    }
+
+    // Chaos Castle Elf/Wizard (163, 165, 167, 169, 171, 173, 427)
+    int cc_others[] = { MONSTER_CHAOS_CASTLE_2, MONSTER_CHAOS_CASTLE_4, MONSTER_CHAOS_CASTLE_6, MONSTER_CHAOS_CASTLE_8, MONSTER_CHAOS_CASTLE_10, MONSTER_CHAOS_CASTLE_12, MONSTER_CHAOS_CASTLE_14 };
+    for (int typeVal : cc_others) {
+        index = typeVal;
+        // Original randomly picked model/weapon. This MUST be done in ApplyMonsterSpecificLogic
+        // Setting defaults here, override in ApplyMonsterSpecificLogic
+        g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // Default model
+        //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+        g_MonsterConfig[index].scale = 0.9f;
+        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
+        // Weapon logic in ApplyMonsterSpecificLogic
+    }
+
+    // Magic Skeletons (89, 95, 112, 118, 124, 130, 143, ?)
+    int magic_skeletons[] = { MONSTER_MAGIC_SKELETON_1, MONSTER_MAGIC_SKELETON_2, MONSTER_MAGIC_SKELETON_3, MONSTER_MAGIC_SKELETON_4, MONSTER_MAGIC_SKELETON_5, MONSTER_MAGIC_SKELETON_6, MONSTER_MAGIC_SKELETON_7, MONSTER_MAGIC_SKELETON_8 };
+    for (int typeVal : magic_skeletons) {
+        index = typeVal;
+        g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
+        g_MonsterConfig[index].name = L"마법해골";
+        g_MonsterConfig[index].scale = 1.2f;
+        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
+        g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
+        g_MonsterConfig[index].weapon1Level = 11; // Level affects appearance/glow
+    }
+
+    index = MONSTER_CASTLE_GATE; // 131 (Different from Kalima Gate?)
+    g_MonsterConfig[index].modelType = MODEL_CASTLE_GATE;
+    g_MonsterConfig[index].name = L"성문";
+    g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].kind = KIND_OPERATE; // Likely operate/trap? Check usage
+    g_MonsterConfig[index].notRotateOnMagicHit = true;
+    g_MonsterConfig[index].enableShadow = false;
+    g_MonsterConfig[index].isBloodCastleGateOrStatue = true;
+
+    // Saint Statues (132-134)
+    for (index = MONSTER_STATUE_OF_SAINT_1; index <= MONSTER_STATUE_OF_SAINT_3; ++index) {
+        g_MonsterConfig[index].modelType = MODEL_STATUE_OF_SAINT;
+        g_MonsterConfig[index].name = L"성자의석관";
+        g_MonsterConfig[index].scale = 0.8f;
+        g_MonsterConfig[index].kind = KIND_OPERATE; // Likely operate/trap?
+        g_MonsterConfig[index].notRotateOnMagicHit = true;
+        g_MonsterConfig[index].enableShadow = false;
+        g_MonsterConfig[index].isBloodCastleGateOrStatue = true;
+    }
+
+    // Chief Skeleton Warriors (84, 90, 96, 113, 119, 125, 138, ?)
+    int chief_skel_warr[] = { MONSTER_CHIEF_SKELETON_WARRIOR_1, MONSTER_CHIEF_SKELETON_WARRIOR_2, MONSTER_CHIEF_SKELETON_WARRIOR_3, MONSTER_CHIEF_SKELETON_WARRIOR_4, MONSTER_CHIEF_SKELETON_WARRIOR_5, MONSTER_CHIEF_SKELETON_WARRIOR_6, MONSTER_CHIEF_SKELETON_WARRIOR_7, MONSTER_CHIEF_SKELETON_WARRIOR_8 };
+    for (int typeVal : chief_skel_warr) {
+        index = typeVal;
+        g_MonsterConfig[index].modelType = MODEL_ORC;
+        //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+        g_MonsterConfig[index].scale = 1.1f;
+        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
+    }
+
+    // Chief Skeleton Archers (85, 91, 97, 114, 120, 126, 139, ?)
+    int chief_skel_arch[] = { MONSTER_CHIEF_SKELETON_ARCHER_1, MONSTER_CHIEF_SKELETON_ARCHER_2, MONSTER_CHIEF_SKELETON_ARCHER_3, MONSTER_CHIEF_SKELETON_ARCHER_4, MONSTER_CHIEF_SKELETON_ARCHER_5, MONSTER_CHIEF_SKELETON_ARCHER_6, MONSTER_CHIEF_SKELETON_ARCHER_7, MONSTER_CHIEF_SKELETON_ARCHER_8 };
+    for (int typeVal : chief_skel_arch) {
+        index = typeVal;
+        g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
+        //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+        g_MonsterConfig[index].scale = 1.1f;
+        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
+        g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW; // Weapon 1 is right hand, weapon 2 is left (bows usually left)
+        g_MonsterConfig[index].weapon2Level = 1;
+    }
+
+    // Dark Skull Soldiers (86, 92, 98, 115, 121, 127, 140, ?)
+    int dark_skulls[] = { MONSTER_DARK_SKULL_SOLDIER_1, MONSTER_DARK_SKULL_SOLDIER_2, MONSTER_DARK_SKULL_SOLDIER_3, MONSTER_DARK_SKULL_SOLDIER_4, MONSTER_DARK_SKULL_SOLDIER_5, MONSTER_DARK_SKULL_SOLDIER_6, MONSTER_DARK_SKULL_SOLDIER_7, MONSTER_DARK_SKULL_SOLDIER_8 };
+    for (int typeVal : dark_skulls) {
+        index = typeVal;
+        g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
+        g_MonsterConfig[index].name = L"흑해골전사";
+        g_MonsterConfig[index].scale = 1.0f;
+        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
+        g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
+        g_MonsterConfig[index].weapon1Level = 0;
+        g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
+        g_MonsterConfig[index].weapon2Level = 0;
+    }
+
+    // Giant Ogres (87, 93, 99, 116, 122, 128, 141, ?)
+    int giant_ogres[] = { MONSTER_GIANT_OGRE_1, MONSTER_GIANT_OGRE_2, MONSTER_GIANT_OGRE_3, MONSTER_GIANT_OGRE_4, MONSTER_GIANT_OGRE_5, MONSTER_GIANT_OGRE_6, MONSTER_GIANT_OGRE_7, MONSTER_GIANT_OGRE_8 };
+    for (int typeVal : giant_ogres) {
+        index = typeVal;
+        g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
+        g_MonsterConfig[index].name = L"자이언트오우거";
+        g_MonsterConfig[index].scale = 0.8f;
+        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
+    }
+
+    // Red Skeleton Knights (88, 94, 111, 117, 123, 129, 142, ?)
+    int red_skel_knights[] = { MONSTER_RED_SKELETON_KNIGHT_1, MONSTER_RED_SKELETON_KNIGHT_2, MONSTER_RED_SKELETON_KNIGHT_3, MONSTER_RED_SKELETON_KNIGHT_4, MONSTER_RED_SKELETON_KNIGHT_5, MONSTER_RED_SKELETON_KNIGHT_6, MONSTER_RED_SKELETON_KNIGHT_7, MONSTER_RED_SKELETON_KNIGHT_8 };
+    for (int typeVal : red_skel_knights) {
+        index = typeVal;
+        g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
+        g_MonsterConfig[index].name = L"붉은해골기사";
+        g_MonsterConfig[index].scale = 1.19f;
+        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
+        g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+        // Level depends on BC level - needs logic in ApplyMonsterSpecificLogic
+        // g_MonsterConfig[index].weapon1Level = (!int((7 + (gMapManager.WorldActive - WD_11BLOODCASTLE_END)) / 3)) ? 8 : 0;
+    }
+
+    // Golden Monsters (78-83, 493-502) - Many need specific effect handling
+    index = MONSTER_GOLDEN_GOBLIN; // 78
+    g_MonsterConfig[index].modelType = MODEL_GOBLIN;
+    g_MonsterConfig[index].name = L"고블린"; // Should be Golden Goblin?
+    g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].weapon1Type = MODEL_AXE;
+    g_MonsterConfig[index].weapon1Level = 9;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+
+    index = MONSTER_GOLDEN_DERKON; // 79
+    g_MonsterConfig[index].modelType = MODEL_DRAGON_;
+    g_MonsterConfig[index].name = L"드래곤"; // Should be Golden Dragon?
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+
+    index = MONSTER_GOLDEN_LIZARD_KING; // 80
+    g_MonsterConfig[index].modelType = MODEL_LIZARD;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.4f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_LIGHTNING_STAFF;
+    g_MonsterConfig[index].weapon1ExcellentFlags = 63;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+
+    index = MONSTER_GOLDEN_VEPAR; // 81
+    g_MonsterConfig[index].modelType = MODEL_VEPAR;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+
+    index = MONSTER_GOLDEN_TANTALLOS; // 82
+    g_MonsterConfig[index].modelType = MODEL_TANTALLOS;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.8f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].blendMesh = 2;
+    g_MonsterConfig[index].blendMeshLight = 1.0f;
+    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+    g_MonsterConfig[index].weapon1ExcellentFlags = 63;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+    // CreateJoint(...) // Logic for ApplyMonsterSpecificLogic
+
+    index = MONSTER_GOLDEN_WHEEL; // 83
+    g_MonsterConfig[index].modelType = MODEL_GOLDEN_WHEEL;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.4f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].weapon1Type = MODEL_AQUAGOLD_CROSSBOW;
+    g_MonsterConfig[index].weapon1ExcellentFlags = 63;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+    // CreateJoint(...) // Logic for ApplyMonsterSpecificLogic
+
+    index = MONSTER_GOLDEN_DARK_KNIGHT; // 493
+    g_MonsterConfig[index].modelType = MODEL_DARK_KNIGHT;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].weapon1Type = MODEL_DOUBLE_BLADE;
+    // c->Level = 1; // Need initialLevel field in struct?
+    g_MonsterConfig[index].needsGoldenEffect = true;
+
+    index = MONSTER_GOLDEN_DEVIL; // 494
+    g_MonsterConfig[index].modelType = MODEL_DEVIL;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+
+    index = MONSTER_GOLDEN_STONE_GOLEM; // 495
+    g_MonsterConfig[index].modelType = MODEL_GOLDEN_STONE_GOLEM;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.35f;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+    g_MonsterConfig[index].bonesToRegister.push_back({ L"Monster101_L_Arm", 12 });
+    g_MonsterConfig[index].bonesToRegister.push_back({ L"Monster101_R_Arm", 20 });
+    g_MonsterConfig[index].bonesToRegister.push_back({ L"Monster101_Head", 6 });
+
+    index = MONSTER_GOLDEN_CRUST; // 496
+    g_MonsterConfig[index].modelType = MODEL_CRUST;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_BLADE;
+    g_MonsterConfig[index].weapon1Level = 5;
+    g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
+    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].blendMesh = 1;
+    g_MonsterConfig[index].blendMeshLight = 1.0f;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+
+    index = MONSTER_GOLDEN_SATYROS; // 497
+    g_MonsterConfig[index].modelType = MODEL_SATYROS;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.3f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+
+    index = MONSTER_GOLDEN_TWIN_TAIL; // 498
+    g_MonsterConfig[index].modelType = MODEL_TWIN_TAIL;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.3f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+    g_MonsterConfig[index].bonesToRegister.push_back({ L"Twintail_Hair24", 16 });
+    g_MonsterConfig[index].bonesToRegister.push_back({ L"Twintail_Hair32", 24 });
+    // Angle/Gravity/Distance setup in ApplyMonsterSpecificLogic
+
+    index = MONSTER_GOLDEN_IRON_KNIGHT; // 499
+    g_MonsterConfig[index].modelType = MODEL_IRON_KNIGHT;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.5f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+
+    index = MONSTER_GOLDEN_NAPIN; // 500
+    g_MonsterConfig[index].modelType = MODEL_NAPIN;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 0.95f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+
+    index = MONSTER_GOLDEN_GREAT_DRAGON; // 501
+    g_MonsterConfig[index].modelType = MODEL_DRAGON_;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 0.88f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+
+    index = MONSTER_GOLDEN_RABBIT; // 502
+    g_MonsterConfig[index].modelType = MODEL_RABBIT;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.0f * 0.95f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].needsGoldenEffect = true;
+
+    // --- Continue for other monsters ---
+
+    index = MONSTER_MOLT; // 68
+    g_MonsterConfig[index].modelType = MODEL_MOLT;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.4f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+
+
+    index = MONSTER_ALQUAMOS; // 69
+    g_MonsterConfig[index].modelType = MODEL_ALQUAMOS;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].blendMesh = 0;
+
+    index = MONSTER_QUEEN_RAINER; // 70
+    g_MonsterConfig[index].modelType = MODEL_QUEEN_RAINER;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.3f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].blendMesh = -2; // Special blend mode
+    g_MonsterConfig[index].blendMeshLight = 1.0f;
+    g_MonsterConfig[index].enableShadow = false;
+
+    // Crust variants (71, 74, 301)
+    int crust_types[] = { MONSTER_OMEGA_WING, MONSTER_MEGA_CRUST, MONSTER_ALPHA_CRUST };
+    for (int typeVal : crust_types) {
+        index = typeVal;
+        g_MonsterConfig[index].modelType = MODEL_CRUST;
+        //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+        g_MonsterConfig[index].kind = KIND_MONSTER;
+        g_MonsterConfig[index].blendMesh = 1;
+        g_MonsterConfig[index].blendMeshLight = 1.0f;
+        if (MONSTER_MEGA_CRUST == typeVal) {
+            g_MonsterConfig[index].scale = 1.1f;
+            g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_BLADE;
+            g_MonsterConfig[index].weapon1Level = 5;
+            g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
+            g_MonsterConfig[index].weapon2Level = 0;
+        }
+        else { // Omega Wing, Alpha Crust
+            g_MonsterConfig[index].scale = 1.3f;
+            g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_BLADE;
+            g_MonsterConfig[index].weapon1Level = 9;
+            g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
+            g_MonsterConfig[index].weapon2Level = 9;
+        }
+        // Cloth logic in ApplyMonsterSpecificLogic
+    }
+
+    index = MONSTER_PHANTOM_KNIGHT; // 72
+    g_MonsterConfig[index].modelType = MODEL_PHANTOM_KNIGHT;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.45f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].weapon1Type = MODEL_DARK_BREAKER;
+    g_MonsterConfig[index].weapon1Level = 5;
+
+    // Drakan variants (73, 75)
+    int drakan_types[] = { MONSTER_DRAKAN, MONSTER_GREAT_DRAKAN };
+    for (int typeVal : drakan_types) {
+        index = typeVal;
+        g_MonsterConfig[index].modelType = MODEL_DRAKAN;
+        //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+        g_MonsterConfig[index].kind = KIND_MONSTER;
+        g_MonsterConfig[index].notRotateOnMagicHit = true;
+        g_MonsterConfig[index].scale = (typeVal == MONSTER_GREAT_DRAKAN) ? 1.0f : 0.8f;
+        // Mesh blend settings need ApplyMonsterSpecificLogic or direct manipulation after creation
+    }
+
+    index = MONSTER_DARK_PHOENIX; // 77
+    g_MonsterConfig[index].modelType = MODEL_DARK_PHEONIX_SHIELD; // Note: Uses shield model initially
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].notRotateOnMagicHit = true;
+    // StreamMesh setting needs ApplyMonsterSpecificLogic or direct manipulation
+    // Cloth logic in ApplyMonsterSpecificLogic
+    // Blend/Render logic in RenderCharacter needs adjustment
+
+    index = MONSTER_BULL_FIGHTER; // 0 (Already done above, but ensure defaults are covered)
+    if (g_MonsterConfig[index].modelType == -1) { // Check if default case needs setting
+        g_MonsterConfig[index].modelType = MODEL_BULL_FIGHTER;
+        g_MonsterConfig[index].name = L"소뿔전사";
+        g_MonsterConfig[index].scale = 0.8f;
+        g_MonsterConfig[index].kind = KIND_MONSTER;
+        g_MonsterConfig[index].weapon1Type = MODEL_NIKKEA_AXE;
+        g_MonsterConfig[index].hiddenMesh = 0;
+    }
+
+    // Traps (100-106, 103 is Meteorite, 106 is Laser)
+    index = MONSTER_LANCE_TRAP; // 100
+    g_MonsterConfig[index].modelType = 39; // Hardcoded model ID from switch
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].kind = KIND_TRAP;
+
+    index = MONSTER_IRON_STICK_TRAP; // 101
+    g_MonsterConfig[index].modelType = 40; // Hardcoded model ID from switch
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].kind = KIND_TRAP;
+
+    index = MONSTER_FIRE_TRAP; // 102
+    g_MonsterConfig[index].modelType = 51; // Hardcoded model ID from switch
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].kind = KIND_TRAP;
+
+    index = MONSTER_METEORITE_TRAP; // 103
+    g_MonsterConfig[index].modelType = 25; // Hardcoded model ID from switch
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].kind = KIND_TRAP;
+
+    index = MONSTER_LASER_TRAP; // 106
+    g_MonsterConfig[index].modelType = 51; // Hardcoded model ID from switch
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].kind = KIND_TRAP;
+
+    index = MONSTER_SOCCERBALL; // 200
+    g_MonsterConfig[index].modelType = MODEL_BALL;
+    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
+    g_MonsterConfig[index].scale = 1.8f;
+    g_MonsterConfig[index].kind = KIND_OPERATE; // Or KIND_ETC?
+    g_MonsterConfig[index].blendMesh = 2;
+    // c->Level = 1; // Need initialLevel field?
+
+    index = MONSTER_PET_TRAINER; // 226
+    g_MonsterConfig[index].modelType = MODEL_NPC_BREEDER;
+    g_MonsterConfig[index].name = L"조련사 NPC";
+    g_MonsterConfig[index].kind = KIND_NPC;
+
+#ifdef _PVP_MURDERER_HERO_ITEM
+    index = 227;
+    g_MonsterConfig[index].modelType = MODEL_MASTER;
+    g_MonsterConfig[index].name = L"살인마상점";
+    g_MonsterConfig[index].kind = KIND_NPC;
+
+    index = 228;
+    g_MonsterConfig[index].modelType = MODEL_HERO_SHOP;
+    g_MonsterConfig[index].name = L"영웅상점";
+    g_MonsterConfig[index].kind = KIND_NPC;
+#endif  
+
+    index = MONSTER_JERRIDON; // 370
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].modelType = MODEL_RECOVERY_NPC;
+
+    index = MONSTER_LAHAP; // 256
+    g_MonsterConfig[index].modelType = MODEL_NPC_SERBIS;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 256 - 세르비스";
+    
+
+    index = MONSTER_WOLF_STATUS; // 204
+    g_MonsterConfig[index].modelType = MODEL_CRYWOLF_STATUE;
+    g_MonsterConfig[index].name = L"NPC 204 - 석상";
+    //g_MonsterConfig[index].live = false;
+
+    for (int i = 0; i < 5; i++) { // 205-209
+        index = MONSTER_WOLF_ALTAR1 + i;
+        g_MonsterConfig[MONSTER_WOLF_ALTAR1 + i].modelType = MODEL_CRYWOLF_ALTAR1 + i;
+        g_MonsterConfig[MONSTER_WOLF_ALTAR1 + i].name = L"제단 - NPC " + std::to_wstring(i + 1);
+        g_MonsterConfig[MONSTER_WOLF_ALTAR1 + i].hiddenMesh = -2;
+        //g_MonsterConfig[MONSTER_WOLF_ALTAR1 + i].position[2] -= 10.0f;
+        //g_MonsterConfig[MONSTER_WOLF_ALTAR1 + i].visible = false;
+        g_MonsterConfig[MONSTER_WOLF_ALTAR1 + i].enableShadow = false;
+    }
+
+    index = MONSTER_ELPHIS; // 368
+    g_MonsterConfig[index].modelType = MODEL_SMELTING_NPC;
+    g_MonsterConfig[index].name = L"NPC 368 - 제련의탑";
+    g_MonsterConfig[index].scale = 2.5f;
+    g_MonsterConfig[index].enableShadow = false;
+    g_MonsterConfig[index].m_bRenderShadow = false;
+
+    index = MONSTER_LEO_THE_HELPER; // 371
+    g_MonsterConfig[index].modelType = MODEL_BC_NPC1;
+	g_MonsterConfig[index].name = L"NPC 371 - BC_NPC1";
+	g_MonsterConfig[index].kind = KIND_NPC;
+	g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
+	g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
+	g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
+	g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
+	g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
+
+    index = MONSTER_FIREWORKS_GIRL; // 379
+    g_MonsterConfig[index].modelType = MODEL_WEDDING_NPC;
+    g_MonsterConfig[index].name = L"NPC 379 - WeddingNPC";
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].enableShadow = false;
+    g_MonsterConfig[index].m_bRenderShadow = false;
+
+
+    // 258, 371, 414
+    int helpers[] = { MONSTER_LUKE_THE_HELPER, MONSTER_LEO_THE_HELPER, MONSTER_HELPER_ELLEN };
+    for (int i = 0; i < sizeof(helpers) / sizeof(helpers[0]); i++) {
+        index = helpers[i];
+        g_MonsterConfig[index].name = L"NPC " + std::to_wstring(i + 1);
+        g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
+        g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
+        g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
+        g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
+        g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
+        g_MonsterConfig[index].weapon1Type = -1;
+        g_MonsterConfig[index].m_bpcroom = true;
+    }
+
+    index = MONSTER_ORACLE_LAYLA; // 259
+    g_MonsterConfig[index].modelType = MODEL_KALIMA_SHOP;
+    g_MonsterConfig[index].name = L"NPC 259 - KalimaShop";
+    //g_MonsterConfig[index].position[2] += 140.0f;
+
+    index = MONSTER_CHAOS_CARD_MASTER; // 375
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].helmType = MODEL_VENOM_MIST_HELM;
+    g_MonsterConfig[index].armorType = MODEL_VENOM_MIST_ARMOR;
+    g_MonsterConfig[index].pantsType = MODEL_VENOM_MIST_PANTS;
+    g_MonsterConfig[index].glovesType = MODEL_VENOM_MIST_GLOVES;
+    g_MonsterConfig[index].bootsType = MODEL_VENOM_MIST_BOOTS;
+    g_MonsterConfig[index].wingsType = MODEL_WINGS_OF_HEAVEN;
+    int iLevel = 9;
+    g_MonsterConfig[index].helmLevel = iLevel;
+    g_MonsterConfig[index].armorLevel = iLevel;
+    g_MonsterConfig[index].pantsLevel = iLevel;
+    g_MonsterConfig[index].glovesLevel = iLevel;
+    g_MonsterConfig[index].bootsLevel = iLevel;
+    g_MonsterConfig[index].wingsLevel = iLevel;
+    g_MonsterConfig[index].weapon1Type = -1;
+
+    // 376, 377
+    int suppliers[] = { MONSTER_PAMELA_THE_SUPPLIER, MONSTER_ANGELA_THE_SUPPLIER };
+    for (int i = 0; i < sizeof(suppliers) / sizeof(suppliers[0]); i++) {
+        index = suppliers[i];
+        g_MonsterConfig[index].modelType = MODEL_BC_NPC1 + i;
+        g_MonsterConfig[index].name = L"공성 " + std::to_wstring(i + 1);
+        //g_MonsterConfig[index].angle[2] = 0.0f;
+        g_MonsterConfig[index].scale = 1.0f;
+        //g_MonsterConfig[index].blendMesh = 1;
+        //g_MonsterConfig[index].blendMeshLight = 1.0f;
+    }
+
+    index = MONSTER_PRIEST_DEVIN; // 406
+    g_MonsterConfig[index].modelType = MODEL_NPC_DEVIN;
+    g_MonsterConfig[index].name = L"NPC 406 - 사제데빈";
+
+    index = MONSTER_WEREWOLF_QUARREL; // 407
+    g_MonsterConfig[index].modelType = MODEL_NPC_QUARREL;
+    g_MonsterConfig[index].name = L"NPC 407 - 웨어울프쿼렐";
+    g_MonsterConfig[index].scale = 1.9f;
+
+    index = MONSTER_GATEKEEPER; // 408
+    g_MonsterConfig[index].modelType = MODEL_NPC_CASTLE_GATE;
+    g_MonsterConfig[index].name = L"NPC 408 - 성문";
+    //g_MonsterConfig[index].position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 240.f;
+    g_MonsterConfig[index].scale = 1.2f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.1f;
+    g_MonsterConfig[index].enableShadow = false;
+    g_MonsterConfig[index].m_bRenderShadow = false;
+
+    index = MONSTER_LUNAR_RABBIT; // 413
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_LUNAR_RABBIT;
+    g_MonsterConfig[index].name = L"NPC 413 - 달토끼";
+    g_MonsterConfig[index].scale = 0.8f;
+    //g_MonsterConfig[index].weapon1Type = -1; // default
+    //g_MonsterConfig[index].weapon2Type = -1; // default
+    //g_MonsterConfig.m_iAnimation = 0;
+    //BoneManager::RegisterBone(c, L"Rabbit_1", 3);		// Bip01 Spine
+    //BoneManager::RegisterBone(c, L"Rabbit_2", 16);		// Bip01 Head
+    //BoneManager::RegisterBone(c, L"Rabbit_3", 15);		// Bip01 Neck1
+    //BoneManager::RegisterBone(c, L"Rabbit_4", 2);		// Bip01 Pelvis
+
+    index = MONSTER_CHERRY_BLOSSOM_TREE; // 451
+    g_MonsterConfig[index].modelType = MODEL_NPC_CHERRYBLOSSOMTREE;
+    g_MonsterConfig[index].name = L"NPC 451 - 벚꽃나무";
+    //g_MonsterConfig[index].scale = 1.0f; // default
+    g_MonsterConfig[index].m_fEdgeScale = 0.0f;
+    g_MonsterConfig[index].m_bRenderShadow = false;
+
+    index = MONSTER_DAVID; // 579
+    g_MonsterConfig[index].modelType = MODEL_LUCKYITEM_NPC;
+    g_MonsterConfig[index].name = L"NPC 579 - Lucy";
+    g_MonsterConfig[index].scale = 0.95f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.2f;
+    //Models[MODEL_LUCKYITEM_NPC].Actions[0].PlaySpeed = 0.45f;
+    //Models[MODEL_LUCKYITEM_NPC].Actions[1].PlaySpeed = 0.5f;
+
+    index = MONSTER_SEED_MASTER; // 452
+    g_MonsterConfig[index].modelType = MODEL_SEED_MASTER;
+    g_MonsterConfig[index].name = L"NPC 452 - 시드마스터";
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.2f;
+
+    index = MONSTER_SEED_RESEARCHER; // 453
+    g_MonsterConfig[index].modelType = MODEL_SEED_INVESTIGATOR;
+    g_MonsterConfig[index].name = L"NPC 453 - 시드연구가";
+    g_MonsterConfig[index].scale = 0.9f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.15f;
+
+    index = MONSTER_REINIT_HELPER; // 464
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"NPC 464 - 초기화 도우미";
+    //g_MonsterConfig[index].classType = 2;
+    g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
+    g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
+    g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
+    g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
+    g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
+    g_MonsterConfig[index].weapon1Type = MODEL_LIGHT_CROSSBOW;
+    g_MonsterConfig[index].weapon2Type = MODEL_BOLT;
+    g_MonsterConfig[index].m_fEdgeScale = 1.15f;
+
+    index = MONSTER_TRANSFORMED_SNOWMAN; // 477
+    g_MonsterConfig[index].modelType = MODEL_XMAS2008_SNOWMAN;
+    g_MonsterConfig[index].name = L"NPC 477";
+    g_MonsterConfig[index].scale = 1.3f;
+    //g_MonsterConfig[index].lifeTime = 100;
+
+#ifdef PJH_ADD_PANDA_CHANGERING
+    index = MONSTER_TRANSFORMED_PANDA; // 503
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"NPC 503";
+#endif //PJH_ADD_PANDA_CHANGERING
+
+    index = MONSTER_TRANSFORMED_SKELETON; // 548
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"NPC 549";
+
+    // 468 - 475
+    int little_santa[] = { MONSTER_LITTLE_SANTA_YELLOW, MONSTER_LITTLE_SANTA_GREEN,
+        MONSTER_LITTLE_SANTA_RED, MONSTER_LITTLE_SANTA_BLUE, MONSTER_LITTLE_SANTA_WHITE,
+        MONSTER_LITTLE_SANTA_BLACK, MONSTER_LITTLE_SANTA_ORANGE, MONSTER_LITTLE_SANTA_PINK };
+    for (int i = 0; i < sizeof(little_santa) / sizeof(little_santa[0]); i++) {
+        index = little_santa[i];
+        //int _Model_NpcIndex = MODEL_LITTLESANTA + (Type - 468); // ? 
+        g_MonsterConfig[index].modelType = MODEL_LITTLESANTA + i;
+        g_MonsterConfig[index].scale = 0.43f;
+
+        //for (int i = 0; i < 5; i++)
+        //{
+        //    if (i < 2 || i == 4)
+        //    {
+        //        //xmassanta_stand_1~2 || xmassanta_idle3
+        //        Models[_Model_NpcIndex].Actions[i].PlaySpeed = 0.4f;
+        //    }
+        //    else// if(i >= 2 && i < 4)
+        //    {
+        //        //xmassanta_idle1~2
+        //        Models[_Model_NpcIndex].Actions[i].PlaySpeed = 0.5f;
+        //    }
+        //}
+        g_MonsterConfig[index].name = L"NPC " + std::to_wstring(i + 1) + L" - LittleSanta";
+    }
+
+    index = MONSTER_DELGADO; // 478
+    g_MonsterConfig[index].modelType = MODEL_NPC_SERBIS;
+    g_MonsterConfig[index].name = L"NPC 478";
+
+    index = MONSTER_GATEKEEPER_TITUS; // 479
+    g_MonsterConfig[index].modelType = MODEL_DUEL_NPC_TITUS;
+    g_MonsterConfig[index].name = L"NPC 479";
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.2f;
+
+    index = MONSTER_MOSS_THE_MERCHANT; // 492
+    g_MonsterConfig[index].modelType = MODEL_GAMBLE_NPC_MOSS;
+    g_MonsterConfig[index].name = L"NPC 492";
+    g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.1f;
+    //g_MonsterConfig[index].lifeTime = 100;
+    /*for (int i = 0; i < 6; i++)
+    {
+        Models[MODEL_GAMBLE_NPC_MOSS].Actions[i].PlaySpeed = 0.33f;
+    }*/
+
+    index = MONSTER_GOLDEN_RABBIT; // 502
+    g_MonsterConfig[index].modelType = MODEL_RABBIT;
+    g_MonsterConfig[index].name = L"NPC 502";
+    g_MonsterConfig[index].scale = 1.0f * 0.95;
+
+    index = MONSTER_GOLDEN_DARK_KNIGHT; // 493
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_KNIGHT;
+    g_MonsterConfig[index].name = L"NPC 493";
+    g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].initialLevel = 1;
+    g_MonsterConfig[index].weapon1Type = MODEL_DOUBLE_BLADE;
+
+    index = MONSTER_GOLDEN_DEVIL; // 494
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEVIL;
+    g_MonsterConfig[index].name = L"NPC 494";
+    g_MonsterConfig[index].scale = 1.1f;
+
+    index = MONSTER_GOLDEN_STONE_GOLEM; // 495
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_STONE_GOLEM;
+    g_MonsterConfig[index].name = L"NPC 495";
+    g_MonsterConfig[index].scale = 1.35;
+    //BoneManager::RegisterBone(c, L"Monster101_L_Arm", 12);
+    //BoneManager::RegisterBone(c, L"Monster101_R_Arm", 20);
+    //BoneManager::RegisterBone(c, L"Monster101_Head", 6);
+
+    index = MONSTER_GOLDEN_CRUST; // 496
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CRUST;
+    g_MonsterConfig[index].name = L"NPC 496";
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_BLADE;
+    g_MonsterConfig[index].weapon1Level = 5;
+    g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
+    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].blendMesh = 1;
+    g_MonsterConfig[index].blendMeshLight = 1.0f;
+
+    index = MONSTER_GOLDEN_SATYROS; // 497
+    g_MonsterConfig[index].modelType = MODEL_SATYROS;
+    g_MonsterConfig[index].name = L"NPC 497";
+    g_MonsterConfig[index].scale = 1.3f;
+
+    index = MONSTER_GOLDEN_TWIN_TAIL; // 498
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_TWIN_TAIL;
+    g_MonsterConfig[index].name = L"NPC 498";
+    g_MonsterConfig[index].scale = 1.3f;
+    //g_MonsterConfig[index].angle[0] = 0.0f;
+    //g_MonsterConfig[index].gravity = 0.0f;
+    //g_MonsterConfig[index].distance = (float)(rand() % 20) / 10.0f;
+    //BoneManager::RegisterBone(c, L"Twintail_Hair24", 16);
+    //BoneManager::RegisterBone(c, L"Twintail_Hair32", 24);
+
+    index = MONSTER_GOLDEN_IRON_KNIGHT; // 499
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_IRON_KNIGHT;
+    g_MonsterConfig[index].name = L"NPC 499";
+    g_MonsterConfig[index].scale = 1.5f;
+
+    index = MONSTER_GOLDEN_NAPIN; // 500
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_NAPIN;
+    g_MonsterConfig[index].name = L"NPC 500";
+    g_MonsterConfig[index].scale = 0.95f;
+
+    index = MONSTER_GOLDEN_GREAT_DRAGON; // 501
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DRAGON;
+    g_MonsterConfig[index].name = L"NPC 501";
+    g_MonsterConfig[index].scale = 0.88f;
+
+    index = MONSTER_LUGARD; // 540
+    g_MonsterConfig[index].modelType = MODEL_DOPPELGANGER_NPC_LUGARD;
+    g_MonsterConfig[index].name = L"NPC 540";
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.2f;
+
+    index = MONSTER_COMPENSATION_BOX; // 541
+    g_MonsterConfig[index].modelType = MODEL_DOPPELGANGER_NPC_BOX;
+    g_MonsterConfig[index].name = L"NPC 541";
+    g_MonsterConfig[index].scale = 2.3f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.1f;
+
+    index = MONSTER_GOLDEN_COMPENSATION_BOX; // 542
+    g_MonsterConfig[index].modelType = MODEL_DOPPELGANGER_NPC_BOX;
+    g_MonsterConfig[index].name = L"NPC 542";
+    g_MonsterConfig[index].scale = 3.3f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.1f;
+
+    index = MONSTER_GENS_DUPRIAN; // 543
+    g_MonsterConfig[index].modelType = MODAL_GENS_NPC_DUPRIAN;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 543";
+
+    index = MONSTER_CHRISTINE_THE_GENERAL_GOODS_MERCHANT; // 545
+    g_MonsterConfig[index].modelType = MODEL_UNITEDMARKETPLACE_CHRISTIN;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 545";
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.2f;
+
+    index = MONSTER_JEWELER_RAUL; // 546
+    g_MonsterConfig[index].modelType = MODEL_UNITEDMARKETPLACE_RAUL;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 546";
+    g_MonsterConfig[index].m_fEdgeScale = 1.15f;
+
+    index = MONSTER_MARKET_UNION_MEMBER_JULIA; // 547
+    g_MonsterConfig[index].modelType = MODEL_UNITEDMARKETPLACE_JULIA;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 547";
+    g_MonsterConfig[index].m_fEdgeScale = 1.1f;
+
+    index = MONSTER_MERCENARY_GUILD_FELICIA; // 566
+    g_MonsterConfig[index].modelType = MODEL_TERSIA;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 566 - 길드관리인 테르시아";
+    g_MonsterConfig[index].scale = 0.93f;
+
+    index = MONSTER_PRIESTESS_VEINA; // 567
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 567 - 신녀 베이나";
+    //g_MonsterConfig[index].position[2] += 145.0f;
+
+    index = MONSTER_LEINA_THE_GENERAL_GOODS_MERCHANT; // 577
+    g_MonsterConfig[index].modelType = MODEL_KARUTAN_NPC_REINA;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 577 - 잡화상인 레이나";
+    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].m_fEdgeScale = 1.2f;
+
+    index = MONSTER_WEAPONS_MERCHANT_BOLO; // 578
+    g_MonsterConfig[index].modelType = MODEL_KARUTAN_NPC_VOLVO;
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"NPC 578 - 무기상인 볼로";
+    g_MonsterConfig[index].scale = 0.9f;
+}
+
+void ApplyMonsterSpecificLogic(CHARACTER* c, EMonsterType Type, const MonsterConfigData& config)
+{
+    if (!c) return;
+    OBJECT* o = &c->Object;
+
+    // Use a switch for type-specific logic based on the original CreateMonster
+    switch (Type)
+    {
+    case MONSTER_GUARDSMAN: // 224
+        o->SubType = rand() % 2 + 10; // Set random SubType at runtime
+        break;
+
+        // Kalima Gates (Initial Animation State)
+	case MONSTER_GATE_TO_KALIMA_1: // 152
+	case MONSTER_GATE_TO_KALIMA_2: // 153
+	case MONSTER_GATE_TO_KALIMA_3: // 154
+	case MONSTER_GATE_TO_KALIMA_4: // 155
+	case MONSTER_GATE_TO_KALIMA_5: // 156
+	case MONSTER_GATE_TO_KALIMA_6: // 157
+	case MONSTER_GATE_TO_KALIMA_7: // 158
+        o->PriorAnimationFrame = 10.f;
+        o->AnimationFrame = 10.f; // Use float consistently
+        break;
+
+        // Chaos Castle Elf/Wizard (Random Model/Weapon)
+	case MONSTER_CHAOS_CASTLE_2: // 163
+	case MONSTER_CHAOS_CASTLE_4: // 165
+	case MONSTER_CHAOS_CASTLE_6: // 167
+	case MONSTER_CHAOS_CASTLE_8: // 169
+	case MONSTER_CHAOS_CASTLE_10: // 171
+	case MONSTER_CHAOS_CASTLE_12: // 173
+	case MONSTER_CHAOS_CASTLE_14: // 427
+    {
+        int randType = rand() % 2;
+        // Note: CreateCharacter was already called with a default modelType (e.g., ELF)
+        // from the config. We override weapons here. Changing the model *might* require
+        // more complex handling (reallocating bones, etc.) depending on CreateCharacter.
+        // Having separate EMonsterType enums might be cleaner.
+        if (randType == 0) { // Elf variant
+            o->Type = MODEL_CHAOS_CASTLE_ELF; // Ensure correct model ID
+            c->Weapon[0].Type = MODEL_GREAT_REIGN_CROSSBOW;
+            c->Weapon[0].Level = 0;
+            c->Weapon[1].Type = -1; // Clear other weapon if needed
+            c->Weapon[1].Level = 0;
+        }
+        else { // Wizard variant
+            o->Type = MODEL_CHAOS_CASTLE_WIZARD; // Ensure correct model ID
+            c->Weapon[0].Type = MODEL_LEGENDARY_STAFF;
+            c->Weapon[0].Level = 0;
+            c->Weapon[1].Type = -1; // Clear other weapon if needed
+            c->Weapon[1].Level = 0;
+        }
+        // TODO: Verify if changing o->Type here causes issues with BoneTransform allocation.
+    }
+    break;
+
+    // Red Skeleton Knight (Conditional Weapon Level based on BC level)
+	case MONSTER_RED_SKELETON_KNIGHT_1: // 88
+	case MONSTER_RED_SKELETON_KNIGHT_2: // 94
+	case MONSTER_RED_SKELETON_KNIGHT_3: // 111
+	case MONSTER_RED_SKELETON_KNIGHT_4: // 117
+    case MONSTER_RED_SKELETON_KNIGHT_5: // 123
+	case MONSTER_RED_SKELETON_KNIGHT_6: // 129
+	case MONSTER_RED_SKELETON_KNIGHT_7: // 142
+	case MONSTER_RED_SKELETON_KNIGHT_8: // 432
+        // This logic depends on the global map manager state when the monster is created.
+        if (gMapManager.InBloodCastle()) // Check if currently in Blood Castle
+        {
+            // Assuming WD_11BLOODCASTLE_END is the end of the BC map range
+            if (!int((7 + (gMapManager.WorldActive - WD_11BLOODCASTLE_END)) / 3))
+                c->Weapon[0].Level = 8;
+            else
+                c->Weapon[0].Level = 0;
+        }
+        else {
+            // Default level if not in Blood Castle (or handle differently)
+            c->Weapon[0].Level = 0; // Or perhaps use config.weapon1Level?
+        }
+        break;
+
+        // Golden Monsters with Joint Effects
+    case MONSTER_GOLDEN_TANTALLOS: // 82
+    case MONSTER_GOLDEN_WHEEL:     // 83
+    case MONSTER_MUTANT_HERO:      // 66
+    case MONSTER_MUTANT:           // 67
+    case MONSTER_DEATH_BEAM_KNIGHT:// 76
+    case MONSTER_BEAM_KNIGHT:      // 65
+    case MONSTER_BLOODY_WOLF:      // 64
+    case MONSTER_GOLDEN_TITAN:     // 53
+        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
+        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
+        break;
+
+        // Tantallos/Zaikan specific setup
+    case MONSTER_TANTALLOS:        // 31
+    case MONSTER_ZAIKAN:           // 32
+        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
+        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
+        if (Type == MONSTER_ZAIKAN) {
+            o->SubType = 1;
+        }
+        // Note: Weapon for Tantallos/Zaikan is set in config now.
+        break;
+
+        // Iron Wheel (Joint Effects)
+    case MONSTER_IRON_WHEEL:       // 33
+        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
+        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
+        break;
+
+        // Drakan (Mesh Blend Settings - Modifies global model data, use with caution!)
+    case MONSTER_DRAKAN:           // 73
+    case MONSTER_GREAT_DRAKAN:     // 75
+        // WARNING: Modifying Models[] affects all instances of this model type.
+        // Consider if this effect is truly needed or can be achieved differently.
+        Models[o->Type].Meshs[0].NoneBlendMesh = true;
+        Models[o->Type].Meshs[1].NoneBlendMesh = false;
+        Models[o->Type].Meshs[2].NoneBlendMesh = false;
+        Models[o->Type].Meshs[3].NoneBlendMesh = true;
+        Models[o->Type].Meshs[4].NoneBlendMesh = true;
+        break;
+
+        // Dark Phoenix (StreamMesh Setting - Modifies global model data)
+    case MONSTER_DARK_PHOENIX:     // 77
+        // WARNING: Modifying Models[] affects all instances of this model type.
+        Models[MODEL_DARK_PHEONIX_SHIELD].StreamMesh = 0;
+        break;
+
+        // Orc Archer variants (Hidden Mesh) - Already handled by config.hiddenMesh
+    case MONSTER_ORC_ARCHER:             // 5
+    case MONSTER_ORC_ARCHER_OF_DOOM:     // 58
+        // o->HiddenMesh = 1; // Set via config now
+        break;
+        // Elite Orc variants (Hidden Mesh) - Already handled by config.hiddenMesh
+    case MONSTER_ELITE_ORC:              // 6
+    case MONSTER_ORC_SOLDIER_OF_DOOM:    // 57
+        // o->HiddenMesh = 2; // Set via config now
+        break;
+
+        // Poison Bull (Apply Buff)
+    case MONSTER_POISON_BULL: // 8
+        g_CharacterRegisterBuff(o, eDeBuff_Poison); // Apply initial buff
+        break;
+
+        // Ghost (Alpha Target, Blood)
+    case MONSTER_GHOST: // 11
+        o->AlphaTarget = 0.4f; // Set specific alpha
+        c->Blood = true;       // Set initial state flag (or use config.startsBloody)
+        c->MoveSpeed = 15;     // Override default move speed
+        break;
+
+        // Player Model NPCs (Apply Body Parts, Scale, PK, etc.)
+    case MONSTER_CURSED_WIZARD: // 34
+    case MONSTER_MARLON: // 229
+    case MONSTER_ALEX: // 230
+    case MONSTER_CROSSBOW_GUARD: // 247
+    case MONSTER_WANDERING_MERCHANT_MARTIN: // 248
+    case MONSTER_BERDYSH_GUARD: // 249
+    case MONSTER_WANDERING_MERCHANT_HAROLD: // 250
+    case MONSTER_POTION_GIRL_AMY: // 253
+    case MONSTER_LUMEN_THE_BARMAID: // 255
+    //case MONSTER_ELF_SOLDIER: // 257 (Handled separately below due to MakeElfHelper)
+    case MONSTER_LUKE_THE_HELPER: // 258
+    case MONSTER_LEO_THE_HELPER: // 371
+    case MONSTER_HELPER_ELLEN: // 414
+    case MONSTER_CHAOS_CARD_MASTER: // 375
+    case MONSTER_REINIT_HELPER: // 464
+    case MONSTER_SKELETON_WARRIOR: // 14
+    case MONSTER_DEATH_KING:       // 55
+    case MONSTER_DEATH_BONE:       // 56
+    case MONSTER_SKELETON_ARCHER: // 15
+    case MONSTER_ELITE_SKELETON: // 16
+    case MONSTER_ELITE_SKILL_SOLDIER: // 372
+    case MONSTER_JACK_OLANTERN: // 373
+    case MONSTER_SANTA: // 374
+    case MONSTER_GAMEMASTER: // 378
+    case MONSTER_TRANSFORMED_PANDA: // 503
+    case MONSTER_TRANSFORMED_SKELETON: // 548
+    //case MONSTER_GOLDEN_ARCHER: // 236 (Handled separately below due to SubType)
+    {
+        // Apply BodyPart items from config data
+        if (config.helmType != -1) {
+            c->BodyPart[BODYPART_HELM].Type = config.helmType;
+            c->BodyPart[BODYPART_HELM].Level = config.helmLevel;
+        }
+        if (config.armorType != -1) {
+            c->BodyPart[BODYPART_ARMOR].Type = config.armorType;
+            c->BodyPart[BODYPART_ARMOR].Level = config.armorLevel;
+        }
+        if (config.pantsType != -1) {
+            c->BodyPart[BODYPART_PANTS].Type = config.pantsType;
+            c->BodyPart[BODYPART_PANTS].Level = config.pantsLevel;
+        }
+        if (config.glovesType != -1) {
+            c->BodyPart[BODYPART_GLOVES].Type = config.glovesType;
+            c->BodyPart[BODYPART_GLOVES].Level = config.glovesLevel;
+        }
+        if (config.bootsType != -1) {
+            c->BodyPart[BODYPART_BOOTS].Type = config.bootsType;
+            c->BodyPart[BODYPART_BOOTS].Level = config.bootsLevel;
+        }
+        if (config.wingsType != -1) {
+            c->Wing.Type = config.wingsType;
+            c->Wing.Level = config.wingsLevel;
+        }
+
+        // Apply specific SubTypes for player models that use them
+        switch (Type) {
+        case MONSTER_SKELETON_WARRIOR: // 14
+        case MONSTER_DEATH_KING: // 55
+		case MONSTER_DEATH_BONE: // 56
+            o->SubType = MODEL_SKELETON1;
+            c->Blood = true; // Set blood flag for skeletons
+            break;
+		case MONSTER_SKELETON_ARCHER: // 15
+            o->SubType = MODEL_SKELETON2;
+            c->Blood = true;
+            break;
+		case MONSTER_ELITE_SKELETON: // 16
+            o->SubType = MODEL_SKELETON3;
+            c->Blood = true;
+            break;
+		case MONSTER_ELITE_SKILL_SOLDIER: // 372
+            o->SubType = MODEL_SKELETON_PCBANG;
+            break;
+		case MONSTER_JACK_OLANTERN: // 373
+            o->SubType = MODEL_HALLOWEEN;
+            break;
+		case MONSTER_SANTA: // 374
+            o->SubType = MODEL_XMAS_EVENT_CHANGE_GIRL;
+            break;
+		case MONSTER_GAMEMASTER: // 378
+            o->SubType = MODEL_GM_CHARACTER;
+            break;
+		case MONSTER_TRANSFORMED_PANDA: // 503
+            o->SubType = MODEL_PANDA;
+            break;
+		case MONSTER_TRANSFORMED_SKELETON: // 548
+            o->SubType = MODEL_SKELETON_CHANGED;
+            break;
+		case MONSTER_GOLDEN_ARCHER: // 236
+            o->SubType = MODEL_SKELETON2;
+            break;
+		case MONSTER_CHAOS_CARD_MASTER: // 375
+            o->SubType = Type; // Set SubType to match monster type
+            break;
+        }
+
+        // Apply other specific logic
+        if (Type == MONSTER_CURSED_WIZARD) {
+            c->PK = PVP_MURDERER2;
+            if (gMapManager.InDevilSquare()) {
+                o->Scale = 1.0f; // Override scale only in Devil Square
+            }
+        }
+        if (Type == MONSTER_LUKE_THE_HELPER || Type == MONSTER_LEO_THE_HELPER || Type == MONSTER_HELPER_ELLEN) {
+            o->m_bpcroom = true; // Set specific flag
+        }
+
+        SetCharacterScale(c); // Call scale adjustment after setting parts
+    }
+    break;
+
+    // Elf Helper (Special setup function + Joint)
+    case MONSTER_ELF_SOLDIER: // 257 - Handled separately because it uses MakeElfHelper first
+		o->SubType = MODEL_ELF_WIZARD; // Set SubType for Elf Helper
+		o->m_bpcroom = true; // Set specific flag
+        MakeElfHelper(c); // Call the helper function to set up equipment/wings
+        CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 42, o, 15.f); // Create joint effect
+        SetCharacterScale(c); // Apply scale after equipment is set
+        break;    
+
+    // Wolf Altars (Position, Visibility, HiddenMesh)
+    case MONSTER_WOLF_ALTAR1: // 205
+    case MONSTER_WOLF_ALTAR2: // 206
+    case MONSTER_WOLF_ALTAR3: // 207
+    case MONSTER_WOLF_ALTAR4: // 208
+    case MONSTER_WOLF_ALTAR5: // 209
+        o->Position[2] -= 10.0f; // Adjust Z position
+        o->HiddenMesh = -2;      // Set specific hidden mesh value
+        o->Visible = false;      // Start invisible
+        break;
+
+    // NPCs requiring CreateObject
+    case MONSTER_PAMELA_THE_SUPPLIER: // 376
+        o->Angle[2] = 0.f; // Set specific angle
+        CreateObject(MODEL_BC_BOX, o->Position, o->Angle); // Create associated object
+        break;
+    case MONSTER_ANGELA_THE_SUPPLIER: // 377
+        o->Angle[2] = 90.f; // Set specific angle
+        CreateObject(MODEL_BC_BOX, o->Position, o->Angle); // Create associated object
+        break;
+
+    case MONSTER_GOLDEN_ARCHER: // 236 - Handled separately because it uses player model but isn't a standard NPC setup
+        o->SubType = MODEL_SKELETON2;
+        // Scale and Level are set in config
+        break;
+
+        // Goblin Gate (Set initial action)
+    case MONSTER_GOBLIN_GATE: // 234
+        SetAction(o, 0); // Set initial action to idle/closed?
+        break;
+
+        // Elf Lala (Position Adjustment)
+    case MONSTER_ELF_LALA: // 242
+        o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 140.f;
+        break;
+
+        // Wolf Statue (Set Live to false)
+    case MONSTER_WOLF_STATUS: // 204
+        o->Live = false; // Make it non-interactive/targetable?
+        break;
+
+        // Gatekeeper (Position Adjustment)
+    case MONSTER_GATEKEEPER: // 408
+        o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 240.f;
+        break;
+
+        // Lunar Rabbit (SubType, Bone Registration)
+    case MONSTER_LUNAR_RABBIT: // 413
+        o->SubType = rand() % 3; // Random SubType
+        o->m_iAnimation = 0;     // Set initial animation index
+        // Bone registration (Do this AFTER ApplyMonsterSpecificLogic in CreateMonster)
+        // BoneManager::RegisterBone(c, L"Rabbit_1", 3);
+        // BoneManager::RegisterBone(c, L"Rabbit_2", 16);
+        // BoneManager::RegisterBone(c, L"Rabbit_3", 15);
+        // BoneManager::RegisterBone(c, L"Rabbit_4", 2);
+        break;
+
+        // NPCs with Position Adjustments
+    case MONSTER_ORACLE_LAYLA: // 259
+        o->Position[2] += 140.0f;
+        break;
+    case MONSTER_PRIESTESS_VEINA: // 567
+        o->Position[2] += 145.0f;
+        break;
+    case MONSTER_CHERRY_BLOSSOM_SPIRIT: // 450
+        o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 170.f;
+        break;
+
+        // NPCs/Monsters with Lifetime
+    case MONSTER_TRANSFORMED_SNOWMAN: // 477
+    case MONSTER_WANDERING_MERCHANT_ZYRO: // 568
+    case MONSTER_MOSS_THE_MERCHANT: // 492
+        o->LifeTime = 100; // Set initial lifetime
+        break;
+
+        // NPCs/Monsters with Global PlaySpeed Modifications (Keep separate if possible)
+    case MONSTER_DAVID: // 579
+        // WARNING: Modifies global model data
+        // Models[MODEL_LUCKYITEM_NPC].Actions[0].PlaySpeed = 0.45f;
+        // Models[MODEL_LUCKYITEM_NPC].Actions[1].PlaySpeed = 0.5f;
+        break;
+    case MONSTER_LITTLE_SANTA_YELLOW: // 468 to 475
+    case MONSTER_LITTLE_SANTA_GREEN:
+    case MONSTER_LITTLE_SANTA_RED:
+    case MONSTER_LITTLE_SANTA_BLUE:
+    case MONSTER_LITTLE_SANTA_WHITE:
+    case MONSTER_LITTLE_SANTA_BLACK:
+    case MONSTER_LITTLE_SANTA_ORANGE:
+    case MONSTER_LITTLE_SANTA_PINK:
+        // WARNING: Modifies global model data
+        // int modelIndex = MODEL_LITTLESANTA + (Type - 468);
+        // Models[modelIndex].Actions[...].PlaySpeed = ...;
+        break;
+
+        // Golden Twin Tail (Runtime State & Bone Registration)
+    case MONSTER_GOLDEN_TWIN_TAIL: // 498
+        o->Angle[0] = 0.0f; // Set initial angle
+        o->Gravity = 0.0f;  // Set initial gravity
+        o->Distance = (float)(rand() % 20) / 10.0f; // Set random distance
+        // Bone registration (Do this AFTER ApplyMonsterSpecificLogic in CreateMonster)
+        // BoneManager::RegisterBone(c, L"Twintail_Hair24", 16);
+        // BoneManager::RegisterBone(c, L"Twintail_Hair32", 24);
+        break;
+
+        // Golden Stone Golem (Bone Registration)
+    case MONSTER_GOLDEN_STONE_GOLEM: // 495
+        // Bone registration (Do this AFTER ApplyMonsterSpecificLogic in CreateMonster)
+        // BoneManager::RegisterBone(c, L"Monster101_L_Arm", 12);
+        // BoneManager::RegisterBone(c, L"Monster101_R_Arm", 20);
+        // BoneManager::RegisterBone(c, L"Monster101_Head", 6);
+        break;
+
+        // Red Dragon (Bounding Box Override)
+    case MONSTER_RED_DRAGON: // 57
+        Vector(200.f, 150.f, 280.f, o->BoundingBoxMax); // Override bounding box
+        break;
+
+        // Default case for monsters not explicitly handled above
+    default:
+        // Add any default logic needed after config application, if any.
+        // For example, if initialSubType was set to -1 in config, handle rand() here.
+        // if (config.initialSubType == -1 /* Or another indicator */) {
+        //     // Handle random SubType assignment if needed for other types
+        // }
+        break;
+    }
 }

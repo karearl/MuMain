@@ -2,6 +2,7 @@
 #define __ZZCHARACTER_H__
 
 #include "ZzzBMD.h"
+#include <unordered_map>
 
 extern Script_Skill MonsterSkill[];
 extern CHARACTER* CharactersClient;
@@ -10,6 +11,77 @@ extern CHARACTER* Hero;
 
 DWORD GetGuildRelationShipTextColor(BYTE GuildRelationShip);
 DWORD GetGuildRelationShipBGColor(BYTE GuildRelationShip);
+
+extern std::unordered_map<int, int> g_CharacterKeyToIndexMap;
+extern std::vector<int> g_FreeCharacterIndices;
+
+struct MonsterConfigData {
+    // Core Identification & Appearance
+    int         modelType = MONSTER_MODEL_UNDEFINED;         // The MODEL_XXX ID for rendering
+    std::wstring name = L"";            // Default monster name
+    float       scale = 1.0f;           // Default scale
+
+    // Gameplay Classification
+    int         kind = KIND_MONSTER;    // Use KIND_MONSTER, KIND_NPC, etc. defines
+
+    // Equipment (Use MODEL_XXX IDs or -1 for none)
+    // Weapons
+    short       weapon1Type = -1;
+    short       weapon1Level = 0;
+    BYTE        weapon1ExcellentFlags = 0; // Store flags if needed for effects/stats
+    BYTE        weapon1AncientDiscriminator = 0;
+    short       weapon2Type = -1;
+    short       weapon2Level = 0;
+    BYTE        weapon2ExcellentFlags = 0;
+    BYTE        weapon2AncientDiscriminator = 0;
+    // Armor (for player-model NPCs like Marlon, Guards, Cursed Wizard)
+    short       helmType = -1;
+    short       helmLevel = 0;
+    short       armorType = -1;
+    short       armorLevel = 0;
+    short       pantsType = -1;
+    short       pantsLevel = 0;
+    short       glovesType = -1;
+    short       glovesLevel = 0;
+    short       bootsType = -1;
+    short       bootsLevel = 0;
+    short       wingsType = -1;
+    short       wingsLevel = 0;
+    // Note: Helper/Pet type might be too complex for static config if it involves creating separate objects.
+
+    // Rendering & Visual Flags/Settings
+    int         hiddenMesh = -1;        // Default: show all meshes.
+    int         blendMesh = -1;         // Default: no blend mesh.
+    float       blendMeshLight = 1.0f;  // Light intensity for blend mesh effect
+    bool        enableShadow = true;    // Whether the object casts a shadow
+    bool        m_bRenderShadow = true; // Separate flag from ZzzObject? Keep synced.
+    float       alphaTarget = 1.0f;     // Initial alpha target (e.g., 0.4f for GHOST)
+    float       m_fEdgeScale = 1.0f;    // Edge scale for outlines
+
+    // Behavior & State Flags
+    bool        notRotateOnMagicHit = false; // For static NPCs/objects
+    int         initialLevel = 0;       // If monster level needs to be set
+    int         initialSubType = 0;     // If SubType needs specific init (Use -1 if needs rand())
+    bool        startsBloody = false;   // If it starts with the 'blood' effect
+    bool        m_bpcroom = false;      // PC Room flag for helpers?
+
+    // Special Effect Flags (used to trigger logic in ApplyMonsterSpecificLogic or RenderCharacter)
+    bool        needsGoldenEffect = false; // Flag for golden monster rendering logic
+    bool        isBloodCastleGateOrStatue = false; // Flag for specific BC gate/statue logic
+
+    // Optional: Store bone names and IDs for registration
+    std::vector<std::pair<const wchar_t*, int>> bonesToRegister;
+
+    // Default constructor to ensure sane defaults
+    MonsterConfigData() = default;
+};
+
+void ApplyMonsterSpecificLogic(CHARACTER* c, EMonsterType Type, const MonsterConfigData& config);
+void InitializeMonsterData();
+
+const int MAX_MONSTER_TYPE_INDEX = MONSTER_END + 1;
+extern MonsterConfigData g_MonsterConfig[MAX_MONSTER_TYPE_INDEX];
+
 
 CHARACTER* FindCharacterByID(wchar_t* szName);
 CHARACTER* FindCharacterByKey(int Key);
