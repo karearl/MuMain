@@ -1107,404 +1107,472 @@ void CNewUISystem::Hide(DWORD dwKey)
         return;
     }
 
-    if (dwKey == INTERFACE_FRIEND)
+    switch (dwKey)
     {
-        g_pMainFrame->SetBtnState(MAINFRAME_BTN_FRIEND, false);
-        m_pNewFriendWindow->HideAllWindow(TRUE, TRUE);
-    }
-    else if (dwKey == INTERFACE_CHARACTER)
-    {
-        g_pMainFrame->SetBtnState(MAINFRAME_BTN_CHAINFO, false);
-        if (IsVisible(INTERFACE_MYQUEST))
+        case INTERFACE_FRIEND:
         {
-            g_pMyQuestInfoWindow->SetPos(640 - 190, 0);
+            g_pMainFrame->SetBtnState(MAINFRAME_BTN_FRIEND, false);
+            m_pNewFriendWindow->HideAllWindow(TRUE, TRUE);
         }
-        if (IsVisible((INTERFACE_INVENTORY)))
+        break;
+        case INTERFACE_CHARACTER:
         {
+            g_pMainFrame->SetBtnState(MAINFRAME_BTN_CHAINFO, false);
+            if (IsVisible(INTERFACE_MYQUEST))
+            {
+                g_pMyQuestInfoWindow->SetPos(640 - 190, 0);
+            }
+            if (IsVisible((INTERFACE_INVENTORY)))
+            {
+                g_pMyInventory->SetPos(640 - 190, 0);
+            }
+            if (IsVisible((INTERFACE_PET)))
+            {
+                Hide(INTERFACE_PET);
+            }
+            if (IsVisible((INTERFACE_QUEST_PROGRESS_ETC)))
+            {
+                g_pQuestProgressByEtc->SetPos(640 - 190, 0);
+            }
+        }
+        break;
+        case INTERFACE_INVENTORY_EXT:
+        {
+            constexpr auto secondColumnX = 640 - 190 * 2;
+            if (IsVisible(INTERFACE_MYSHOP_INVENTORY))
+            {
+                g_pMyShopInventory->SetPos(secondColumnX, 0);
+            }
+
+            if (IsVisible(INTERFACE_TRADE))
+            {
+                g_pTrade->SetPos(secondColumnX, 0);
+            }
+
+            if (IsVisible(INTERFACE_STORAGE))
+            {
+                g_pStorageInventory->SetPos(secondColumnX, 0);
+            }
+
+            if (IsVisible(INTERFACE_NPCSHOP))
+            {
+                g_pNPCShop->SetPos(secondColumnX, 0);
+            }
+
+            if (IsVisible(INTERFACE_MIXINVENTORY))
+            {
+                g_pMixInventory->SetPos(secondColumnX, 0);
+            }
+
+            Show(INTERFACE_HERO_POSITION_INFO);
+        }
+        break;
+        case INTERFACE_INVENTORY:
+        {
+            g_pMainFrame->SetBtnState(MAINFRAME_BTN_MYINVEN, false);
+
+            if (IsVisible(INTERFACE_INVENTORY_EXT))
+            {
+                m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY_EXT, false);
+            }
+
+            if (IsVisible(INTERFACE_MIXINVENTORY))
+            {
+                if (g_pMixInventory->ClosingProcess() == false)
+                    return;
+                m_pNewUIMng->ShowInterface(INTERFACE_MIXINVENTORY, false);
+            }
+            if (IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND))
+            {
+                if (g_pLuckyItemWnd->ClosingProcess() == false)
+                    return;
+                m_pNewUIMng->ShowInterface(SEASON3B::INTERFACE_LUCKYITEMWND, false);
+            }
+            if (IsVisible(INTERFACE_NPCSHOP))
+            {
+                g_pNPCShop->ClosingProcess();
+                m_pNewUIMng->ShowInterface(INTERFACE_NPCSHOP, false);
+            }
+            if (IsVisible(INTERFACE_MYSHOP_INVENTORY))
+            {
+                m_pNewUIMng->ShowInterface(INTERFACE_MYSHOP_INVENTORY, false);
+            }
+            if (IsVisible(INTERFACE_PURCHASESHOP_INVENTORY))
+            {
+                g_pPurchaseShopInventory->ClosingProcess();
+                m_pNewUIMng->ShowInterface(INTERFACE_PURCHASESHOP_INVENTORY, false);
+            }
+            if (IsVisible(INTERFACE_STORAGE))
+            {
+                g_pStorageInventoryExt->ProcessClosing();
+                if (!g_pStorageInventory->ProcessClosing())
+                    return;
+
+                m_pNewUIMng->ShowInterface(INTERFACE_STORAGE_EXT, false);
+                m_pNewUIMng->ShowInterface(INTERFACE_STORAGE, false);
+            }
+            if (IsVisible(INTERFACE_TRADE))
+            {
+                g_pTrade->ProcessCloseBtn();
+                m_pNewUIMng->ShowInterface(INTERFACE_TRADE, false);
+            }
+
+            if (IsVisible(INTERFACE_LUCKYCOIN_REGISTRATION))
+            {
+                m_pNewLuckyCoinRegistration->ClosingProcess();
+                m_pNewUIMng->ShowInterface(INTERFACE_LUCKYCOIN_REGISTRATION, false);
+            }
+            if (IsVisible(INTERFACE_EXCHANGE_LUCKYCOIN))
+            {
+                m_pNewExchangeLuckyCoinWindow->ClosingProcess();
+                m_pNewUIMng->ShowInterface(INTERFACE_EXCHANGE_LUCKYCOIN, false);
+            }
+
+            if (IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND))
+            {
+                m_pNewUILuckyItemWnd->ClosingProcess();
+                m_pNewUIMng->ShowInterface(SEASON3B::INTERFACE_LUCKYITEMWND, false);
+            }
+
             g_pMyInventory->SetPos(640 - 190, 0);
+            g_pMyInventory->ClosingProcess();
         }
-        if (IsVisible((INTERFACE_PET)))
-        {
-            Hide(INTERFACE_PET);
-        }
-        if (IsVisible((INTERFACE_QUEST_PROGRESS_ETC)))
-        {
-            g_pQuestProgressByEtc->SetPos(640 - 190, 0);
-        }
-    }
-    else if (dwKey == INTERFACE_INVENTORY_EXT)
-    {
-        constexpr auto secondColumnX = 640 - 190 * 2;
-        if (IsVisible(INTERFACE_MYSHOP_INVENTORY))
-        {
-            g_pMyShopInventory->SetPos(secondColumnX, 0);
-        }
-
-        if (IsVisible(INTERFACE_TRADE))
-        {
-            g_pTrade->SetPos(secondColumnX, 0);
-        }
-
-        if (IsVisible(INTERFACE_STORAGE))
-        {
-            g_pStorageInventory->SetPos(secondColumnX, 0);
-        }
-
-        if (IsVisible(INTERFACE_NPCSHOP))
-        {
-            g_pNPCShop->SetPos(secondColumnX, 0);
-        }
-
-        if (IsVisible(INTERFACE_MIXINVENTORY))
-        {
-            g_pMixInventory->SetPos(secondColumnX, 0);
-        }
-
-        Show(INTERFACE_HERO_POSITION_INFO);
-    }
-    else if (dwKey == INTERFACE_INVENTORY)
-    {
-        g_pMainFrame->SetBtnState(MAINFRAME_BTN_MYINVEN, false);
-
-        if (IsVisible(INTERFACE_INVENTORY_EXT))
-        {
-            m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY_EXT, false);
-        }
-
-        if (IsVisible(INTERFACE_MIXINVENTORY))
+        break;
+        case INTERFACE_MIXINVENTORY:
         {
             if (g_pMixInventory->ClosingProcess() == false)
+            {
                 return;
-            m_pNewUIMng->ShowInterface(INTERFACE_MIXINVENTORY, false);
+            }
+            g_pMainFrame->SetBtnState(MAINFRAME_BTN_MYINVEN, false);
+            m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
+            Show(INTERFACE_HERO_POSITION_INFO);
         }
-        if (IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND))
-        {
-            if (g_pLuckyItemWnd->ClosingProcess() == false)
-                return;
-            m_pNewUIMng->ShowInterface(SEASON3B::INTERFACE_LUCKYITEMWND, false);
-        }
-        if (IsVisible(INTERFACE_NPCSHOP))
+        break;
+        case INTERFACE_NPCSHOP:
         {
             g_pNPCShop->ClosingProcess();
-            m_pNewUIMng->ShowInterface(INTERFACE_NPCSHOP, false);
+            g_pMainFrame->SetBtnState(MAINFRAME_BTN_MYINVEN, false);
+            m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
         }
-        if (IsVisible(INTERFACE_MYSHOP_INVENTORY))
+        break;
+        case INTERFACE_MYSHOP_INVENTORY:
+        case INTERFACE_PURCHASESHOP_INVENTORY:
         {
-            m_pNewUIMng->ShowInterface(INTERFACE_MYSHOP_INVENTORY, false);
+            if (dwKey == INTERFACE_MYSHOP_INVENTORY)
+            {
+                g_pMyShopInventory->ClosingProcess();
+            }
+            else if (dwKey == INTERFACE_PURCHASESHOP_INVENTORY)
+            {
+                g_pPurchaseShopInventory->ClosingProcess();
+            }
+            g_pMyInventory->SetPos(640 - 190, 0);
+            Show(INTERFACE_HERO_POSITION_INFO);
         }
-        if (IsVisible(INTERFACE_PURCHASESHOP_INVENTORY))
-        {
-            g_pPurchaseShopInventory->ClosingProcess();
-            m_pNewUIMng->ShowInterface(INTERFACE_PURCHASESHOP_INVENTORY, false);
-        }
-        if (IsVisible(INTERFACE_STORAGE))
+        break;
+        case INTERFACE_STORAGE:
         {
             g_pStorageInventoryExt->ProcessClosing();
             if (!g_pStorageInventory->ProcessClosing())
                 return;
-
-            m_pNewUIMng->ShowInterface(INTERFACE_STORAGE_EXT, false);
-            m_pNewUIMng->ShowInterface(INTERFACE_STORAGE, false);
+            g_pMainFrame->SetBtnState(MAINFRAME_BTN_MYINVEN, false);
+            m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY_EXT, false);
+            m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
+            Show(INTERFACE_HERO_POSITION_INFO);
         }
-        if (IsVisible(INTERFACE_TRADE))
+        break;
+        case INTERFACE_STORAGE_EXT:
         {
-            g_pTrade->ProcessCloseBtn();
-            m_pNewUIMng->ShowInterface(INTERFACE_TRADE, false);
+            Show(INTERFACE_HERO_POSITION_INFO);
         }
-
-        if (IsVisible(INTERFACE_LUCKYCOIN_REGISTRATION))
+        break;
+        case INTERFACE_PET:
+        {
+            m_pNewPetInfoWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_PARTY:
+        {
+            m_pNewPartyInfoWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_MYQUEST:
+        {
+            m_pNewMyQuestInfoWindow->ClosingProcess();
+            m_pNewMyQuestInfoWindow->SetPos(640 - 190, 0);
+        }
+        break;
+        case INTERFACE_SENATUS:
+        {
+            m_pNewCastleWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_GUARDSMAN:
+        {
+            m_pNewGuardWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_GATEKEEPER:
+        {
+            m_pNewGatemanWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_GATESWITCH:
+        {
+            m_pNewGateSwitchWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_NPCQUEST:
+        {
+            m_pNewNPCQuest->ProcessClosing();
+        }
+        break;
+        case INTERFACE_BLOODCASTLE:
+        {
+            g_pEnterBloodCastle->ClosingProcess();
+        }
+        break;
+        case INTERFACE_DEVILSQUARE:
+        {
+            g_pEnterDevilSquare->ClosingProcess();
+        }
+        break;
+        case INTERFACE_BLOODCASTLE_TIME:
+        {
+            g_pBloodCastle->ClosingProcess();
+        }
+        break;
+        case INTERFACE_TRADE:
+        {
+            g_pTrade->ProcessClosing();
+            g_pMainFrame->SetBtnState(MAINFRAME_BTN_MYINVEN, false);
+            m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
+            Show(INTERFACE_HERO_POSITION_INFO);
+        }
+        break;
+        case INTERFACE_CATAPULT:
+        {
+            g_pCatapultWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_CHAOSCASTLE_TIME:
+        {
+            m_pNewChaosCastleTime->ClosingProcess();
+        }
+        break;
+        case INTERFACE_COMMAND:
+        {
+            m_pNewCommandWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_WINDOW_MENU:
+        {
+            g_pMainFrame->SetBtnState(MAINFRAME_BTN_WINDOW, false);
+        }
+        break;
+        case INTERFACE_OPTION:
+        {
+            // ?
+        }
+        break;
+        case INTERFACE_HERO_POSITION_INFO:
+        {
+            m_pNewHeroPositionInfo->ClosingProcess();
+        }
+        break;
+        case INTERFACE_HELP:
+        {
+            g_pHelp->ClosingProcess();
+        }
+        break;
+        case INTERFACE_ITEM_EXPLANATION:
+        {
+            g_pItemExplanation->ClosingProcess();
+        }
+        break;
+        case INTERFACE_SETITEM_EXPLANATION:
+        {
+            g_pSetItemExplanation->ClosingProcess();
+        }
+        break;
+        case INTERFACE_QUICK_COMMAND:
+        {
+            g_pQuickCommand->ClosingProcess();
+        }
+        break;
+        case INTERFACE_MOVEMAP:
+        {
+            m_pNewCommandWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_CHATINPUTBOX:
+        {
+            m_pNewChatInputBox->ClosingProcess();
+        }
+        break;
+        case INTERFACE_GUILDINFO:
+        {
+            m_pNewGuildInfoWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_NPCGUILDMASTER:
+        {
+            m_pNewGuildMakeWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_SIEGEWARFARE:
+        {
+            m_pNewSiegeWarfare->ClosingProcess();
+        }
+        break;
+        case INTERFACE_ITEM_ENDURANCE_INFO:
+        {
+            m_pNewItemEnduranceInfo->ClosingProcess();
+        }
+        break;
+        case INTERFACE_BUFF_WINDOW:
+        {
+            m_pNewBuffWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_CURSEDTEMPLE_RESULT:
+        {
+            m_pNewCursedTempleResultWindow->ClosingProcess();
+        }
+        break;
+        case INTERFACE_CRYWOLF:
+        {
+            m_pNewCryWolfInterface->ClosingProcess();
+        }
+        break;
+        case INTERFACE_GOLD_BOWMAN:
+        {
+            m_pNewGoldBowman->ClosingProcess();
+        }
+        break;
+        case INTERFACE_GOLD_BOWMAN_LENA:
+        {
+            m_pNewGoldBowmanLena->ClosingProcess();
+        }
+        break;
+        case INTERFACE_LUCKYCOIN_REGISTRATION:
         {
             m_pNewLuckyCoinRegistration->ClosingProcess();
-            m_pNewUIMng->ShowInterface(INTERFACE_LUCKYCOIN_REGISTRATION, false);
+
+            if (IsVisible(INTERFACE_INVENTORY))
+            {
+                m_pNewMyInventory->ClosingProcess();
+                m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
+            }
         }
-        if (IsVisible(INTERFACE_EXCHANGE_LUCKYCOIN))
+        break;
+        case INTERFACE_EXCHANGE_LUCKYCOIN:
         {
             m_pNewExchangeLuckyCoinWindow->ClosingProcess();
-            m_pNewUIMng->ShowInterface(INTERFACE_EXCHANGE_LUCKYCOIN, false);
-        }
 
-        if (IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND))
-        {
-            m_pNewUILuckyItemWnd->ClosingProcess();
-            m_pNewUIMng->ShowInterface(SEASON3B::INTERFACE_LUCKYITEMWND, false);
+            if (IsVisible(INTERFACE_INVENTORY))
+            {
+                m_pNewMyInventory->ClosingProcess();
+                m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
+            }
         }
-
-        g_pMyInventory->SetPos(640 - 190, 0);
-        g_pMyInventory->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_MIXINVENTORY)
-    {
-        if (g_pMixInventory->ClosingProcess() == false)
+        break;
+        case INTERFACE_DUELWATCH:
         {
-            return;
+            m_pNewDuelWatchWindow->ClosingProcess();
         }
-        g_pMainFrame->SetBtnState(MAINFRAME_BTN_MYINVEN, false);
-        m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
-        Show(INTERFACE_HERO_POSITION_INFO);
-    }
-    else if (dwKey == INTERFACE_NPCSHOP)
-    {
-        g_pNPCShop->ClosingProcess();
-        g_pMainFrame->SetBtnState(MAINFRAME_BTN_MYINVEN, false);
-        m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
-    }
-    else if (dwKey == INTERFACE_MYSHOP_INVENTORY
-        || dwKey == INTERFACE_PURCHASESHOP_INVENTORY)
-    {
-        if (dwKey == INTERFACE_MYSHOP_INVENTORY)
+        break;
+        case INTERFACE_DUELWATCH_MAINFRAME:
         {
-            g_pMyShopInventory->ClosingProcess();
+            m_pNewDuelWatchMainFrameWindow->ClosingProcess();
         }
-        else if (dwKey == INTERFACE_PURCHASESHOP_INVENTORY)
+        break;
+        case INTERFACE_DUELWATCH_USERLIST:
         {
-            g_pPurchaseShopInventory->ClosingProcess();
+            m_pNewDuelWatchUserListWindow->ClosingProcess();
         }
-        g_pMyInventory->SetPos(640 - 190, 0);
-        Show(INTERFACE_HERO_POSITION_INFO);
-    }
-    else if (dwKey == INTERFACE_STORAGE)
-    {
-        g_pStorageInventoryExt->ProcessClosing();
-        if (!g_pStorageInventory->ProcessClosing())
-            return;
-        g_pMainFrame->SetBtnState(MAINFRAME_BTN_MYINVEN, false);
-        m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY_EXT, false);
-        m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
-        Show(INTERFACE_HERO_POSITION_INFO);
-    }
-    else if (dwKey == INTERFACE_STORAGE_EXT)
-    {
-        Show(INTERFACE_HERO_POSITION_INFO);
-    }
-    else if (dwKey == INTERFACE_PET)
-    {
-        m_pNewPetInfoWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_PARTY)
-    {
-        m_pNewPartyInfoWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_MYQUEST)
-    {
-        m_pNewMyQuestInfoWindow->ClosingProcess();
-
-        m_pNewMyQuestInfoWindow->SetPos(640 - 190, 0);
-    }
-    else if (dwKey == INTERFACE_SENATUS)
-    {
-        m_pNewCastleWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_GUARDSMAN)
-    {
-        m_pNewGuardWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_GATEKEEPER)
-    {
-        m_pNewGatemanWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_GATESWITCH)
-    {
-        m_pNewGateSwitchWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_NPCQUEST)
-    {
-        m_pNewNPCQuest->ProcessClosing();
-    }
-    else if (dwKey == INTERFACE_BLOODCASTLE)
-    {
-        g_pEnterBloodCastle->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_DEVILSQUARE)
-    {
-        g_pEnterDevilSquare->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_BLOODCASTLE_TIME)
-    {
-        g_pBloodCastle->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_TRADE)
-    {
-        g_pTrade->ProcessClosing();
-        g_pMainFrame->SetBtnState(MAINFRAME_BTN_MYINVEN, false);
-        m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
-        Show(INTERFACE_HERO_POSITION_INFO);
-    }
-    else if (dwKey == INTERFACE_CATAPULT)
-    {
-        g_pCatapultWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_CHAOSCASTLE_TIME)
-    {
-        m_pNewChaosCastleTime->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_COMMAND)
-    {
-        m_pNewCommandWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_WINDOW_MENU)
-    {
-        g_pMainFrame->SetBtnState(MAINFRAME_BTN_WINDOW, false);
-    }
-    else if (dwKey == INTERFACE_OPTION)
-    {
-    }
-    else if (dwKey == INTERFACE_HERO_POSITION_INFO)
-    {
-        m_pNewHeroPositionInfo->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_HELP)
-    {
-        g_pHelp->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_ITEM_EXPLANATION)
-    {
-        g_pItemExplanation->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_SETITEM_EXPLANATION)
-    {
-        g_pSetItemExplanation->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_QUICK_COMMAND)
-    {
-        g_pQuickCommand->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_MOVEMAP)
-    {
-        m_pNewCommandWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_CHATINPUTBOX)
-    {
-        m_pNewChatInputBox->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_GUILDINFO)
-    {
-        m_pNewGuildInfoWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_NPCGUILDMASTER)
-    {
-        m_pNewGuildMakeWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_SIEGEWARFARE)
-    {
-        m_pNewSiegeWarfare->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_ITEM_ENDURANCE_INFO)
-    {
-        m_pNewItemEnduranceInfo->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_BUFF_WINDOW)
-    {
-        m_pNewBuffWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_CURSEDTEMPLE_RESULT)
-    {
-        m_pNewCursedTempleResultWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_CRYWOLF)
-    {
-        m_pNewCryWolfInterface->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_GOLD_BOWMAN)
-    {
-        m_pNewGoldBowman->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_GOLD_BOWMAN_LENA)
-    {
-        m_pNewGoldBowmanLena->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_LUCKYCOIN_REGISTRATION)
-    {
-        m_pNewLuckyCoinRegistration->ClosingProcess();
-
-        if (IsVisible(INTERFACE_INVENTORY))
+        break;
+    #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
+        case INTERFACE_INGAMESHOP:
         {
-            m_pNewMyInventory->ClosingProcess();
-            m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
+            g_pInGameShop->ClosingProcess();
+            g_pMainFrame->SetBtnState(MAINFRAME_BTN_PARTCHARGE, false);
         }
-    }
-    else if (dwKey == INTERFACE_EXCHANGE_LUCKYCOIN)
-    {
-        m_pNewExchangeLuckyCoinWindow->ClosingProcess();
-
-        if (IsVisible(INTERFACE_INVENTORY))
+        break;
+    #endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+        case INTERFACE_DOPPELGANGER_NPC:
         {
-            m_pNewMyInventory->ClosingProcess();
-            m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
+            m_pNewDoppelGangerWindow->ClosingProcess();
         }
-    }
-    else if (dwKey == INTERFACE_DUELWATCH)
-    {
-        m_pNewDuelWatchWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_DUELWATCH_MAINFRAME)
-    {
-        m_pNewDuelWatchMainFrameWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_DUELWATCH_USERLIST)
-    {
-        m_pNewDuelWatchUserListWindow->ClosingProcess();
-    }
-#ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
-    else if (dwKey == INTERFACE_INGAMESHOP)
-    {
-        g_pInGameShop->ClosingProcess();
-        g_pMainFrame->SetBtnState(MAINFRAME_BTN_PARTCHARGE, false);
-    }
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
-    else if (dwKey == INTERFACE_DOPPELGANGER_NPC)
-    {
-        m_pNewDoppelGangerWindow->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_DOPPELGANGER_FRAME)
-    {
-        m_pNewDoppelGangerFrame->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_NPC_DIALOGUE)
-    {
-        m_pNewNPCDialogue->ProcessClosing();
-    }
-    else if (dwKey == INTERFACE_QUEST_PROGRESS)
-    {
-        m_pNewQuestProgress->ProcessClosing();
-    }
-    else if (dwKey == INTERFACE_QUEST_PROGRESS_ETC)
-    {
-        m_pNewQuestProgressByEtc->ProcessClosing();
-    }
-    else if (dwKey == INTERFACE_EMPIREGUARDIAN_NPC)
-    {
-        m_pNewEmpireGuardianNPC->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_EMPIREGUARDIAN_TIMER)
-    {
-        m_pNewEmpireGuardianTimer->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_MINI_MAP)
-    {
-        m_pNewMiniMap->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_GENSRANKING)
-    {
-        g_pNewUIGensRanking->ClosingProcess();
-    }
-    else if (dwKey == INTERFACE_UNITEDMARKETPLACE_NPC_JULIA)
-    {
-        m_pNewUnitedMarketPlaceWindow->ClosingProcess();
-    }
-    else if (dwKey == SEASON3B::INTERFACE_LUCKYITEMWND)
-    {
-        if (g_pLuckyItemWnd->ClosingProcess() == false)
-            return;
-        if (IsVisible(SEASON3B::INTERFACE_INVENTORY))
+        break;
+        case INTERFACE_DOPPELGANGER_FRAME:
         {
-            m_pNewMyInventory->ClosingProcess();
-            m_pNewUIMng->ShowInterface(SEASON3B::INTERFACE_INVENTORY, false);
+            m_pNewDoppelGangerFrame->ClosingProcess();
         }
-    }
-    else if (dwKey == INTERFACE_MUHELPER)
-    {
-        m_pNewUIMng->ShowInterface(SEASON3B::INTERFACE_MUHELPER_SKILL_LIST, false);
-        m_pNewUIMng->ShowInterface(SEASON3B::INTERFACE_MUHELPER_EXT, false);
+        break;
+        case INTERFACE_NPC_DIALOGUE:
+        {
+            m_pNewNPCDialogue->ProcessClosing();
+        }
+        break;
+        case INTERFACE_QUEST_PROGRESS:
+        {
+            m_pNewQuestProgress->ProcessClosing();
+        }
+        break;
+        case INTERFACE_QUEST_PROGRESS_ETC:
+        {
+            m_pNewQuestProgressByEtc->ProcessClosing();
+        }
+        break;
+        case INTERFACE_EMPIREGUARDIAN_NPC:
+        {
+            m_pNewEmpireGuardianNPC->ClosingProcess();
+        }
+        break;
+        case INTERFACE_EMPIREGUARDIAN_TIMER:
+        {
+            m_pNewEmpireGuardianTimer->ClosingProcess();
+        }
+        break;
+        case INTERFACE_MINI_MAP:
+        {
+            m_pNewMiniMap->ClosingProcess();
+        }
+        break;
+        case INTERFACE_GENSRANKING:
+        {
+            g_pNewUIGensRanking->ClosingProcess();
+        }
+        break;
+        case INTERFACE_UNITEDMARKETPLACE_NPC_JULIA:
+        {
+            m_pNewUnitedMarketPlaceWindow->ClosingProcess();
+        }
+        break;
+        case SEASON3B::INTERFACE_LUCKYITEMWND:
+        {
+            if (g_pLuckyItemWnd->ClosingProcess() == false)
+                return;
+            if (IsVisible(SEASON3B::INTERFACE_INVENTORY))
+            {
+                m_pNewMyInventory->ClosingProcess();
+                m_pNewUIMng->ShowInterface(SEASON3B::INTERFACE_INVENTORY, false);
+            }
+        }
+        break;
+        case INTERFACE_MUHELPER:
+        {
+            m_pNewUIMng->ShowInterface(SEASON3B::INTERFACE_MUHELPER_SKILL_LIST, false);
+            m_pNewUIMng->ShowInterface(SEASON3B::INTERFACE_MUHELPER_EXT, false);
+        }
+        break;
+        default:
+        {
+            // Handle other cases if necessary
+        }
+        break;
     }
 
     m_pNewUIMng->ShowInterface(dwKey, false);
