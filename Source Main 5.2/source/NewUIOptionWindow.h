@@ -5,18 +5,32 @@
 #if !defined(AFX_NEWUIOPTIONWINDOW_H__1469FA1D_7C15_4AFE_AD6E_59C303E72BC0__INCLUDED_)
 #define AFX_NEWUIOPTIONWINDOW_H__1469FA1D_7C15_4AFE_AD6E_59C303E72BC0__INCLUDED_
 
+
 #pragma once
 
 #include "NewUIManager.h"
 #include "NewUIMyInventory.h"
 
+
+
+
+
+
 namespace SEASON3B
 {
+
     class CNewUIOptionWindow : public CNewUIObj
     {
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
     public:
 #endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
+        struct RESOLUTION_INFO
+        {
+            int Width;
+            int Height;
+            wchar_t Text[32];  // For display in the UI
+        };
+
         enum IMAGE_LIST
         {
             IMAGE_OPTION_FRAME_BACK = CNewUIMessageBoxMng::IMAGE_MSGBOX_BACK,
@@ -33,6 +47,9 @@ namespace SEASON3B
             IMAGE_OPTION_EFFECT_COLOR,
             IMAGE_OPTION_VOLUME_BACK,
             IMAGE_OPTION_VOLUME_COLOR,
+
+            IMAGE_OPTION_RESOLUTION_BTN_L,
+            IMAGE_OPTION_RESOLUTION_BTN_R,
         };
 
     public:
@@ -68,6 +85,12 @@ namespace SEASON3B
         void SetRenderAllEffects(bool bRenderAllEffects);
         bool GetRenderAllEffects();
 
+
+        void SetResolutionIndex(int iIndex);
+        int GetResolutionIndex();
+        RESOLUTION_INFO GetCurrentResolution();
+        void PopulateResolutionList();
+
     private:
         void LoadImages();
         void UnloadImages();
@@ -77,6 +100,8 @@ namespace SEASON3B
         void RenderFrame();
         void RenderContents();
         void RenderButtons();
+
+        void ApplyResolutionChange();
 
     private:
         CNewUIManager* m_pNewUIMng;
@@ -90,6 +115,13 @@ namespace SEASON3B
         int m_iVolumeLevel;		// 볼륨조절
         int m_iRenderLevel;		// 효과제한
         bool m_bRenderAllEffects;
+
+
+        int m_iResolutionIndex;           // Current resolution index
+        std::vector<RESOLUTION_INFO> m_ResolutionList;  // Available resolutions
+        CNewUIButton m_BtnResLeft;        // Left arrow button
+        CNewUIButton m_BtnResRight;       // Right arrow button
+
     };
 }
 
