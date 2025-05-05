@@ -584,7 +584,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     case MONSTER_HAMMER_SCOUT:
     {
         OpenMonsterModel(MONSTER_MODEL_SCOUT);
-        c = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
+        c = CreateCharacter(Key, MODEL_SCOUT_HERO, PosX, PosY);
         c->Object.Scale = 1.2f;
         c->Weapon[0].Type = -1;
         c->Weapon[1].Type = -1;
@@ -624,16 +624,16 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
         BoneManager::RegisterBone(c, L"Monster95_Head", 6);
     }
     break;
-    case MONSTER_SCOUTHERO:
+    case MONSTER_SCOUT_HERO:
     {
         OpenMonsterModel(MONSTER_MODEL_SCOUT);
-        c = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
+        c = CreateCharacter(Key, MODEL_SCOUT_HERO, PosX, PosY);
         c->Object.Scale = 1.6f;
         c->Weapon[0].Type = -1;
         c->Weapon[1].Type = -1;
     }
     break;
-    case MONSTER_WEREWOLFHERO:
+    case MONSTER_WEREWOLF_HERO:
     {
         OpenMonsterModel(MONSTER_MODEL_WEREWOLF_HERO);
         c = CreateCharacter(Key, MODEL_WEREWOLF_HERO, PosX, PosY);
@@ -725,7 +725,7 @@ bool M34CryWolf1st::MoveCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
 {
     switch (o->Type)
     {
-    case MODEL_SCOUT:
+    case MODEL_SCOUT_HERO:
     {
         float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
         float fAnimationFrame = o->AnimationFrame - fActionSpeed;
@@ -1044,7 +1044,7 @@ bool M34CryWolf1st::AttackEffectCryWolf1stMonster(CHARACTER* c, OBJECT* o, BMD* 
         }
     }
     break;
-    case MODEL_BEAM_KNIGHT:
+    case MODEL_DEATH_BEAM_KNIGHT:
     {
         vec3_t p, Position, Angle;
         for (int i = 0; i < 6; i++)
@@ -1162,7 +1162,7 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
         }
     }
     break;
-    case MODEL_SCOUT:
+    case MODEL_SCOUT_HERO:
     {
         if (o->CurrentAction == MONSTER01_ATTACK1)
         {
@@ -1470,7 +1470,7 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
         return true;
     }
     break;
-    case MODEL_SCOUT:
+    case MODEL_SCOUT_HERO:
     {
         if (ExtraMon)
         {
@@ -1532,7 +1532,7 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
         return true;
     }
     break;
-    case MODEL_BEAM_KNIGHT:	//318
+    case MODEL_DEATH_BEAM_KNIGHT:	//318
     {
         Vector(0.6f, 0.8f, 0.6f, b->BodyLight);
         b->BeginRender(o->Alpha);
@@ -2000,7 +2000,7 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
             o->SubType = FALSE;
     }
     return true;
-    case MODEL_SCOUT:
+    case MODEL_SCOUT_HERO:
     {
         if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
         {

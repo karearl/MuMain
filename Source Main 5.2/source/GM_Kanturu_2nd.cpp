@@ -69,7 +69,7 @@ CHARACTER* M38Kanturu2nd::Create_Kanturu2nd_Monster(int iType, int PosX, int Pos
         BoneManager::RegisterBone(pCharacter, L"PRSona_Tail1", 77);
     }
     break;
-    case MONSTER_TWIN_TALE:
+    case MONSTER_TWIN_TAIL:
     {
         OpenMonsterModel(MONSTER_MODEL_TWIN_TAIL);
         pCharacter = CreateCharacter(Key, MODEL_TWIN_TAIL, PosX, PosY);
@@ -134,7 +134,7 @@ CHARACTER* M38Kanturu2nd::Create_Kanturu2nd_Monster(int iType, int PosX, int Pos
         BoneManager::RegisterBone(pCharacter, L"KANTURU2ND_ENTER_NPC_14", 10);
     }
     break;
-    case MONSTER_CANON_TRAP:
+    case MONSTER_CANNON_TRAP:
     {
         pCharacter = g_TrapCanon.Create_TrapCanon(PosX, PosY, Key);
     }
@@ -152,7 +152,7 @@ bool M38Kanturu2nd::Set_CurrentAction_Kanturu2nd_Monster(CHARACTER* c, OBJECT* o
     switch (c->MonsterIndex)
     {
     case MONSTER_PERSONA:
-    case MONSTER_TWIN_TALE:
+    case MONSTER_TWIN_TAIL:
     case MONSTER_DREADFEAR:
     {
         return CheckMonsterSkill(c, o);
@@ -182,7 +182,7 @@ bool M38Kanturu2nd::AttackEffect_Kanturu2nd_Monster(CHARACTER* c, OBJECT* o, BMD
         return true;
     }
     break;
-    case MODEL_TRAP_CANON:
+    case MODEL_TRAP_CANNON:
     {
         g_TrapCanon.Render_AttackEffect(c, o, b);
         return true;
@@ -747,7 +747,7 @@ bool M38Kanturu2nd::Render_Kanturu2nd_MonsterObjectMesh(OBJECT* o, BMD* b, int E
         return true;
     }
     break;
-    case MODEL_TRAP_CANON:
+    case MODEL_TRAP_CANNON:
     {
         g_TrapCanon.Render_Object(o, b);
         return true;
@@ -1216,7 +1216,7 @@ bool M38Kanturu2nd::Render_Kanturu2nd_MonsterVisual(CHARACTER* c, OBJECT* o, BMD
         }
     }
     break;
-    case MODEL_TRAP_CANON:
+    case MODEL_TRAP_CANNON:
     {
         g_TrapCanon.Render_Object_Visual(c, o, b);
     }
@@ -1380,15 +1380,15 @@ void CTrapCanon::Destroy()
 
 void CTrapCanon::Open_TrapCanon()
 {
-    gLoadData.AccessModel(MODEL_TRAP_CANON, L"Data\\Npc\\", L"c_mon");
-    gLoadData.OpenTexture(MODEL_TRAP_CANON, L"Npc\\");
+    gLoadData.AccessModel(MODEL_TRAP_CANNON, L"Data\\Npc\\", L"c_mon");
+    gLoadData.OpenTexture(MODEL_TRAP_CANNON, L"Npc\\");
 }
 
 CHARACTER* CTrapCanon::Create_TrapCanon(int iPosX, int iPosY, int iKey)
 {
     CHARACTER* pCha = NULL;
 
-    pCha = CreateCharacter(iKey, MODEL_TRAP_CANON, iPosX, iPosY);
+    pCha = CreateCharacter(iKey, MODEL_TRAP_CANNON, iPosX, iPosY);
     pCha->Object.Scale = 1.0f;
     pCha->AttackTime = 0;
     pCha->LastAttackEffectTime = -1;

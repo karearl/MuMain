@@ -410,7 +410,7 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
     case MONSTER_BERSERKER:
     {
         OpenMonsterModel(MONSTER_MODEL_BERSERK);
-        pCharacter = CreateCharacter(Key, MODEL_BERSERK, PosX, PosY);
+        pCharacter = CreateCharacter(Key, MODEL_BERSERKER, PosX, PosY);
         pCharacter->Object.Scale = 0.95f;
         pCharacter->Weapon[0].Type = -1;
         pCharacter->Weapon[1].Type = -1;
@@ -431,7 +431,7 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
     case MONSTER_GENOCIDER:
     {
         OpenMonsterModel(MONSTER_MODEL_GENOCIDER);
-        pCharacter = CreateCharacter(Key, MODEL_GENOCIDER, PosX, PosY);
+        pCharacter = CreateCharacter(Key, MODEL_GENOCIDER_WARRIOR, PosX, PosY);
         pCharacter->Object.Scale = 1.2f;
         pCharacter->Weapon[0].Type = -1;
         pCharacter->Weapon[1].Type = -1;
@@ -674,7 +674,7 @@ bool M37Kanturu1st::AttackEffectKanturu1stMonster(CHARACTER* c, OBJECT* o, BMD* 
 
     switch (o->Type)
     {
-    case MODEL_BERSERK:
+    case MODEL_BERSERKER:
     {
         return true;
     }
@@ -684,7 +684,7 @@ bool M37Kanturu1st::AttackEffectKanturu1stMonster(CHARACTER* c, OBJECT* o, BMD* 
         return true;
     }
     break;
-    case MODEL_GENOCIDER:
+    case MODEL_GENOCIDER_WARRIOR:
     {
         return true;
     }
@@ -879,11 +879,11 @@ bool M37Kanturu1st::MoveKanturu1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
 {
     switch (o->Type)
     {
-    case MODEL_BERSERK:
+    case MODEL_BERSERKER:
         break;
     case MODEL_GIGANTIS:
         break;
-    case MODEL_GENOCIDER:
+    case MODEL_GENOCIDER_WARRIOR:
         break;
     case MODEL_KENTAUROS:
         break;
@@ -912,7 +912,7 @@ bool M37Kanturu1st::RenderKanturu1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
 {
     switch (o->Type)
     {
-    case MODEL_BERSERK:
+    case MODEL_BERSERKER:
     {
         b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh,
             o->BlendMeshLight, o->BlendMeshTexCoordU,
@@ -950,7 +950,7 @@ bool M37Kanturu1st::RenderKanturu1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
         return true;
     }
     break;
-    case MODEL_GENOCIDER:
+    case MODEL_GENOCIDER_WARRIOR:
     {
         b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh,
             o->BlendMeshLight, o->BlendMeshTexCoordU,
@@ -1094,7 +1094,7 @@ bool M37Kanturu1st::RenderKanturu1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
 {
     switch (o->Type)
     {
-    case MODEL_BERSERK:
+    case MODEL_BERSERKER:
     {
         if (o->CurrentAction == MONSTER01_WALK)
         {
@@ -1185,7 +1185,7 @@ bool M37Kanturu1st::RenderKanturu1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
     }
     break;
 
-    case MODEL_GENOCIDER:
+    case MODEL_GENOCIDER_WARRIOR:
     {
         if (o->CurrentAction == MONSTER01_WALK)
         {
@@ -1647,7 +1647,7 @@ void M37Kanturu1st::MoveKanturu1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
         }
     }
     break;
-    case MODEL_BERSERK:
+    case MODEL_BERSERKER:
     {
         if ((o->AnimationFrame >= 3.5f && o->AnimationFrame <= 6.7f
             && o->CurrentAction == MONSTER01_ATTACK1)
@@ -1751,7 +1751,7 @@ void M37Kanturu1st::MoveKanturu1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
         }
     }
     break;
-    case MODEL_GENOCIDER:
+    case MODEL_GENOCIDER_WARRIOR:
     {
         if ((o->AnimationFrame >= 5.5f && o->AnimationFrame <= 6.9f
             && o->CurrentAction == MONSTER01_ATTACK1)

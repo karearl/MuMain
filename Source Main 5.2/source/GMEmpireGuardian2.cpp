@@ -512,8 +512,8 @@ void GMEmpireGuardian2::MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
     case MODEL_LUCAS:
     case MODEL_DEFENDER:
     case MODEL_FORSAKER:
-    case MODEL_OCELOT:
-    case MODEL_ERIC:
+    case MODEL_OCELOT_THE_LORD:
+    case MODEL_ERIC_THE_GUARD:
     {
         g_EmpireGuardian1.MoveBlurEffect(c, o, b);
     }

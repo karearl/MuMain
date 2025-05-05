@@ -2636,7 +2636,7 @@ void ReceiveCreateMonsterViewport(const BYTE* ReceiveBuffer)
         {
             c->Object.Angle[2] = 20.f;
         }
-        else if (o->Type == MODEL_UNITEDMARKETPLACE_JULIA)
+        else if (o->Type == MODEL_MARKET_UNION_MEMBER_JULIA)
         {
             //c->Object.Angle[2] = 44.0f;
             c->Object.Angle[2] = 49.0f;
@@ -3453,7 +3453,7 @@ void ReceiveSkillStatus(const BYTE* ReceiveBuffer)
         if (g_isCharacterBuff(o, bufftype))
         {
             if ((o->Type >= MODEL_CRYWOLF_ALTAR1 && o->Type <= MODEL_CRYWOLF_ALTAR5)
-                || MODEL_SMITH || MODEL_NPC_SERBIS || MODEL_MERCHANT_MAN
+                || MODEL_HANZO_THE_BLACKSMITH || MODEL_NPC_SERBIS || MODEL_MERCHANT_MAN
                 || MODEL_STORAGE || MODEL_NPC_BREEDER)
             {
                 if (g_isCharacterBuff(o, eBuff_CrywolfHeroContracted))

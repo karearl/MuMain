@@ -156,7 +156,7 @@ bool GMUnitedMarketPlace::MoveMonsterVisual(OBJECT* o, BMD* b)
 
     switch (o->Type)
     {
-    case MODEL_UNITEDMARKETPLACE_JULIA:
+    case MODEL_MARKET_UNION_MEMBER_JULIA:
     {
     }
     return true;
@@ -353,11 +353,11 @@ bool GMUnitedMarketPlace::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
 {
     switch (o->Type)
     {
-    case MODEL_UNITEDMARKETPLACE_CHRISTIN:
+    case MODEL_CHRISTINE_THE_GENERAL_GOODS_MERCHANT:
     {
     }
     return true;
-    case MODEL_UNITEDMARKETPLACE_RAUL:
+    case MODEL_JEWELER_RAUL:
     {
         vec3_t vRelativePos, vWorldPos, Light, vLightPosition;
         Vector(0.f, 0.f, 0.f, vRelativePos);

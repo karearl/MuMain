@@ -1813,8 +1813,8 @@ void OpenNpc(int Type)
 
     switch (Type)
     {
-    case MODEL_MERCHANT_FEMALE:
-        gLoadData.AccessModel(MODEL_MERCHANT_FEMALE, L"Data\\Npc\\", L"Female", 1);
+    case MODEL_LUMEN_THE_BARMAID:
+        gLoadData.AccessModel(MODEL_LUMEN_THE_BARMAID, L"Data\\Npc\\", L"Female", 1);
 
         for (int i = 0; i < 2; i++)
         {
@@ -1856,12 +1856,12 @@ void OpenNpc(int Type)
             gLoadData.OpenTexture(MODEL_MERCHANT_GIRL_LOWER + i, L"Npc\\");
         }
         break;
-    case MODEL_SMITH:
-        gLoadData.AccessModel(MODEL_SMITH, L"Data\\Npc\\", L"Smith", 1);
+    case MODEL_HANZO_THE_BLACKSMITH:
+        gLoadData.AccessModel(MODEL_HANZO_THE_BLACKSMITH, L"Data\\Npc\\", L"Smith", 1);
         LoadWaveFile(SOUND_NPC_BLACK_SMITH, L"Data\\Sound\\nBlackSmith.wav", 1);
         break;
-    case MODEL_SCIENTIST:
-        gLoadData.AccessModel(MODEL_SCIENTIST, L"Data\\Npc\\", L"Wizard", 1);
+    case MODEL_PASI_THE_MAGE:
+        gLoadData.AccessModel(MODEL_PASI_THE_MAGE, L"Data\\Npc\\", L"Wizard", 1);
         break;
     case MODEL_SNOW_MERCHANT:
         gLoadData.AccessModel(MODEL_SNOW_MERCHANT, L"Data\\Npc\\", L"SnowMerchant", 1);
@@ -1872,24 +1872,24 @@ void OpenNpc(int Type)
     case MODEL_SNOW_WIZARD:
         gLoadData.AccessModel(MODEL_SNOW_WIZARD, L"Data\\Npc\\", L"SnowWizard", 1);
         break;
-    case MODEL_ELF_WIZARD:
-        gLoadData.AccessModel(MODEL_ELF_WIZARD, L"Data\\Npc\\", L"ElfWizard", 1);
+    case MODEL_ELF_LALA:
+        gLoadData.AccessModel(MODEL_ELF_LALA, L"Data\\Npc\\", L"ElfWizard", 1);
         LoadWaveFile(SOUND_NPC_HARP, L"Data\\Sound\\nHarp.wav", 1);
         break;
     case MODEL_ELF_MERCHANT:
         gLoadData.AccessModel(MODEL_ELF_MERCHANT, L"Data\\Npc\\", L"ElfMerchant", 1);
         break;
-    case MODEL_MASTER:
-        gLoadData.AccessModel(MODEL_MASTER, L"Data\\Npc\\", L"Master", 1);
+    case MODEL_GUILD_MASTER:
+        gLoadData.AccessModel(MODEL_GUILD_MASTER, L"Data\\Npc\\", L"Master", 1);
         break;
     case MODEL_STORAGE:
         gLoadData.AccessModel(MODEL_STORAGE, L"Data\\Npc\\", L"Storage", 1);
         break;
-    case MODEL_TOURNAMENT:
-        gLoadData.AccessModel(MODEL_TOURNAMENT, L"Data\\Npc\\", L"Tournament", 1);
+    case MODEL_ARENA_GUARD:
+        gLoadData.AccessModel(MODEL_ARENA_GUARD, L"Data\\Npc\\", L"Tournament", 1);
         break;
-    case MODEL_MIX_NPC:
-        gLoadData.AccessModel(MODEL_MIX_NPC, L"Data\\Npc\\", L"MixNpc", 1);
+    case MODEL_CHAOS_GOBLIN:
+        gLoadData.AccessModel(MODEL_CHAOS_GOBLIN, L"Data\\Npc\\", L"MixNpc", 1);
         LoadWaveFile(SOUND_NPC_MIX, L"Data\\Sound\\nMix.wav", 1);
         break;
     case MODEL_REFINERY_NPC:
@@ -1904,8 +1904,8 @@ void OpenNpc(int Type)
         gLoadData.AccessModel(MODEL_NPC_DEVILSQUARE, L"Data\\Npc\\", L"DevilNpc", 1);
         break;
 
-    case MODEL_NPC_SEVINA:
-        gLoadData.AccessModel(MODEL_NPC_SEVINA, L"Data\\Npc\\", L"Sevina", 1);
+    case MODEL_SEVINA_THE_PRIESTESS:
+        gLoadData.AccessModel(MODEL_SEVINA_THE_PRIESTESS, L"Data\\Npc\\", L"Sevina", 1);
         gLoadData.OpenTexture(Type, L"Npc\\");
         break;
     case MODEL_NPC_ARCHANGEL:
@@ -1918,8 +1918,8 @@ void OpenNpc(int Type)
         break;
 
         //  데비아스, 로랜시아 추가 상점 NPC
-    case MODEL_DEVIAS_TRADER:
-        gLoadData.AccessModel(MODEL_DEVIAS_TRADER, L"Data\\Npc\\", L"DeviasTrader", 1);
+    case MODEL_THOMPSON_THE_MERCHANT:
+        gLoadData.AccessModel(MODEL_THOMPSON_THE_MERCHANT, L"Data\\Npc\\", L"DeviasTrader", 1);
         gLoadData.OpenTexture(Type, L"Npc\\");
         break;
 
@@ -1983,9 +1983,9 @@ void OpenNpc(int Type)
         gLoadData.AccessModel(MODEL_NPC_SERBIS, L"Data\\Npc\\", L"npc_mulyak");
         gLoadData.OpenTexture(MODEL_NPC_SERBIS, L"Npc\\");
         break;
-    case MODEL_KALIMA_SHOP:
-        gLoadData.AccessModel(MODEL_KALIMA_SHOP, L"Data\\Npc\\", L"kalnpc");
-        gLoadData.OpenTexture(MODEL_KALIMA_SHOP, L"Npc\\");
+    case MONSTER_ORACLE_LAYLA:
+        gLoadData.AccessModel(MONSTER_ORACLE_LAYLA, L"Data\\Npc\\", L"kalnpc");
+        gLoadData.OpenTexture(MONSTER_ORACLE_LAYLA, L"Npc\\");
         break;
     case MODEL_BC_NPC1:
         gLoadData.AccessModel(MODEL_BC_NPC1, L"Data\\Npc\\", L"npcpharmercy1");
@@ -2097,9 +2097,9 @@ void OpenNpc(int Type)
         gLoadData.AccessModel(MODEL_SEED_MASTER, L"Data\\Npc\\", L"goblinmaster");
         gLoadData.OpenTexture(MODEL_SEED_MASTER, L"Npc\\");
         break;
-    case MODEL_SEED_INVESTIGATOR:
-        gLoadData.AccessModel(MODEL_SEED_INVESTIGATOR, L"Data\\Npc\\", L"seedgoblin");
-        gLoadData.OpenTexture(MODEL_SEED_INVESTIGATOR, L"Npc\\");
+    case MODEL_SEED_RESEARCHER:
+        gLoadData.AccessModel(MODEL_SEED_RESEARCHER, L"Data\\Npc\\", L"seedgoblin");
+        gLoadData.OpenTexture(MODEL_SEED_RESEARCHER, L"Npc\\");
         break;
     case MODEL_LITTLESANTA:
     case MODEL_LITTLESANTA + 1:
@@ -2158,9 +2158,9 @@ void OpenNpc(int Type)
 
         LoadWaveFile(SOUND_DUEL_NPC_IDLE_1, L"Data\\Sound\\w64\\GatekeeperTitus.wav");
         break;
-    case MODEL_GAMBLE_NPC_MOSS:
-        gLoadData.AccessModel(MODEL_GAMBLE_NPC_MOSS, L"Data\\Npc\\", L"gambler_moss");
-        gLoadData.OpenTexture(MODEL_GAMBLE_NPC_MOSS, L"Npc\\");
+    case MODEL_MOSS_THE_MERCHANT:
+        gLoadData.AccessModel(MODEL_MOSS_THE_MERCHANT, L"Data\\Npc\\", L"gambler_moss");
+        gLoadData.OpenTexture(MODEL_MOSS_THE_MERCHANT, L"Npc\\");
         break;
     case MODEL_DOPPELGANGER_NPC_LUGARD:
         gLoadData.AccessModel(MODEL_DOPPELGANGER_NPC_LUGARD, L"Data\\Npc\\", L"Lugard");
@@ -2177,25 +2177,25 @@ void OpenNpc(int Type)
         gLoadData.OpenTexture(MODEL_DOPPELGANGER_NPC_GOLDENBOX, L"Npc\\");
         LoadWaveFile(SOUND_DOPPELGANGER_JEWELBOX_OPEN, L"Data\\Sound\\Doppelganger\\treasurebox_open.wav");
         break;
-    case MODAL_GENS_NPC_DUPRIAN:
-        gLoadData.AccessModel(MODAL_GENS_NPC_DUPRIAN, L"Data\\Npc\\", L"duprian");
-        gLoadData.OpenTexture(MODAL_GENS_NPC_DUPRIAN, L"Npc\\");
+    case MODEL_GENS_NPC_DUPRIAN:
+        gLoadData.AccessModel(MODEL_GENS_NPC_DUPRIAN, L"Data\\Npc\\", L"duprian");
+        gLoadData.OpenTexture(MODEL_GENS_NPC_DUPRIAN, L"Npc\\");
         break;
-    case MODAL_GENS_NPC_BARNERT:
-        gLoadData.AccessModel(MODAL_GENS_NPC_BARNERT, L"Data\\Npc\\", L"barnert");
-        gLoadData.OpenTexture(MODAL_GENS_NPC_BARNERT, L"Npc\\");
+    case MODEL_GENS_NPC_BARNERT:
+        gLoadData.AccessModel(MODEL_GENS_NPC_BARNERT, L"Data\\Npc\\", L"barnert");
+        gLoadData.OpenTexture(MODEL_GENS_NPC_BARNERT, L"Npc\\");
         break;
-    case MODEL_UNITEDMARKETPLACE_CHRISTIN:
-        gLoadData.AccessModel(MODEL_UNITEDMARKETPLACE_CHRISTIN, L"Data\\Npc\\", L"UnitedMarketPlace_christine");
-        gLoadData.OpenTexture(MODEL_UNITEDMARKETPLACE_CHRISTIN, L"Npc\\");
+    case MODEL_CHRISTINE_THE_GENERAL_GOODS_MERCHANT:
+        gLoadData.AccessModel(MODEL_CHRISTINE_THE_GENERAL_GOODS_MERCHANT, L"Data\\Npc\\", L"UnitedMarketPlace_christine");
+        gLoadData.OpenTexture(MODEL_CHRISTINE_THE_GENERAL_GOODS_MERCHANT, L"Npc\\");
         break;
-    case MODEL_UNITEDMARKETPLACE_RAUL:
-        gLoadData.AccessModel(MODEL_UNITEDMARKETPLACE_RAUL, L"Data\\Npc\\", L"UnitedMarkedPlace_raul");
-        gLoadData.OpenTexture(MODEL_UNITEDMARKETPLACE_RAUL, L"Npc\\");
+    case MODEL_JEWELER_RAUL:
+        gLoadData.AccessModel(MODEL_JEWELER_RAUL, L"Data\\Npc\\", L"UnitedMarkedPlace_raul");
+        gLoadData.OpenTexture(MODEL_JEWELER_RAUL, L"Npc\\");
         break;
-    case MODEL_UNITEDMARKETPLACE_JULIA:
-        gLoadData.AccessModel(MODEL_UNITEDMARKETPLACE_JULIA, L"Data\\Npc\\", L"UnitedMarkedPlace_julia");
-        gLoadData.OpenTexture(MODEL_UNITEDMARKETPLACE_JULIA, L"Npc\\");
+    case MODEL_MARKET_UNION_MEMBER_JULIA:
+        gLoadData.AccessModel(MODEL_MARKET_UNION_MEMBER_JULIA, L"Data\\Npc\\", L"UnitedMarkedPlace_julia");
+        gLoadData.OpenTexture(MODEL_MARKET_UNION_MEMBER_JULIA, L"Npc\\");
         break;
     case MODEL_KARUTAN_NPC_REINA:	// 로랜시장 NPC 잡화상인 크리스틴과 동일.
         gLoadData.AccessModel(MODEL_KARUTAN_NPC_REINA, L"Data\\Npc\\", L"UnitedMarketPlace_christine");
@@ -2209,16 +2209,16 @@ void OpenNpc(int Type)
         gLoadData.AccessModel(MODEL_LUCKYITEM_NPC, L"Data\\Npc\\LuckyItem\\", L"npc_burial");
         gLoadData.OpenTexture(MODEL_LUCKYITEM_NPC, L"Npc\\LuckyItem\\");
         break;
-    case MODEL_TERSIA:
-        gLoadData.AccessModel(MODEL_TERSIA, L"Data\\Npc\\", L"tersia");
-        gLoadData.OpenTexture(MODEL_TERSIA, L"Npc\\");
-    case MODEL_BENA:
-        gLoadData.AccessModel(MODEL_BENA, L"Data\\Npc\\", L"bena");
-        gLoadData.OpenTexture(MODEL_BENA, L"Npc\\");
+    case MODEL_MERCENARY_GUILD_FELICIA:
+        gLoadData.AccessModel(MODEL_MERCENARY_GUILD_FELICIA, L"Data\\Npc\\", L"tersia");
+        gLoadData.OpenTexture(MODEL_MERCENARY_GUILD_FELICIA, L"Npc\\");
+    case MODEL_PRIESTESS_VEINA:
+        gLoadData.AccessModel(MODEL_PRIESTESS_VEINA, L"Data\\Npc\\", L"bena");
+        gLoadData.OpenTexture(MODEL_PRIESTESS_VEINA, L"Npc\\");
         break;
-    case MODEL_ZAIRO:
-        gLoadData.AccessModel(MODEL_ZAIRO, L"Data\\Npc\\", L"volvo"); // TODO: find the right BMD file
-        gLoadData.OpenTexture(MODEL_ZAIRO, L"Npc\\");
+    case MODEL_WANDERING_MERCHANT_ZYRO:
+        gLoadData.AccessModel(MODEL_WANDERING_MERCHANT_ZYRO, L"Data\\Npc\\", L"volvo"); // TODO: find the right BMD file
+        gLoadData.OpenTexture(MODEL_WANDERING_MERCHANT_ZYRO, L"Npc\\");
         break;
     }
 
@@ -2243,32 +2243,32 @@ void OpenNpc(int Type)
     case MODEL_DOPPELGANGER_NPC_GOLDENBOX:
         Models[Type].Actions[MONSTER01_DIE].PlaySpeed = 0.1f;
         break;
-    case MODAL_GENS_NPC_DUPRIAN:
+    case MODEL_GENS_NPC_DUPRIAN:
         Models[Type].Actions[MONSTER01_STOP1].PlaySpeed = 0.6f;
         Models[Type].Actions[MONSTER01_STOP2].PlaySpeed = 0.6f;
         Models[Type].Actions[MONSTER01_WALK].PlaySpeed = 1.4f;
         break;
-    case MODAL_GENS_NPC_BARNERT:
+    case MODEL_GENS_NPC_BARNERT:
         Models[Type].Actions[MONSTER01_STOP1].PlaySpeed = 0.3f;
         Models[Type].Actions[MONSTER01_STOP2].PlaySpeed = 1.2f;
         Models[Type].Actions[MONSTER01_WALK].PlaySpeed = 0.3f;
-    case MODEL_UNITEDMARKETPLACE_RAUL:
+    case MODEL_JEWELER_RAUL:
         Models[Type].Actions[MONSTER01_STOP1].PlaySpeed = 0.5f;
         Models[Type].Actions[MONSTER01_STOP2].PlaySpeed = 0.5f;
         Models[Type].Actions[MONSTER01_WALK].PlaySpeed = 0.5f;
         break;
-    case MODEL_UNITEDMARKETPLACE_JULIA:
+    case MODEL_MARKET_UNION_MEMBER_JULIA:
         Models[Type].Actions[MONSTER01_STOP1].PlaySpeed = 0.5f;
         Models[Type].Actions[MONSTER01_STOP2].PlaySpeed = 0.5f;
         Models[Type].Actions[MONSTER01_WALK].PlaySpeed = 0.5f;
         break;
-    case MODEL_UNITEDMARKETPLACE_CHRISTIN:
+    case MODEL_CHRISTINE_THE_GENERAL_GOODS_MERCHANT:
     case MODEL_KARUTAN_NPC_REINA:
         Models[Type].Actions[MONSTER01_STOP1].PlaySpeed = 0.5f;
         Models[Type].Actions[MONSTER01_STOP2].PlaySpeed = 0.6f;
         Models[Type].Actions[MONSTER01_WALK].PlaySpeed = 0.5f;
         break;
-    case MODEL_TERSIA:
+    case MODEL_MERCENARY_GUILD_FELICIA:
         Models[Type].Actions[MONSTER01_STOP1].PlaySpeed = 0.35f;
         Models[Type].Actions[MONSTER01_STOP2].PlaySpeed = 0.3f;
         break;

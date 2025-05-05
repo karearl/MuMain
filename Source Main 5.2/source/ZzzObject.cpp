@@ -1138,7 +1138,7 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
                                 else if (SEASON3C::GMSwampOfQuiet::RenderObject(o, b, ExtraMon)) {}
                                 else if (TheMapProcess().RenderObjectMesh(o, b)) {}
                                 else
-                                    if (o->Type == MODEL_KALIMA_SHOP)
+                                    if (o->Type == MONSTER_ORACLE_LAYLA)
                                     {
                                         Vector(1.f, 1.f, 1.f, b->BodyLight);
                                         float Luminosity = sinf(WorldTime * 0.002f) * 0.3f + 0.6f;
@@ -2266,7 +2266,7 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
 #ifdef ASG_ADD_TIME_LIMIT_QUEST_NPC
                 else if (o->Type == MODEL_GAMBLE_NPC_MOSS || o->Type == MODEL_TIME_LIMIT_QUEST_NPC_ZAIRO)
 #else	// ASG_ADD_TIME_LIMIT_QUEST_NPC
-                else if (o->Type == MODEL_GAMBLE_NPC_MOSS)
+                else if (o->Type == MODEL_MOSS_THE_MERCHANT)
 #endif	// ASG_ADD_TIME_LIMIT_QUEST_NPC
                 {
                     vec3_t vRelativePos, vWorldPos, Light;
@@ -2395,11 +2395,11 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
                 {
                     b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, 0, o->BlendMeshLight, o->BlendMeshTexCoordU, WorldTime * 0.0006f);
                 }
-                else if (o->Type == MODEL_UNITEDMARKETPLACE_CHRISTIN)
+                else if (o->Type == MODEL_CHRISTINE_THE_GENERAL_GOODS_MERCHANT)
                 {
                     b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
                 }
-                else if (o->Type == MODEL_UNITEDMARKETPLACE_RAUL)
+                else if (o->Type == MODEL_JEWELER_RAUL)
                 {
                     b->RenderMesh(0, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
                     b->RenderMesh(1, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
@@ -2417,7 +2417,7 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
                     b->RenderMesh(13, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
                     b->RenderMesh(14, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
                 }
-                else if (o->Type == MODEL_UNITEDMARKETPLACE_JULIA)
+                else if (o->Type == MODEL_MARKET_UNION_MEMBER_JULIA)
                 {
                     vec3_t vRelativePos, vWorldPos, Light;
                     Vector(0.f, 0.f, 0.f, vRelativePos);
@@ -2449,7 +2449,7 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
 
                     b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
                 }
-                else if (o->Type == MODEL_TERSIA)
+                else if (o->Type == MODEL_MERCENARY_GUILD_FELICIA)
                 {
                     b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
                     b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME, o->Alpha * 0.4f, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);

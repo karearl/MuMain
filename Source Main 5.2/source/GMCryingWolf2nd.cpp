@@ -128,7 +128,7 @@ CHARACTER* M34CryingWolf2nd::CreateCryingWolf2ndMonster(int iType, int PosX, int
 
     switch (iType)
     {
-    case MONSTER_WEREWOLFHERO:
+    case MONSTER_WEREWOLF_HERO:
     {
         OpenMonsterModel(MONSTER_MODEL_WEREWOLF_HERO);
         pCharacter = CreateCharacter(Key, MODEL_WEREWOLF_HERO, PosX, PosY);
@@ -164,7 +164,7 @@ CHARACTER* M34CryingWolf2nd::CreateCryingWolf2ndMonster(int iType, int PosX, int
     case MONSTER_SCOUT:
     {
         OpenMonsterModel(MONSTER_MODEL_SCOUT);
-        pCharacter = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
+        pCharacter = CreateCharacter(Key, MODEL_SCOUT_HERO, PosX, PosY);
         pCharacter->Object.Scale = 1.2f;
         pCharacter->Weapon[0].Type = -1;
         pCharacter->Weapon[1].Type = -1;

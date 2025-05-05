@@ -3615,7 +3615,7 @@ void Action(CHARACTER* c, OBJECT* o, bool Now)
                 {
                     SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
                 }
-                else if (CharactersClient[TargetNpc].MonsterIndex == MONSTER_LUGARD)
+                else if (CharactersClient[TargetNpc].MonsterIndex == MONSTER_DOPPELGANGER_LUGARD)
                 {
                     SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
                 }

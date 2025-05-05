@@ -177,7 +177,7 @@ CHARACTER* GMEmpireGuardian1::CreateMonster(int iType, int PosX, int PosY, int K
     case MONSTER_OCELOT_THE_LORD:
     {
         OpenMonsterModel(MONSTER_MODEL_OCELOT);
-        pCharacter = CreateCharacter(Key, MODEL_OCELOT, PosX, PosY);
+        pCharacter = CreateCharacter(Key, MODEL_OCELOT_THE_LORD, PosX, PosY);
         wcscpy(pCharacter->ID, L"기사단");
         pCharacter->Object.Scale = 1.1f;
     }
@@ -185,7 +185,7 @@ CHARACTER* GMEmpireGuardian1::CreateMonster(int iType, int PosX, int PosY, int K
     case MONSTER_ERIC_THE_GUARD:
     {
         OpenMonsterModel(MONSTER_MODEL_ERIC);
-        pCharacter = CreateCharacter(Key, MODEL_ERIC, PosX, PosY);
+        pCharacter = CreateCharacter(Key, MODEL_ERIC_THE_GUARD, PosX, PosY);
         wcscpy(pCharacter->ID, L"호위병");
         pCharacter->Object.Scale = 1.1f;
     }
@@ -1255,7 +1255,7 @@ void GMEmpireGuardian1::MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
         } // attack switch end
     }
     break;
-    case MODEL_OCELOT:
+    case MODEL_OCELOT_THE_LORD:
     {
         if (o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2)
         {
@@ -1283,7 +1283,7 @@ void GMEmpireGuardian1::MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
         }
     }
     break;
-    case MODEL_ERIC:
+    case MODEL_ERIC_THE_GUARD:
     {
         float Start_Frame = 0.f;
         float End_Frame = 10.f;
