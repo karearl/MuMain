@@ -3222,10 +3222,10 @@ void OnlyNpcChatProcess(CHARACTER* c, OBJECT* o)
                 CreateChat(c->ID, GlobalText[1974], c);
             }
             break;
-        case MODEL_ELF_WIZARD:
+        case MODEL_ELF_LALA:
             CreateChat(c->ID, GlobalText[1975], c);
             break;
-        case MODEL_MASTER:
+        case MODEL_GUILD_MASTER:
             CreateChat(c->ID, GlobalText[1976], c);
             break;
         case MODEL_PLAYER:
@@ -3392,8 +3392,8 @@ void EtcStopAnimationSetting(CHARACTER* c, OBJECT* o)
                         o->SubType = 0;
                     }
                     break;
-                case MODEL_SMITH:
-                case MODEL_SCIENTIST:
+                case MODEL_HANZO_THE_BLACKSMITH:
+                case MODEL_PASI_THE_MAGE:
                     if (rand() % 16 < 12)
                         SetAction(o, 0);
                     else
@@ -3429,7 +3429,7 @@ void EtcStopAnimationSetting(CHARACTER* c, OBJECT* o)
                         SetAction(o, rand() % 3 + 1);
                     }
                     break;
-                case MODEL_SEED_INVESTIGATOR:
+                case MODEL_SEED_RESEARCHER:
                     if (rand() % 3 < 2 || o->CurrentAction == 1)
                         SetAction(o, 0);
                     else
@@ -3467,7 +3467,7 @@ void EtcStopAnimationSetting(CHARACTER* c, OBJECT* o)
                 case MODEL_XMAS2008_SNOWMAN_NPC:
                     SetAction(o, 0);
                     break;
-                case MODEL_GAMBLE_NPC_MOSS:
+                case MODEL_MOSS_THE_MERCHANT:
                     if (rand() % 5 < 4 || o->CurrentAction == 1)
                     {
                         SetAction(o, 0);
@@ -3477,21 +3477,21 @@ void EtcStopAnimationSetting(CHARACTER* c, OBJECT* o)
                         SetAction(o, 1);
                     }
                     break;
-                case MODAL_GENS_NPC_DUPRIAN:
-                case MODAL_GENS_NPC_BARNERT:
+                case MODEL_GENS_NPC_DUPRIAN:
+                case MODEL_GENS_NPC_BARNERT:
                     if (rand() % 5 < 4)
                         SetAction(o, 0);
                     else
                         SetAction(o, rand() % 2 + 1);
                     break;
-                case MODEL_UNITEDMARKETPLACE_RAUL:
-                case MODEL_UNITEDMARKETPLACE_JULIA:
+                case MODEL_JEWELER_RAUL:
+                case MODEL_MARKET_UNION_MEMBER_JULIA:
                     if (rand() % 5 < 4)
                         SetAction(o, 0);
                     else
                         SetAction(o, rand() % 2 + 1);
                     break;
-                case MODEL_UNITEDMARKETPLACE_CHRISTIN:
+                case MODEL_CHRISTINE_THE_GENERAL_GOODS_MERCHANT:
                 case MODEL_KARUTAN_NPC_REINA:
                     if (rand() % 5 < 3)
                         SetAction(o, 0);
@@ -3573,7 +3573,7 @@ void AnimationCharacter(CHARACTER* c, OBJECT* o, BMD* b)
 
     switch (o->Type)
     {
-    case MODEL_DEVIAS_TRADER:
+    case MODEL_THOMPSON_THE_MERCHANT:
         if (b->CurrentAnimationFrame == b->Actions[o->CurrentAction].NumAnimationKeys - 1)
         {
             if (rand_fps_check(32))
@@ -5734,7 +5734,7 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
             MonsterMoveSandSmoke(o);
             //MonsterDieSandSmoke(o);
             break;
-        case MODEL_BEAM_KNIGHT://
+        case MODEL_DEATH_BEAM_KNIGHT://
             MoveEye(o, b, 8, 9);
             if (c->MonsterIndex == MONSTER_DEATH_BEAM_KNIGHT)
             {
@@ -5974,15 +5974,15 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
         case MODEL_ICE_MONSTER:
             o->BlendMeshTexCoordV = -(float)((int)(WorldTime) % 2000) * 0.0005f;
             break;
-        case MODEL_MIX_NPC:
+        case MODEL_CHAOS_GOBLIN:
             if (rand_fps_check(64))
                 PlayBuffer(SOUND_NPC_MIX);
             break;
-        case MODEL_ELF_WIZARD:
+        case MODEL_ELF_LALA:
             if (rand_fps_check(256))
                 PlayBuffer(SOUND_NPC_HARP);
             break;
-        case MODEL_SMITH:
+        case MODEL_HANZO_THE_BLACKSMITH:
             if (g_isCharacterBuff(o, eBuff_CrywolfNPCHide))
                 break;
             if (o->CurrentAction == 0 && o->AnimationFrame >= 5.f && o->AnimationFrame <= 10.f)
@@ -6005,7 +6005,7 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
                 }
             }
             break;
-        case MODEL_DEVIAS_TRADER:
+        case MODEL_THOMPSON_THE_MERCHANT:
             Vector(1.f, 1.f, 1.f, Light);
             Vector(0.f, 5.f, 10.f, p);
             if (o->CurrentAction == 0)
@@ -8458,7 +8458,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         if (MONSTER_METAL_BALROG == c->MonsterIndex || MONSTER_ALPHA_CRUST == c->MonsterIndex || MONSTER_GREAT_DRAKAN == c->MonsterIndex
             || MONSTER_WHITE_WIZARD == c->MonsterIndex || MONSTER_ORC_SOLDIER_OF_DOOM == c->MonsterIndex || MONSTER_ORC_ARCHER_OF_DOOM == c->MonsterIndex
             || MONSTER_MUTANT_HERO == c->MonsterIndex || MONSTER_OMEGA_WING == c->MonsterIndex || MONSTER_AXE_HERO == c->MonsterIndex || MONSTER_GIGAS_GOLEM == c->MonsterIndex
-            || MONSTER_SCOUTHERO == c->MonsterIndex || MONSTER_WEREWOLFHERO == c->MonsterIndex || MONSTER_VALAM == c->MonsterIndex || MONSTER_SOLAM == c->MonsterIndex || MONSTER_SCOUT == c->MonsterIndex || 319 == c->MonsterIndex
+            || MONSTER_SCOUT_HERO == c->MonsterIndex || MONSTER_WEREWOLF_HERO == c->MonsterIndex || MONSTER_VALAM == c->MonsterIndex || MONSTER_SOLAM == c->MonsterIndex || MONSTER_SCOUT == c->MonsterIndex || 319 == c->MonsterIndex
             )
         {
             RenderObject(o, Translate, Select, c->MonsterIndex);
@@ -11042,10 +11042,10 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         RenderLight(o, BITMAP_SPARK, 4.f, 9, 0.f, 0.f, 5.f);
         RenderLight(o, BITMAP_SHINY + 2, 3.f, 9, 0.f, 0.f, 5.f);
         break;
-    case MODEL_MIX_NPC:
+    case MODEL_CHAOS_GOBLIN:
         RenderLight(o, BITMAP_LIGHT, 1.5f, 32, 0.f, 0.f, 0.f);
         break;
-    case MODEL_NPC_SEVINA:
+    case MODEL_SEVINA_THE_PRIESTESS:
         RenderLight(o, BITMAP_LIGHT, 2.5f, 6, 0.f, 0.f, 0.f);
         break;
     case MODEL_NPC_DEVILSQUARE:
@@ -11156,7 +11156,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         CreateSprite(BITMAP_FLARE, Position, fScale, Light, o);
     }
     break;
-    case MODEL_SEED_INVESTIGATOR:
+    case MODEL_SEED_RESEARCHER:
     {
         float fLumi, fScale;
         fScale = 1.0f;
@@ -11606,7 +11606,7 @@ void CreateCharacterPointer(CHARACTER* c, int Type, unsigned char PositionX, uns
     case MODEL_DRAGON_:
     case MODEL_TITAN:
     case MODEL_TANTALLOS:
-    case MODEL_BEAM_KNIGHT:
+    case MODEL_DEATH_BEAM_KNIGHT:
         Vector(70.f, 70.f, 250.f, o->BoundingBoxMax);
         break;
     case MODEL_HYDRA:
@@ -11770,7 +11770,7 @@ void CreateCharacterPointer(CHARACTER* c, int Type, unsigned char PositionX, uns
         c->Weapon[0].LinkBone = 32;
         c->Weapon[1].LinkBone = 43;
         break;
-    case MODEL_BEAM_KNIGHT:
+    case MODEL_DEATH_BEAM_KNIGHT:
         c->Weapon[0].LinkBone = 55;
         c->Weapon[1].LinkBone = 70;
         break;
@@ -13517,3385 +13517,20717 @@ void InitializeMonsterData()
     int index; // Reusable index variable
 
     index = MONSTER_BULL_FIGHTER; // 0
-	g_MonsterConfig[index].modelType = MODEL_BULL_FIGHTER;
-	g_MonsterConfig[index].name = L"Bull Fighter";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].hiddenMesh = 0;
-	g_MonsterConfig[index].scale = 0.8f;
-    g_MonsterConfig[index].weapon1Type = MODEL_NIKKEA_AXE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BULL_FIGHTER;
+    g_MonsterConfig[index].name = L"BULL_FIGHTER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HOUND; // 1
-	g_MonsterConfig[index].modelType = MODEL_HOUND;
-	g_MonsterConfig[index].name = L"Hound";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].hiddenMesh = 0;
-    g_MonsterConfig[index].scale = 0.85f;
-	g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_ASSASSIN;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_HOUND;
+    g_MonsterConfig[index].name = L"HOUND";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
-	index = MONSTER_BUDGE_DRAGON; // 2
-	g_MonsterConfig[index].modelType = MODEL_BUDGE_DRAGON;
-	g_MonsterConfig[index].name = L"Budge Dragon";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
+
+    index = MONSTER_BUDGE_DRAGON; // 2
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BUDGE_DRAGON;
+    g_MonsterConfig[index].name = L"BUDGE_DRAGON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SPIDER; // 3
-	g_MonsterConfig[index].modelType = MODEL_SPIDER;
-	g_MonsterConfig[index].name = L"Spider";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPIDER;
+    g_MonsterConfig[index].name = L"SPIDER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ELITE_BULL_FIGHTER; // 4
-	g_MonsterConfig[index].modelType = MODEL_BULL_FIGHTER;
-	g_MonsterConfig[index].name = L"Elite Bull Fighter";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.2f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BULL_FIGHTER;
+    g_MonsterConfig[index].name = L"ELITE_BULL_FIGHTER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
-	index = MONSTER_HELL_HOUND; // 5
-    g_MonsterConfig[index].modelType = MODEL_HOUND;
-	g_MonsterConfig[index].name = L"Hell Hound";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].hiddenMesh = 1;
-	g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon1Type = MODEL_FALCHION;
-    g_MonsterConfig[index].weapon2Type = MODEL_PLATE_SHIELD;
-    g_MonsterConfig[index].initialLevel = 1;
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
-	index = MONSTER_LICH; // 6
-	g_MonsterConfig[index].modelType = MODEL_LICH;
-	g_MonsterConfig[index].name = L"Lich";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.85f;
-	g_MonsterConfig[index].weapon1Type = MODEL_SERPENT_STAFF;
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
-	index = MONSTER_GIANT; // 7
-	g_MonsterConfig[index].modelType = MODEL_GIANT;
-	g_MonsterConfig[index].name = L"Giant";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.6f;
-	g_MonsterConfig[index].weapon1Type = MODEL_DOUBLE_AXE;
-	g_MonsterConfig[index].weapon2Type = MODEL_DOUBLE_AXE;
+    index = MONSTER_HELL_HOUND; // 5
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_HOUND;
+    g_MonsterConfig[index].name = L"HELL_HOUND";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
-	index = MONSTER_POISON_BULL; // 8
-	g_MonsterConfig[index].modelType = MODEL_BULL_FIGHTER;
-	g_MonsterConfig[index].name = L"Poison Bull";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
-	g_MonsterConfig[index].initialLevel = 1;
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
+
+    index = MONSTER_LICH; // 6
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"LICH";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
+
+    index = MONSTER_GIANT; // 7
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIANT;
+    g_MonsterConfig[index].name = L"GIANT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
+
+    index = MONSTER_POISON_BULL; // 8
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BULL_FIGHTER;
+    g_MonsterConfig[index].name = L"POISON_BULL";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_THUNDER_LICH; // 9
-	g_MonsterConfig[index].modelType = MODEL_LICH;
-	g_MonsterConfig[index].name = L"Thunder Lich";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.1f;
-	g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_STAFF;
-	g_MonsterConfig[index].initialLevel = 1;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_LICH;
+    g_MonsterConfig[index].name = L"THUNDER_LICH";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_KNIGHT; // 10
-	g_MonsterConfig[index].modelType = MODEL_DARK_KNIGHT;
-	g_MonsterConfig[index].name = L"Dark Knight";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.8f;
-    g_MonsterConfig[index].weapon1Type = MODEL_DOUBLE_BLADE;
-    g_MonsterConfig[index].initialLevel = 1;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_KNIGHT;
+    g_MonsterConfig[index].name = L"DARK_KNIGHT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
-	index = MONSTER_GHOST; // 11
-	g_MonsterConfig[index].modelType = MODEL_GHOST;
-	g_MonsterConfig[index].name = L"Ghost";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.4f;
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
+
+    index = MONSTER_GHOST; // 11
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GHOST;
+    g_MonsterConfig[index].name = L"GHOST";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LARVA; // 12
-	g_MonsterConfig[index].modelType = MODEL_LARVA;
-	g_MonsterConfig[index].name = L"Larva";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.6f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_LARVA;
+    g_MonsterConfig[index].name = L"LARVA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HELL_SPIDER; // 13
-	g_MonsterConfig[index].modelType = MODEL_SPIDER;
-	g_MonsterConfig[index].name = L"Hell Spider";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.1f;
-	g_MonsterConfig[index].weapon1Type = MODEL_SERPENT_STAFF;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_HELL_SPIDER;
+    g_MonsterConfig[index].name = L"HELL_SPIDER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SKELETON_WARRIOR; // 14
-	g_MonsterConfig[index].modelType = MODEL_PLAYER;
-	g_MonsterConfig[index].name = L"Skeleton Warrior";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.95f;
-	g_MonsterConfig[index].weapon1Type = MODEL_GLADIUS;
-    g_MonsterConfig[index].weapon2Type = MODEL_BUCKLER;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"SKELETON_WARRIOR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SKELETON_ARCHER; // 15
-	g_MonsterConfig[index].modelType = MODEL_PLAYER;
-	g_MonsterConfig[index].name = L"Skeleton Archer";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon1Type = MODEL_ELVEN_BOW;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"SKELETON_ARCHER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ELITE_SKELETON; // 16
-	g_MonsterConfig[index].modelType = MODEL_PLAYER;
-	g_MonsterConfig[index].name = L"Elite Skeleton";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.2f;
-	g_MonsterConfig[index].weapon1Type = MODEL_TOMAHAWK;
-	g_MonsterConfig[index].weapon2Type = MODEL_SKULL_SHIELD;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"ELITE_SKELETON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CYCLOPS; // 17
-	g_MonsterConfig[index].modelType = MODEL_CYCLOPS;
-	g_MonsterConfig[index].name = L"Cyclops";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CYCLOPS;
+    g_MonsterConfig[index].name = L"CYCLOPS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GORGON; // 18
-	g_MonsterConfig[index].modelType = MODEL_GORGON;
-	g_MonsterConfig[index].name = L"Gorgon";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.5f;
-	g_MonsterConfig[index].weapon1Type = MODEL_GORGON_STAFF;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GORGON;
+    g_MonsterConfig[index].name = L"GORGON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_YETI; // 19
-	g_MonsterConfig[index].modelType = MODEL_YETI;
-	g_MonsterConfig[index].name = L"Yeti";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_YETI;
+    g_MonsterConfig[index].name = L"YETI";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ELITE_YETI; // 20
-    g_MonsterConfig[index].modelType = MODEL_ELITE_YETI;
-	g_MonsterConfig[index].name = L"Elite Yeti";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.4f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ELITE_YETI;
+    g_MonsterConfig[index].name = L"ELITE_YETI";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ASSASSIN; // 21
-	g_MonsterConfig[index].modelType = MODEL_ASSASSIN;
-	g_MonsterConfig[index].name = L"Assassin";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.95f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ASSASSIN;
+    g_MonsterConfig[index].name = L"ASSASSIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ICE_MONSTER; // 22
-	g_MonsterConfig[index].modelType = MODEL_ICE_MONSTER;
-	g_MonsterConfig[index].name = L"Ice Monster";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ICE_MONSTER;
+    g_MonsterConfig[index].name = L"ICE_MONSTER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HOMMERD; // 23
-	g_MonsterConfig[index].modelType = MODEL_HOMMERD;
-	g_MonsterConfig[index].name = L"Hommerd";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.15f;
-	g_MonsterConfig[index].weapon1Type = MODEL_LARKAN_AXE;
-	g_MonsterConfig[index].weapon2Type = MODEL_BIG_ROUND_SHIELD;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_HOMMERD;
+    g_MonsterConfig[index].name = L"HOMMERD";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_WORM; // 24
-	g_MonsterConfig[index].modelType = MODEL_WORM;
-	g_MonsterConfig[index].name = L"Worm";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_WORM;
+    g_MonsterConfig[index].name = L"WORM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ICE_QUEEN; // 25
-	g_MonsterConfig[index].modelType = MODEL_ICE_QUEEN;
-	g_MonsterConfig[index].name = L"Ice Queen";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon1Type = MODEL_ANGELIC_STAFF;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ICE_QUEEN;
+    g_MonsterConfig[index].name = L"ICE_QUEEN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOBLIN; // 26
-	g_MonsterConfig[index].modelType = MODEL_GOBLIN;
-	g_MonsterConfig[index].name = L"Goblin";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.8f;
-    g_MonsterConfig[index].weapon1Type = MODEL_AXE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GOBLIN;
+    g_MonsterConfig[index].name = L"GOBLIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAIN_SCORPION; // 27
-	g_MonsterConfig[index].modelType = MODEL_CHAIN_SCORPION;
-	g_MonsterConfig[index].name = L"Chain Scorpion";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.1f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHAIN_SCORPION;
+    g_MonsterConfig[index].name = L"CHAIN_SCORPION";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BEETLE_MONSTER; // 28
-	g_MonsterConfig[index].modelType = MODEL_BEETLE_MONSTER;
-	g_MonsterConfig[index].name = L"Beetle Monster";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.8f;
-    g_MonsterConfig[index].weapon1Type = MODEL__SPEAR;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BEETLE_MONSTER;
+    g_MonsterConfig[index].name = L"BEETLE_MONSTER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HUNTER; // 29
-	g_MonsterConfig[index].modelType = MODEL_HUNTER;
-	g_MonsterConfig[index].name = L"Hunter";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_HUNTER;
+    g_MonsterConfig[index].name = L"HUNTER";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.95f;
-	g_MonsterConfig[index].weapon1Type = MODEL_ARQUEBUS;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_FOREST_MONSTER; // 30
-	g_MonsterConfig[index].modelType = MODEL_FOREST_MONSTER;
-	g_MonsterConfig[index].name = L"Forest Monster";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.75f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_FOREST_MONSTER;
+    g_MonsterConfig[index].name = L"FOREST_MONSTER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_AGON; // 31
-	g_MonsterConfig[index].modelType = MODEL_AGON;
-	g_MonsterConfig[index].name = L"Agon";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.3f;
-	g_MonsterConfig[index].weapon1Type = MODEL_SERPENT_SWORD;
-	g_MonsterConfig[index].weapon2Type = MODEL_SERPENT_SWORD;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_AGON;
+    g_MonsterConfig[index].name = L"AGON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_STONE_GOLEM; // 32
-	g_MonsterConfig[index].modelType = MODEL_STONE_GOLEM;
-	g_MonsterConfig[index].name = L"Stone Golem";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_STONE_GOLEM;
+    g_MonsterConfig[index].name = L"STONE_GOLEM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ELITE_GOBLIN; // 33
-	g_MonsterConfig[index].modelType = MODEL_GOBLIN;
-	g_MonsterConfig[index].name = L"Elite Goblin";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.2f;
-	g_MonsterConfig[index].weapon1Type = MODEL_MORNING_STAR;
-    g_MonsterConfig[index].weapon2Type = MODEL_HORN_SHIELD;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GOBLIN;
+    g_MonsterConfig[index].name = L"ELITE_GOBLIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CURSED_WIZARD; // 34
+    //* core
     g_MonsterConfig[index].modelType = MODEL_PLAYER;
-	g_MonsterConfig[index].name = L"Cursed Wizard";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = MODEL_LEGENDARY_STAFF;
-	g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
-	g_MonsterConfig[index].helmType = MODEL_LEGENDARY_HELM;
-	g_MonsterConfig[index].armorType = MODEL_LEGENDARY_ARMOR;
-	g_MonsterConfig[index].glovesType = MODEL_LEGENDARY_GLOVES;
-	g_MonsterConfig[index].bootsType = MODEL_LEGENDARY_BOOTS;
+    g_MonsterConfig[index].name = L"CURSED_WIZARD";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_GORGON; // 35
-	g_MonsterConfig[index].modelType = MODEL_GORGON;
-	g_MonsterConfig[index].name = L"Death Gorgon";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.3f;
-	g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
-	g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GORGON;
+    g_MonsterConfig[index].name = L"DEATH_GORGON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SHADOW; // 36
-	g_MonsterConfig[index].modelType = MODEL_SHADOW;
-	g_MonsterConfig[index].name = L"Shadow";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.2f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SHADOW;
+    g_MonsterConfig[index].name = L"SHADOW";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEVIL; // 37
-	g_MonsterConfig[index].modelType = MODEL_DEVIL;
-	g_MonsterConfig[index].name = L"Devil";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.1f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEVIL;
+    g_MonsterConfig[index].name = L"DEVIL";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BALROG; // 38
-	g_MonsterConfig[index].modelType = MODEL_BALROG;
-	g_MonsterConfig[index].name = L"Balrog";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.6f;
-	g_MonsterConfig[index].weapon1Type = MODEL_BILL_OF_BALROG;
-	g_MonsterConfig[index].weapon1Level = 9;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BALROG;
+    g_MonsterConfig[index].name = L"BALROG";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_POISON_SHADOW; // 39
-	g_MonsterConfig[index].modelType = MODEL_SHADOW;
-	g_MonsterConfig[index].name = L"Poison Shadow";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.2f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SHADOW;
+    g_MonsterConfig[index].name = L"POISON_SHADOW";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_KNIGHT; // 40
-	g_MonsterConfig[index].modelType = MODEL_DARK_KNIGHT;
-	g_MonsterConfig[index].name = L"Death Knight";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.3f;
-	g_MonsterConfig[index].weapon1Type = MODEL_GIANT_SWORD;
-    g_MonsterConfig[index].weapon2Type = MODEL_LIGHTING_SWORD;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_KNIGHT;
+    g_MonsterConfig[index].name = L"DEATH_KNIGHT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_COW; // 41
-    g_MonsterConfig[index].modelType = MODEL_DEATH_COW;
-	g_MonsterConfig[index].name = L"Death Cow";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon1Type = MODEL_GREAT_HAMMER;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_COW;
+    g_MonsterConfig[index].name = L"DEATH_COW";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RED_DRAGON; // 42
-    g_MonsterConfig[index].modelType = MODEL_DRAGON_; // ?
-	g_MonsterConfig[index].name = L"Red Dragon";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.3f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DRAGON;
+    g_MonsterConfig[index].name = L"RED_DRAGON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_BUDGE_DRAGON; // 43
-	g_MonsterConfig[index].modelType = MODEL_BUDGE_DRAGON;
-	g_MonsterConfig[index].name = L"Golden Budge Dragon";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.7f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BUDGE_DRAGON;
+    g_MonsterConfig[index].name = L"GOLDEN_BUDGE_DRAGON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_DRAGON; // 44
-	g_MonsterConfig[index].modelType = MODEL_DRAGON_; // ?
-	g_MonsterConfig[index].name = L"Golden Dragon";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DRAGON;
+    g_MonsterConfig[index].name = L"GOLDEN_DRAGON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BAHAMUT; // 45
-	g_MonsterConfig[index].modelType = MODEL_BAHAMUT;
-	g_MonsterConfig[index].name = L"Bahamut";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.6f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BAHAMUT;
+    g_MonsterConfig[index].name = L"BAHAMUT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_VEPAR; // 46
-	g_MonsterConfig[index].modelType = MODEL_VEPAR;
-	g_MonsterConfig[index].name = L"Vepar";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* coreMONSTER_ MODEL_VEPAR;
+    g_MonsterConfig[index].name = L"VEPAR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_VALKYRIE; // 47
-	g_MonsterConfig[index].modelType = MODEL_VALKYRIE;
-	g_MonsterConfig[index].name = L"Valkyrie";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon1Type = MODEL_BLUEWING_CROSSBOW;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_VALKYRIE;
+    g_MonsterConfig[index].name = L"VALKYRIE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LIZARD_KING; // 48
-    g_MonsterConfig[index].modelType = MODEL_LIZARD;
-	g_MonsterConfig[index].name = L"Lizard King";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.4f;
-	g_MonsterConfig[index].weapon1Type = MODEL_STAFF_OF_RESURRECTION;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_LIZARD;
+    g_MonsterConfig[index].name = L"LIZARD_KING";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HYDRA; // 49
-	g_MonsterConfig[index].modelType = MODEL_HYDRA;
-	g_MonsterConfig[index].name = L"Hydra";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_HYDRA;
+    g_MonsterConfig[index].name = L"HYDRA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SEA_WORM; // 50
-	g_MonsterConfig[index].modelType = MODEL_SEA_WORM;
-	g_MonsterConfig[index].name = L"Sea Worm";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.8f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SEA_WORM;
+    g_MonsterConfig[index].name = L"SEA_WORM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GREAT_BAHAMUT; // 51
-	g_MonsterConfig[index].modelType = MODEL_BAHAMUT;
-	g_MonsterConfig[index].name = L"Great Bahamut";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BAHAMUT;
+    g_MonsterConfig[index].name = L"GREAT_BAHAMUT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SILVER_VALKYRIE; // 52
-	g_MonsterConfig[index].modelType = MODEL_VALKYRIE;
-	g_MonsterConfig[index].name = L"Silver Valkyrie";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.4f;
-    g_MonsterConfig[index].weapon1Type = MODEL_BLUEWING_CROSSBOW;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_VALKYRIE;
+    g_MonsterConfig[index].name = L"SILVER_VALKYRIE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_TITAN; // 53
-	g_MonsterConfig[index].modelType = MODEL_TITAN;
-	g_MonsterConfig[index].name = L"Golden Titan";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.8f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_TITAN;
+    g_MonsterConfig[index].name = L"GOLDEN_TITAN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_SOLDIER; // 54
-	g_MonsterConfig[index].modelType = MODEL_SOLDIER;
-	g_MonsterConfig[index].name = L"Golden Soldier";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon1Type = MODEL_AQUAGOLD_CROSSBOW;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SOLDIER;
+    g_MonsterConfig[index].name = L"GOLDEN_SOLDIER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_KING; // 55
+    //* core
     g_MonsterConfig[index].modelType = MODEL_PLAYER;
-	g_MonsterConfig[index].name = L"Death King";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.4f;
-    g_MonsterConfig[index].weapon1Type = MODEL_BILL_OF_BALROG;
+    g_MonsterConfig[index].name = L"DEATH_KING";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_BONE; // 56
+    //* core
     g_MonsterConfig[index].modelType = MODEL_PLAYER;
-	g_MonsterConfig[index].name = L"Death Bone";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.8f;
-    g_MonsterConfig[index].weapon1Type = MODEL_GREAT_SCYTHE;
+    g_MonsterConfig[index].name = L"DEATH_BONE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_IRON_WHEEL; // 57
-    g_MonsterConfig[index].modelType = MODEL_GOLDEN_WHEEL;
-	g_MonsterConfig[index].name = L"Iron Wheel";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.4f;
-    g_MonsterConfig[index].weapon1Type = MODEL_AQUAGOLD_CROSSBOW;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GOLDEN_WHEEL;
+    g_MonsterConfig[index].name = L"IRON_WHEEL";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_TANTALLOS; // 58
-	g_MonsterConfig[index].modelType = MODEL_TANTALLOS;
-	g_MonsterConfig[index].name = L"Tantalos";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.8f;
-    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_TANTALLOS;
+    g_MonsterConfig[index].name = L"TANTALLOS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ZAIKAN; // 59
-    g_MonsterConfig[index].modelType = MODEL_TANTALLOS;
-	g_MonsterConfig[index].name = L"Zaikan";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.8f;
-	g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_TANTALLOS;
+    g_MonsterConfig[index].name = L"ZAIKAN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOODY_WOLF; // 60
-	g_MonsterConfig[index].modelType = MODEL_BLOODY_WOLF;
-	g_MonsterConfig[index].name = L"Bloody Wolf";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 2.2f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOODY_WOLF;
+    g_MonsterConfig[index].name = L"BLOODY_WOLF";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BEAM_KNIGHT; // 61
-	g_MonsterConfig[index].modelType = MODEL_BEAM_KNIGHT;
-	g_MonsterConfig[index].name = L"Beam Knight";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.5f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BEAM_KNIGHT;
+    g_MonsterConfig[index].name = L"BEAM_KNIGHT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MUTANT; // 62
-	g_MonsterConfig[index].modelType = MODEL_MUTANT;
-	g_MonsterConfig[index].name = L"Mutant";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.5f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MUTANT;
+    g_MonsterConfig[index].name = L"MUTANT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_BEAM_KNIGHT; // 63
-	g_MonsterConfig[index].modelType = MODEL_BEAM_KNIGHT;
-	g_MonsterConfig[index].name = L"Death Beam Knight";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.9f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_KNIGHT;
+    g_MonsterConfig[index].name = L"DEATH_BEAM_KNIGHT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ORC_ARCHER; // 64
-	g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
-	g_MonsterConfig[index].name = L"Orc Archer";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.2f;
-    g_MonsterConfig[index].weapon1Type = MODEL_BATTLE_BOW;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"ORC_ARCHER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ELITE_ORC; // 65
-	g_MonsterConfig[index].modelType = MODEL_ORC;
-	g_MonsterConfig[index].name = L"Elite Orc";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.3f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC;
+    g_MonsterConfig[index].name = L"ELITE_ORC";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CURSED_KING; // 66
-    g_MonsterConfig[index].modelType = MODEL_CURSED_KING;
-	g_MonsterConfig[index].name = L"Cursed King";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.7f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CURSED_KING;
+    g_MonsterConfig[index].name = L"CURSED_KING";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_METAL_BALROG; // 67
-	g_MonsterConfig[index].modelType = MODEL_BALROG;
-	g_MonsterConfig[index].name = L"Metal Balrog";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.6f;
-	g_MonsterConfig[index].weapon1Type = MODEL_BILL_OF_BALROG;
-	g_MonsterConfig[index].weapon1Level = 9;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BALROG;
+    g_MonsterConfig[index].name = L"METAL_BALROG";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MOLT; // 68
-	g_MonsterConfig[index].modelType = MODEL_MOLT;
-	g_MonsterConfig[index].name = L"Molt";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.4f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MOLT;
+    g_MonsterConfig[index].name = L"MOLT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ALQUAMOS; // 69
-	g_MonsterConfig[index].modelType = MODEL_ALQUAMOS;
-	g_MonsterConfig[index].name = L"Alquamos";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ALQUAMOS;
+    g_MonsterConfig[index].name = L"ALQUAMOS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_QUEEN_RAINER; // 70
-	g_MonsterConfig[index].modelType = MODEL_QUEEN_RAINER;
-	g_MonsterConfig[index].name = L"Queen Rainer";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.3f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_QUEEN_RAINER;
+    g_MonsterConfig[index].name = L"QUEEN_RAINER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MEGA_CRUST; // 71
-    g_MonsterConfig[index].modelType = MODEL_CRUST;
-	g_MonsterConfig[index].name = L"Mega Crust";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_BLADE;
-    g_MonsterConfig[index].weapon1Level = 5;
-	g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
-	g_MonsterConfig[index].weapon2Level = 9;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CRUST;
+    g_MonsterConfig[index].name = L"MEGA_CRUST";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_PHANTOM_KNIGHT; // 72
-	g_MonsterConfig[index].modelType = MODEL_PHANTOM_KNIGHT;
-	g_MonsterConfig[index].name = L"Phantom Knight";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.4f;
-    g_MonsterConfig[index].weapon1Type = MODEL_DARK_BREAKER;
-	g_MonsterConfig[index].weapon1Level = 5;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_PHANTOM_KNIGHT;
+    g_MonsterConfig[index].name = L"PHANTOM_KNIGHT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DRAKAN; // 73
-	g_MonsterConfig[index].modelType = MODEL_DRAKAN;
-	g_MonsterConfig[index].name = L"Drakan";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.8f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DRAKAN;
+    g_MonsterConfig[index].name = L"DRAKAN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ALPHA_CRUST; // 74
-	g_MonsterConfig[index].modelType = MODEL_CRUST;
-	g_MonsterConfig[index].name = L"Alpha Crust";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.3f;
-	g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_BLADE;
-	g_MonsterConfig[index].weapon1Level = 5;
-	g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
-	g_MonsterConfig[index].weapon2Level = 9;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CRUST;
+    g_MonsterConfig[index].name = L"ALPHA_CRUST";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GREAT_DRAKAN; // 75
-	g_MonsterConfig[index].modelType = MODEL_DRAKAN;
-	g_MonsterConfig[index].name = L"Great Drakan";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GREAT_DRAKAN;
+    g_MonsterConfig[index].name = L"GREAT_DRAKAN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_PHOENIX_SHIELD; // 76
-    // ??
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_PHOENIX_SHIELD;
+    g_MonsterConfig[index].name = L"DARK_PHOENIX_SHIELD";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_PHOENIX; // 77
-    g_MonsterConfig[index].modelType = MODEL_DARK_PHEONIX_SHIELD; // what..?
-	g_MonsterConfig[index].name = L"Dark Phoenix";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_PHOENIX;
+    g_MonsterConfig[index].name = L"DARK_PHOENIX";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_GOBLIN; // 78
-	g_MonsterConfig[index].modelType = MODEL_GOBLIN;
-	g_MonsterConfig[index].name = L"Golden Goblin";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.8f;
-    g_MonsterConfig[index].weapon1Type = MODEL_AXE;
-    g_MonsterConfig[index].weapon1Level = 9;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GOLDEN_GOBLIN;
+    g_MonsterConfig[index].name = L"GOLDEN_GOBLIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_DERKON; // 79
-    g_MonsterConfig[index].modelType = MODEL_DRAGON_;
-	g_MonsterConfig[index].name = L"Golden Derkon";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.9f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DRAGON;
+    g_MonsterConfig[index].name = L"GOLDEN_DERKON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_LIZARD_KING; // 80
-	g_MonsterConfig[index].modelType = MODEL_LIZARD;
-	g_MonsterConfig[index].name = L"Golden Lizard King";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.4f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_LIGHTNING_STAFF;
-    g_MonsterConfig[index].weapon1ExcellentFlags = 63; // magic!
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GOLDEN_LIZARD_KING;
+    g_MonsterConfig[index].name = L"GOLDEN_LIZARD_KING";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_VEPAR; // 81
-	g_MonsterConfig[index].modelType = MODEL_VEPAR;
-	g_MonsterConfig[index].name = L"Golden Vepar";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_VEPAR;
+    g_MonsterConfig[index].name = L"GOLDEN_VEPAR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_TANTALLOS; // 82
-	g_MonsterConfig[index].modelType = MODEL_TANTALLOS;
-	g_MonsterConfig[index].name = L"Golden Tantalos";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.8f;
-	g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
-	g_MonsterConfig[index].weapon1ExcellentFlags = 63; // magic!
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_TANTALLOS;
+    g_MonsterConfig[index].name = L"GOLDEN_TANTALLOS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_WHEEL; // 83
-	g_MonsterConfig[index].modelType = MODEL_GOLDEN_WHEEL;
-	g_MonsterConfig[index].name = L"Golden Wheel";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.4f;
-	g_MonsterConfig[index].weapon1Type = MODEL_AQUAGOLD_CROSSBOW;
-	g_MonsterConfig[index].weapon1ExcellentFlags = 63; // magic!
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GOLDEN_WHEEL;
+    g_MonsterConfig[index].name = L"GOLDEN_WHEEL";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_WARRIOR_1; // 84
-    g_MonsterConfig[index].modelType = MODEL_ORC;
-	g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.1f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_WARRIOR_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_ARCHER_1; // 85
-	g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
-	g_MonsterConfig[index].name = L"Chief Skeleton Archer";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.1f;
-	g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
-	g_MonsterConfig[index].weapon2Level = 1;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_ARCHER_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_SKULL_SOLDIER_1; // 86
-    g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
-	g_MonsterConfig[index].name = L"Dark Skull Soldier";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_SKULL_SOLDIER;
+    g_MonsterConfig[index].name = L"DARK_SKULL_SOLDIER_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
-    g_MonsterConfig[index].weapon1Level = 0;
-	g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
-	g_MonsterConfig[index].weapon2Level = 0;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIANT_OGRE_1; // 87
-	g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
-	g_MonsterConfig[index].name = L"Giant Ogre";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.8f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"GIANT_OGRE_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RED_SKELETON_KNIGHT_1; // 88
-	g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
-	g_MonsterConfig[index].name = L"Red Skeleton Knight";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.19f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_RED_SKELETON_KNIGHT_1;
+    g_MonsterConfig[index].name = L"RED_SKELETON_KNIGHT_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MAGIC_SKELETON_1; // 89
-	g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
-	g_MonsterConfig[index].name = L"Magic Skeleton";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.2f;
-    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
-    g_MonsterConfig[index].weapon1Level = 11;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"MAGIC_SKELETON_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_WARRIOR_2; // 90
-	g_MonsterConfig[index].modelType = MODEL_ORC;
-	g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.1f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHIEF_SKELETON_WARRIOR_2;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_WARRIOR_2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_ARCHER_2; // 91
-	g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
-	g_MonsterConfig[index].name = L"Chief Skeleton Archer";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.1f;
-	g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
-	g_MonsterConfig[index].weapon2Level = 1;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_ARCHER_2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_SKULL_SOLDIER_2; // 92
-	g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
-	g_MonsterConfig[index].name = L"Dark Skull Soldier";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
-	g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
-	g_MonsterConfig[index].weapon1Level = 0;
-	g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
-	g_MonsterConfig[index].weapon2Level = 0;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_SKULL_SOLDIER;
+    g_MonsterConfig[index].name = L"DARK_SKULL_SOLDIER_2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIANT_OGRE_2; // 93
-	g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
-	g_MonsterConfig[index].name = L"Giant Ogre";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.8f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"GIANT_OGRE_2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RED_SKELETON_KNIGHT_2; // 94
-    g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
-    g_MonsterConfig[index].name = L"Red Skeleton Knight";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_RED_SKELETON_KNIGHT;
+    g_MonsterConfig[index].name = L"RED_SKELETON_KNIGHT_2";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.19f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MAGIC_SKELETON_2; // 95
-    g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
-    g_MonsterConfig[index].name = L"Magic Skeleton";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"MAGIC_SKELETON_2";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.2f;
-    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
-    g_MonsterConfig[index].weapon1Level = 11;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_WARRIOR_3; // 96
-    g_MonsterConfig[index].modelType = MODEL_ORC;
-    g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_WARRIOR_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_ARCHER_3; // 97
-    g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
-    g_MonsterConfig[index].name = L"Chief Skeleton Archer";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_ARCHER_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
-    g_MonsterConfig[index].weapon2Level = 1;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_SKULL_SOLDIER_3; // 98
-    g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
-    g_MonsterConfig[index].name = L"Dark Skull Soldier";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_SKULL_SOLDIER;
+    g_MonsterConfig[index].name = L"DARK_SKULL_SOLDIER_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
-    g_MonsterConfig[index].weapon2Level = 0;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIANT_OGRE_3; // 99
-    g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
-    g_MonsterConfig[index].name = L"Giant Ogre";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"GIANT_OGRE_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LANCE_TRAP; // 100
-    g_MonsterConfig[index].modelType = 39; // magic!
-	g_MonsterConfig[index].kind = KIND_TRAP;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_TRAP_CANNON;
+    g_MonsterConfig[index].name = L"LANCE_TRAP";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_IRON_STICK_TRAP; // 101
-    g_MonsterConfig[index].modelType = 40; // magic!
-    g_MonsterConfig[index].kind = KIND_TRAP;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_TRAP_CANNON;
+    g_MonsterConfig[index].name = L"IRON_STICK_TRAP";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_FIRE_TRAP; // 102
-    g_MonsterConfig[index].modelType = 51; // magic!
-    g_MonsterConfig[index].kind = KIND_TRAP;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_TRAP_CANNON;
+    g_MonsterConfig[index].name = L"FIRE_TRAP";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_METEORITE_TRAP; // 103
-    g_MonsterConfig[index].modelType = 25; // magic!
-    g_MonsterConfig[index].kind = KIND_TRAP;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_TRAP_CANNON;
+    g_MonsterConfig[index].name = L"METEORITE_TRAP";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_TRAP; // 104
-    g_MonsterConfig[index].kind = KIND_TRAP;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_TRAP_CANNON;
+    g_MonsterConfig[index].name = L"TRAP";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
-    index = MONSTER_CANON_TRAP; // 105
-    g_MonsterConfig[index].kind = KIND_TRAP;
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
+    index = MONSTER_CANNON_TRAP; // 105
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_TRAP_CANNON;
+    g_MonsterConfig[index].name = L"CANON_TRAP";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LASER_TRAP; // 106
-    g_MonsterConfig[index].modelType = 51; // magic!
-    g_MonsterConfig[index].kind = KIND_TRAP;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_TRAP_CANNON;
+    g_MonsterConfig[index].name = L"LASER_TRAP";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RED_SKELETON_KNIGHT_3; // 111
-    g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
-    g_MonsterConfig[index].name = L"Red Skeleton Knight";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_RED_SKELETON_KNIGHT;
+    g_MonsterConfig[index].name = L"RED_SKELETON_KNIGHT_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.19f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MAGIC_SKELETON_3; // 112
-    g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
-    g_MonsterConfig[index].name = L"Magic Skeleton";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"MAGIC_SKELETON_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.2f;
-    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
-    g_MonsterConfig[index].weapon1Level = 11;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_WARRIOR_4; // 113
-    g_MonsterConfig[index].modelType = MODEL_ORC;
-    g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_WARRIOR_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_ARCHER_4; // 114
-    g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
-    g_MonsterConfig[index].name = L"Chief Skeleton Archer";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_ARCHER_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
-    g_MonsterConfig[index].weapon2Level = 1;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_SKULL_SOLDIER_4; // 115
-    g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
-    g_MonsterConfig[index].name = L"Dark Skull Soldier";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_SKULL_SOLDIER;
+    g_MonsterConfig[index].name = L"DARK_SKULL_SOLDIER_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
-    g_MonsterConfig[index].weapon2Level = 0;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIANT_OGRE_4; // 116
-    g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
-    g_MonsterConfig[index].name = L"Giant Ogre";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"GIANT_OGRE_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RED_SKELETON_KNIGHT_4; // 117
-    g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
-    g_MonsterConfig[index].name = L"Red Skeleton Knight";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_RED_SKELETON_KNIGHT_4;
+    g_MonsterConfig[index].name = L"RED_SKELETON_KNIGHT_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.19f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MAGIC_SKELETON_4; // 118
-    g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
-    g_MonsterConfig[index].name = L"Magic Skeleton";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"MAGIC_SKELETON_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.2f;
-    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
-    g_MonsterConfig[index].weapon1Level = 11;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_WARRIOR_5; // 119
-    g_MonsterConfig[index].modelType = MODEL_ORC;
-    g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_WARRIOR_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_ARCHER_5; // 120
-    g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
-    g_MonsterConfig[index].name = L"Chief Skeleton Archer";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_ARCHER_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
-    g_MonsterConfig[index].weapon2Level = 1;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_SKULL_SOLDIER_5; // 121
-    g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
-    g_MonsterConfig[index].name = L"Dark Skull Soldier";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_SKULL_SOLDIER_5;
+    g_MonsterConfig[index].name = L"DARK_SKULL_SOLDIER_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
-    g_MonsterConfig[index].weapon2Level = 0;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIANT_OGRE_5; // 122
-    g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
-    g_MonsterConfig[index].name = L"Giant Ogre";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"GIANT_OGRE_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RED_SKELETON_KNIGHT_5; // 123
-    g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
-    g_MonsterConfig[index].name = L"Red Skeleton Knight";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_RED_SKELETON_KNIGHT;
+    g_MonsterConfig[index].name = L"RED_SKELETON_KNIGHT_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.19f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MAGIC_SKELETON_5; // 124
-    g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
-    g_MonsterConfig[index].name = L"Magic Skeleton";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"MAGIC_SKELETON_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.2f;
-    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
-    g_MonsterConfig[index].weapon1Level = 11;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_WARRIOR_6; // 125
-    g_MonsterConfig[index].modelType = MODEL_ORC;
-    g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_WARRIOR_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_ARCHER_6; // 126
-    g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
-    g_MonsterConfig[index].name = L"Chief Skeleton Archer";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_ARCHER_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
-    g_MonsterConfig[index].weapon2Level = 1;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_SKULL_SOLDIER_6; // 127
-    g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
-    g_MonsterConfig[index].name = L"Dark Skull Soldier";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_SKULL_SOLDIER;
+    g_MonsterConfig[index].name = L"DARK_SKULL_SOLDIER_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
-    g_MonsterConfig[index].weapon2Level = 0;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIANT_OGRE_6; // 128
-    g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
-    g_MonsterConfig[index].name = L"Giant Ogre";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"GIANT_OGRE_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RED_SKELETON_KNIGHT_6; // 129
-    g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
-    g_MonsterConfig[index].name = L"Red Skeleton Knight";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_RED_SKELETON_KNIGHT;
+    g_MonsterConfig[index].name = L"RED_SKELETON_KNIGHT_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.19f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MAGIC_SKELETON_6; // 130
-    g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
-    g_MonsterConfig[index].name = L"Magic Skeleton";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"MAGIC_SKELETON_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.2f;
-    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
-    g_MonsterConfig[index].weapon1Level = 11;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CASTLE_GATE; // 131
-	g_MonsterConfig[index].modelType = MODEL_CASTLE_GATE;
-	g_MonsterConfig[index].name = L"Castle Gate";
-    g_MonsterConfig[index].kind = KIND_OPERATE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CASTLE_GATE;
+    g_MonsterConfig[index].name = L"CASTLE_GATE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_STATUE_OF_SAINT_1; // 132
-	g_MonsterConfig[index].modelType = MODEL_STATUE_OF_SAINT;
-	g_MonsterConfig[index].name = L"Statue of Saint";
-	g_MonsterConfig[index].kind = KIND_OPERATE;
-	g_MonsterConfig[index].scale = 0.8f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_STATUE_OF_SAINT;
+    g_MonsterConfig[index].name = L"STATUE_OF_SAINT_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_STATUE_OF_SAINT_2; // 133
-    g_MonsterConfig[index].modelType = MODEL_STATUE_OF_SAINT;
-    g_MonsterConfig[index].name = L"Statue of Saint";
-    g_MonsterConfig[index].kind = KIND_OPERATE;
-    g_MonsterConfig[index].scale = 0.8f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_STATUE_OF_SAINT;
+    g_MonsterConfig[index].name = L"STATUE_OF_SAINT_2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_STATUE_OF_SAINT_3; // 134
-    g_MonsterConfig[index].modelType = MODEL_STATUE_OF_SAINT;
-    g_MonsterConfig[index].name = L"Statue of Saint";
-    g_MonsterConfig[index].kind = KIND_OPERATE;
-    g_MonsterConfig[index].scale = 0.8f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_STATUE_OF_SAINT;
+    g_MonsterConfig[index].name = L"STATUE_OF_SAINT_3";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_WHITE_WIZARD; // 135
-    g_MonsterConfig[index].modelType = MODEL_CURSED_KING;
-	g_MonsterConfig[index].name = L"White Wizard";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.7f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CURSED_KING;
+    g_MonsterConfig[index].name = L"WHITE_WIZARD";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ORC_SOLDIER_OF_DOOM; // 136
-	g_MonsterConfig[index].modelType = MODEL_ORC;
-	g_MonsterConfig[index].name = L"Orc Soldier of Doom";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.3f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC;
+    g_MonsterConfig[index].name = L"ORC_SOLDIER_OF_DOOM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ORC_ARCHER_OF_DOOM; // 137
-	g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
-	g_MonsterConfig[index].name = L"Orc Archer of Doom";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.2f;
-	g_MonsterConfig[index].weapon1Type = MODEL_BATTLE_BOW;
-    g_MonsterConfig[index].weapon1Level = 5;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"ORC_ARCHER_OF_DOOM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_WARRIOR_7; // 138
-    g_MonsterConfig[index].modelType = MODEL_ORC;
-    g_MonsterConfig[index].name = L"Chief Skeleton Warrior";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_WARRIOR_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_ARCHER_7; // 139
-    g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
-    g_MonsterConfig[index].name = L"Chief Skeleton Archer";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_ARCHER_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW;
-    g_MonsterConfig[index].weapon2Level = 1;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_SKULL_SOLDIER_7; // 140
-    g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
-    g_MonsterConfig[index].name = L"Dark Skull Soldier";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_SKULL_SOLDIER;
+    g_MonsterConfig[index].name = L"DARK_SKULL_SOLDIER_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
-    g_MonsterConfig[index].weapon2Level = 0;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIANT_OGRE_7; // 141
-    g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
-    g_MonsterConfig[index].name = L"Giant Ogre";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"GIANT_OGRE_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.8f;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RED_SKELETON_KNIGHT_7; // 142
-    g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
-    g_MonsterConfig[index].name = L"Red Skeleton Knight";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_RED_SKELETON_KNIGHT;
+    g_MonsterConfig[index].name = L"RED_SKELETON_KNIGHT_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.19f;
-    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MAGIC_SKELETON_7; // 143
-    g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
-    g_MonsterConfig[index].name = L"Magic Skeleton";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"MAGIC_SKELETON_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.2f;
-    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
-    g_MonsterConfig[index].weapon1Level = 11;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_ANGEL_1; // 144
-	g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
-	g_MonsterConfig[index].name = L"Death Angel";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_ANGEL;
+    g_MonsterConfig[index].name = L"DEATH_ANGEL_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_CENTURION_1; // 145
-	g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
-	g_MonsterConfig[index].name = L"Death Centurion";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"DEATH_CENTURION_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOOD_SOLDIER_1; // 146
-	g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
-	g_MonsterConfig[index].name = L"Blood Soldier";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"BLOOD_SOLDIER_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_AEGIS_1; // 147
-	g_MonsterConfig[index].modelType = MODEL_AEGIS;
-	g_MonsterConfig[index].name = L"Aegis";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"AEGIS_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ROGUE_CENTURION_1; // 148
-	g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
-	g_MonsterConfig[index].name = L"Rogue Centurion";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"ROGUE_CENTURION_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_NECRON_1; // 149
-    g_MonsterConfig[index].modelType = MODEL_NECRON;
-	g_MonsterConfig[index].name = L"Necron";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_NECRON;
+    g_MonsterConfig[index].name = L"NECRON_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BALI; // 150
-	g_MonsterConfig[index].modelType = MODEL_BALI;
-	g_MonsterConfig[index].name = L"Bali";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.12f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BALI;
+    g_MonsterConfig[index].name = L"BALI";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SOLDIER; // 151
-	g_MonsterConfig[index].modelType = MODEL_SOLDIER;
-	g_MonsterConfig[index].name = L"Soldier";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.3f;
-    g_MonsterConfig[index].weapon2Type = MODEL_AQUAGOLD_CROSSBOW;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SOLDIER;
+    g_MonsterConfig[index].name = L"SOLDIER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GATE_TO_KALIMA_1; // 152
-    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
-	g_MonsterConfig[index].name = L"Gate to Kalima";
-	g_MonsterConfig[index].kind = KIND_OPERATE;
-	g_MonsterConfig[index].scale = 1.0f;
-	g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
-	g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].notRotateOnMagicHit = true;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GATE_TO_KALIMA_1;
+    g_MonsterConfig[index].name = L"GATE_TO_KALIMA_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GATE_TO_KALIMA_2; // 153
-    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
-    g_MonsterConfig[index].name = L"Gate to Kalima";
-    g_MonsterConfig[index].kind = KIND_OPERATE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GATE_TO_KALIMA_2;
+    g_MonsterConfig[index].name = L"GATE_TO_KALIMA_2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].notRotateOnMagicHit = true;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GATE_TO_KALIMA_3; // 154
-    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
-    g_MonsterConfig[index].name = L"Gate to Kalima";
-    g_MonsterConfig[index].kind = KIND_OPERATE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GATE_TO_KALIMA_3;
+    g_MonsterConfig[index].name = L"GATE_TO_KALIMA_3";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].notRotateOnMagicHit = true;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GATE_TO_KALIMA_4; // 155
-    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
-    g_MonsterConfig[index].name = L"Gate to Kalima";
-    g_MonsterConfig[index].kind = KIND_OPERATE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GATE_TO_KALIMA_4;
+    g_MonsterConfig[index].name = L"GATE_TO_KALIMA_4";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].notRotateOnMagicHit = true;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GATE_TO_KALIMA_5; // 156
-    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
-    g_MonsterConfig[index].name = L"Gate to Kalima";
-    g_MonsterConfig[index].kind = KIND_OPERATE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GATE_TO_KALIMA_5;
+    g_MonsterConfig[index].name = L"GATE_TO_KALIMA_5";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].notRotateOnMagicHit = true;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GATE_TO_KALIMA_6; // 157
-    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
-    g_MonsterConfig[index].name = L"Gate to Kalima";
-    g_MonsterConfig[index].kind = KIND_OPERATE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GATE_TO_KALIMA_6;
+    g_MonsterConfig[index].name = L"GATE_TO_KALIMA_6";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].notRotateOnMagicHit = true;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GATE_TO_KALIMA_7; // 158
-    g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
-    g_MonsterConfig[index].name = L"Gate to Kalima";
-    g_MonsterConfig[index].kind = KIND_OPERATE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GATE_TO_KALIMA_7;
+    g_MonsterConfig[index].name = L"GATE_TO_KALIMA_7";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].weapon1Type = -1; // magic! kinda
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].notRotateOnMagicHit = true;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SCHRIKER_1; // 160
-    g_MonsterConfig[index].modelType = MODEL_SCHRIKER;
-	g_MonsterConfig[index].name = L"Schriker";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SCHRIKER_3;
+    g_MonsterConfig[index].name = L"SCHRIKER_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_OF_KUNDUN_1; // 161
-	g_MonsterConfig[index].modelType = MODEL_ILLUSION_OF_KUNDUN;
-	g_MonsterConfig[index].name = L"Illusion of Kundun";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 1.0f;
-	g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_OF_KUNDUN;
+    g_MonsterConfig[index].name = L"ILLUSION_OF_KUNDUN_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_1; // 162
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
-	g_MonsterConfig[index].name = L"Chaos Castle Knight";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
-	g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
-	g_MonsterConfig[index].weapon2Level = 0;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CASTLE_GATE;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_2; // 163
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
-	g_MonsterConfig[index].name = L"Chaos Castle Elf";
-	g_MonsterConfig[index].kind = KIND_MONSTER;
-	g_MonsterConfig[index].scale = 0.9f;
-	g_MonsterConfig[index].weapon1Type = -1; // magic!
-	g_MonsterConfig[index].weapon1Level = 0;
-	g_MonsterConfig[index].weapon2Type = -1; // magic!
-	g_MonsterConfig[index].weapon2Level = 0;
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHAOSCASTLE_ELF;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_3; // 164
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
-    g_MonsterConfig[index].name = L"Chaos Castle Knight";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CASTLE_GATE;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_4; // 165
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
-    g_MonsterConfig[index].name = L"Chaos Castle Elf";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHAOSCASTLE_ELF;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = -1; // magic!
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = -1; // magic!
-    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_5; // 166
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
-    g_MonsterConfig[index].name = L"Chaos Castle Knight";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CASTLE_GATE;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_6; // 167
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
-    g_MonsterConfig[index].name = L"Chaos Castle Elf";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHAOSCASTLE_ELF;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = -1; // magic!
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = -1; // magic!
-    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_7; // 168
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
-    g_MonsterConfig[index].name = L"Chaos Castle Knight";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHAOSCASTLE_KNIGHT;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_8; // 169
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
-    g_MonsterConfig[index].name = L"Chaos Castle Elf";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHAOSCASTLE_ELF;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_8";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = -1; // magic!
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = -1; // magic!
-    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_9; // 170
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
-    g_MonsterConfig[index].name = L"Chaos Castle Knight";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHAOSCASTLE_KNIGHT;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_9";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_10; // 171
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
-    g_MonsterConfig[index].name = L"Chaos Castle Elf";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHAOSCASTLE_ELF;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_10";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = -1; // magic!
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = -1; // magic!
-    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_11; // 172
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
-    g_MonsterConfig[index].name = L"Chaos Castle Knight";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHAOSCASTLE_KNIGHT;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_11";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_12; // 173
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
-    g_MonsterConfig[index].name = L"Chaos Castle Elf";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHAOSCASTLE_ELF;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_12";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = -1; // magic!
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = -1; // magic!
-    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_ANGEL_2; // 174
-    g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
-    g_MonsterConfig[index].name = L"Death Angel";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_ANGEL;
+    g_MonsterConfig[index].name = L"DEATH_ANGEL_2";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_CENTURION_2; // 175
-    g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
-    g_MonsterConfig[index].name = L"Death Centurion";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"DEATH_CENTURION_2";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOOD_SOLDIER_2; // 176
-    g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
-    g_MonsterConfig[index].name = L"Blood Soldier";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"BLOOD_SOLDIER_2";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_AEGIS_2; // 177
-    g_MonsterConfig[index].modelType = MODEL_AEGIS;
-    g_MonsterConfig[index].name = L"Aegis";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"AEGIS_2";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ROGUE_CENTURION_2; // 178
-    g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
-    g_MonsterConfig[index].name = L"Rogue Centurion";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"ROGUE_CENTURION_2";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_NECRON_2; // 179
-    g_MonsterConfig[index].modelType = MODEL_NECRON;
-    g_MonsterConfig[index].name = L"Necron";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_NECRON;
+    g_MonsterConfig[index].name = L"NECRON_2";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SCHRIKER_2; // 180
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SCHRIKER_3;
+    g_MonsterConfig[index].name = L"SCHRIKER_2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_OF_KUNDUN_2; // 181
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_OF_KUNDUN;
+    g_MonsterConfig[index].name = L"ILLUSION_OF_KUNDUN_2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_ANGEL_3; // 182
-    g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
-    g_MonsterConfig[index].name = L"Death Angel";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_ANGEL_3;
+    g_MonsterConfig[index].name = L"DEATH_ANGEL_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_CENTURION_3; // 183
-    g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
-    g_MonsterConfig[index].name = L"Death Centurion";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"DEATH_CENTURION_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOOD_SOLDIER_3; // 184
-    g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
-    g_MonsterConfig[index].name = L"Blood Soldier";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"BLOOD_SOLDIER_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_AEGIS_3; // 185
-    g_MonsterConfig[index].modelType = MODEL_AEGIS;
-    g_MonsterConfig[index].name = L"Aegis";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"AEGIS_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ROGUE_CENTURION_3; // 186
-    g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
-    g_MonsterConfig[index].name = L"Rogue Centurion";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"ROGUE_CENTURION_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_NECRON_3; // 187
-    g_MonsterConfig[index].modelType = MODEL_NECRON;
-    g_MonsterConfig[index].name = L"Necron";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_NECRON;
+    g_MonsterConfig[index].name = L"NECRON_3";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SCHRIKER_3; // 188
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SCHRIKER_3;
+    g_MonsterConfig[index].name = L"SCHRIKER_3";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_OF_KUNDUN_3; // 189
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_OF_KUNDUN;
+    g_MonsterConfig[index].name = L"ILLUSION_OF_KUNDUN_3";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_ANGEL_4; // 190
-    g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
-    g_MonsterConfig[index].name = L"Death Angel";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_ANGEL;
+    g_MonsterConfig[index].name = L"DEATH_ANGEL_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_CENTURION_4; // 191
-    g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
-    g_MonsterConfig[index].name = L"Death Centurion";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"DEATH_CENTURION_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOOD_SOLDIER_4; // 192
-    g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
-    g_MonsterConfig[index].name = L"Blood Soldier";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"BLOOD_SOLDIER_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_AEGIS_4; // 193
-    g_MonsterConfig[index].modelType = MODEL_AEGIS;
-    g_MonsterConfig[index].name = L"Aegis";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"AEGIS_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ROGUE_CENTURION_4; // 194
-    g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
-    g_MonsterConfig[index].name = L"Rogue Centurion";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"ROGUE_CENTURION_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_NECRON_4; // 195
-    g_MonsterConfig[index].modelType = MODEL_NECRON;
-    g_MonsterConfig[index].name = L"Necron";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_NECRON;
+    g_MonsterConfig[index].name = L"NECRON_4";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SCHRIKER_4; // 196
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SCHRIKER_3;
+    g_MonsterConfig[index].name = L"SCHRIKER_4";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_OF_KUNDUN_4; // 197
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_OF_KUNDUN;
+    g_MonsterConfig[index].name = L"ILLUSION_OF_KUNDUN_4";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SOCCERBALL; // 200
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SOCCERBALL;
+    g_MonsterConfig[index].name = L"SOCCERBALL";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_WOLF_STATUS; // 204
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_WOLF_STATUS;
+    g_MonsterConfig[index].name = L"WOLF_STATUS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
-    index = MONSTER_WOLF_ALTAR1; // 205
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
+    index = MONSTER_CRYWOLF_ALTAR1; // 205
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_CRYWOLF_ALTAR1;
+    g_MonsterConfig[index].name = L"WOLF_ALTAR1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
-    index = MONSTER_WOLF_ALTAR2; // 206
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
-    index = MONSTER_WOLF_ALTAR3; // 207
+    index = MONSTER_CRYWOLF_ALTAR2; // 206
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_CRYWOLF_ALTAR2;
+    g_MonsterConfig[index].name = L"WOLF_ALTAR2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
-    index = MONSTER_WOLF_ALTAR4; // 208
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
+    index = MONSTER_CRYWOLF_ALTAR3; // 207
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_CRYWOLF_ALTAR3;
+    g_MonsterConfig[index].name = L"WOLF_ALTAR3";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
-    index = MONSTER_WOLF_ALTAR5; // 209
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
+
+    index = MONSTER_CRYWOLF_ALTAR4; // 208
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_CRYWOLF_ALTAR4;
+    g_MonsterConfig[index].name = L"WOLF_ALTAR4";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
+
+    index = MONSTER_CRYWOLF_ALTAR5; // 209
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_CRYWOLF_ALTAR5;
+    g_MonsterConfig[index].name = L"WOLF_ALTAR5";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SHIELD; // 215
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_SHIELD;
+    g_MonsterConfig[index].name = L"SHIELD";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CROWN; // 216
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPIDER;
+    g_MonsterConfig[index].name = L"CROWN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CROWN_SWITCH1; // 217
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPIDER;
+    g_MonsterConfig[index].name = L"CROWN_SWITCH1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CROWN_SWITCH2; // 218
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPIDER;
+    g_MonsterConfig[index].name = L"CROWN_SWITCH2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CASTLE_GATE_SWITCH; // 219
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CASTLE_GATE1;
+    g_MonsterConfig[index].name = L"CASTLE_GATE_SWITCH";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GUARD; // 220
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_NPC_CLERK;
+    g_MonsterConfig[index].name = L"GUARD";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SLINGSHOT_ATTACK; // 221
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"SLINGSHOT_ATTACK";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SLINGSHOT_DEFENSE; // 222
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"SLINGSHOT_DEFENSE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SENIOR; // 223
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"SENIOR";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GUARDSMAN; // 224
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_NPC_CLERK;
+    g_MonsterConfig[index].name = L"GUARDSMAN";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_PET_TRAINER; // 226
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_NPC_BREEDER;
+    g_MonsterConfig[index].name = L"PET_TRAINER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MARLON; // 229
+    //* core
     g_MonsterConfig[index].modelType = MODEL_PLAYER;
-    g_MonsterConfig[index].name = L"말론";
-    g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
-    g_MonsterConfig[index].helmLevel = 7;
-    g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
-    g_MonsterConfig[index].armorLevel = 7;
-    g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
-    g_MonsterConfig[index].pantsLevel = 7;
-    g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
-    g_MonsterConfig[index].glovesLevel = 7;
-    g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
-    g_MonsterConfig[index].bootsLevel = 7;
-    g_MonsterConfig[index].weapon1Type = MODEL_BERDYSH;
-    g_MonsterConfig[index].weapon1Level = 8;
-	g_MonsterConfig[index].weapon2Type = -1; // magic!
+    g_MonsterConfig[index].name = L"MARLON";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ALEX; // 230
+    //* core
     g_MonsterConfig[index].modelType = MODEL_MERCHANT_MAN;
-    g_MonsterConfig[index].name = L"로랜추가상인";
-    g_MonsterConfig[index].helmType = MODEL_MERCHANT_MAN_HEAD;
-    g_MonsterConfig[index].armorType = MODEL_MERCHANT_MAN_UPPER + 1;
-    g_MonsterConfig[index].glovesType = MODEL_MERCHANT_MAN_GLOVES + 1;
-    g_MonsterConfig[index].bootsType = MODEL_MERCHANT_MAN_BOOTS;
+    g_MonsterConfig[index].name = L"ALEX";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_THOMPSON_THE_MERCHANT; // 231
-    g_MonsterConfig[index].modelType = MODEL_DEVIAS_TRADER;
-    g_MonsterConfig[index].name = L"데비추가상인";
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_THOMPSON_THE_MERCHANT;
+    g_MonsterConfig[index].name = L"THOMPSON_THE_MERCHANT";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ARCHANGEL; // 232
+    //* core
     g_MonsterConfig[index].modelType = MODEL_NPC_ARCHANGEL;
+    g_MonsterConfig[index].name = L"ARCHANGEL";
     g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MESSENGER_OF_ARCH; // 233
+    //* core
     g_MonsterConfig[index].modelType = MODEL_NPC_ARCHANGEL_MESSENGER;
+    g_MonsterConfig[index].name = L"MESSENGER_OF_ARCH";
     g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOBLIN_GATE; // 234
+    //* core
     g_MonsterConfig[index].modelType = MONSTER_MODEL_GOBLIN;
-    g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
-    g_MonsterConfig[index].weapon1Level = 4;
-    g_MonsterConfig[index].scale = 1.5f;
-    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].name = L"GOBLIN_GATE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SEVINA_THE_PRIESTESS; // 235
-    g_MonsterConfig[index].modelType = MODEL_NPC_SEVINA;
-	g_MonsterConfig[index].name = L"Sevina the Priestess";
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_SEVINA_THE_PRIESTESS;
+    g_MonsterConfig[index].name = L"SEVINA_THE_PRIESTESS";
     g_MonsterConfig[index].kind = KIND_NPC;
-	g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_ARCHER; // 236
+    //* core
     g_MonsterConfig[index].modelType = MODEL_PLAYER;
-	g_MonsterConfig[index].name = L"Golden Archer";
-	g_MonsterConfig[index].kind = KIND_NPC;
-	g_MonsterConfig[index].scale = 1.0f;
+    g_MonsterConfig[index].name = L"GOLDEN_ARCHER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHARON; // 237
+    //* core
     g_MonsterConfig[index].modelType = MODEL_NPC_DEVILSQUARE;
-	g_MonsterConfig[index].name = L"Charon";
-	g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"CHARON";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_GOBLIN; // 238
-    g_MonsterConfig[index].modelType = MODEL_MIX_NPC;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_CHAOS_GOBLIN;
+    g_MonsterConfig[index].name = L"CHAOS_GOBLIN";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].blendMesh = 1;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ARENA_GUARD; // 239
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_ARENA_GUARD;
+    g_MonsterConfig[index].name = L"ARENA_GUARD";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].modelType = MODEL_TOURNAMENT;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
-        index = MONSTER_BAZ_THE_VAULT_KEEPER; // 240
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
+
+    index = MONSTER_BAZ_THE_VAULT_KEEPER; // 240
+    //* core
     g_MonsterConfig[index].modelType = MODEL_STORAGE;
+    g_MonsterConfig[index].name = L"BAZ_THE_VAULT_KEEPER";
     g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GUILD_MASTER; // 241
-    g_MonsterConfig[index].modelType = MODEL_MASTER;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_GUILD_MASTER;
+    g_MonsterConfig[index].name = L"GUILD_MASTER";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 241 - 마스터";
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ELF_LALA; // 242
-    g_MonsterConfig[index].modelType = MODEL_ELF_WIZARD;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_ELF_LALA;
+    g_MonsterConfig[index].name = L"ELF_LALA";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 242 - 라라 요정";
-    g_MonsterConfig[index].blendMesh = 1;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_EO_THE_CRAFTSMAN; // 243
-    g_MonsterConfig[index].modelType = MODEL_ELF_WIZARD;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_ELF_MERCHANT;
+    g_MonsterConfig[index].name = L"EO_THE_CRAFTSMAN";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 243 - 라라 요정";
-    g_MonsterConfig[index].blendMesh = 1;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CAREN_THE_BARMAID; // 244
+    //* core
     g_MonsterConfig[index].modelType = MODEL_SNOW_MERCHANT;
+    g_MonsterConfig[index].name = L"CAREN_THE_BARMAID";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 244 - 술집마담";
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_IZABEL_THE_WIZARD; // 245
+    //* core
     g_MonsterConfig[index].modelType = MODEL_SNOW_WIZARD;
+    g_MonsterConfig[index].name = L"IZABEL_THE_WIZARD";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 245 - 무기상인";
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
-    index = MONSTER_ZIENNA_THE_WEAPONS_MERCHANT; // 246 // ?_?
-	g_MonsterConfig[index].modelType = MODEL_SNOW_MERCHANT;
-	g_MonsterConfig[index].kind = KIND_NPC;
-	g_MonsterConfig[index].name = L"NPC 246 - 무기상인";
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
+
+    index = MONSTER_ZIENNA_THE_WEAPONS_MERCHANT; // 246
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_SNOW_SMITH;
+    g_MonsterConfig[index].name = L"ZIENNA_THE_WEAPONS_MERCHANT";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CROSSBOW_GUARD; // 247
+    //* core
     g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"CROSSBOW_GUARD";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 247 - 경비병";
-    g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
-    g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
-    g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
-    g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
-    g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
-    g_MonsterConfig[index].weapon1Type = MODEL_LIGHT_CROSSBOW;
-    g_MonsterConfig[index].weapon2Type = MODEL_BOLT;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_WANDERING_MERCHANT_MARTIN; // 248
+    //* core
     g_MonsterConfig[index].modelType = MODEL_MERCHANT_MAN;
+    g_MonsterConfig[index].name = L"WANDERING_MERCHANT_MARTIN";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 248 - 떠돌이 상인";
-    g_MonsterConfig[index].helmType = MODEL_MERCHANT_MAN_HEAD + 1;
-    g_MonsterConfig[index].armorType = MODEL_MERCHANT_MAN_UPPER + 1;
-    g_MonsterConfig[index].glovesType = MODEL_MERCHANT_MAN_GLOVES + 1;
-    g_MonsterConfig[index].bootsType = MODEL_MERCHANT_MAN_BOOTS + 1;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BERDYSH_GUARD; // 249
+    //* core
     g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"BERDYSH_GUARD";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 249 - 경비병";
-    g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
-    g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
-    g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
-    g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
-    g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
-    g_MonsterConfig[index].weapon1Type = MODEL_BERDYSH;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_WANDERING_MERCHANT_HAROLD; // 250
+    //* core
     g_MonsterConfig[index].modelType = MODEL_MERCHANT_MAN;
+    g_MonsterConfig[index].name = L"WANDERING_MERCHANT_HAROLD";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 250 - 떠돌이 상인";
-    g_MonsterConfig[index].helmType = MODEL_MERCHANT_MAN_HEAD;
-    g_MonsterConfig[index].armorType = MODEL_MERCHANT_MAN_UPPER;
-    g_MonsterConfig[index].glovesType = MODEL_MERCHANT_MAN_GLOVES;
-    g_MonsterConfig[index].bootsType = MODEL_MERCHANT_MAN_BOOTS;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HANZO_THE_BLACKSMITH; // 251
-    g_MonsterConfig[index].modelType = MODEL_SMITH;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_HANZO_THE_BLACKSMITH;
+    g_MonsterConfig[index].name = L"HANZO_THE_BLACKSMITH";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 251 - 대장장이 한스";
-    g_MonsterConfig[index].scale = 0.95f;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_POTION_GIRL_AMY; // 253
+    //* core
     g_MonsterConfig[index].modelType = MODEL_MERCHANT_GIRL;
+    g_MonsterConfig[index].name = L"POTION_GIRL_AMY";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 253 - 물약파는 소녀";
-    g_MonsterConfig[index].helmType = MODEL_MERCHANT_GIRL_HEAD;
-    g_MonsterConfig[index].armorType = MODEL_MERCHANT_GIRL_UPPER;
-    g_MonsterConfig[index].pantsType = MODEL_MERCHANT_GIRL_LOWER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_PASI_THE_MAGE; // 254
-    g_MonsterConfig[index].modelType = MODEL_SCIENTIST;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PASI_THE_MAGE;
+    g_MonsterConfig[index].name = L"PASI_THE_MAGE";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 254 - 마법사 파시";
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LUMEN_THE_BARMAID; // 255
-    g_MonsterConfig[index].modelType = MODEL_MERCHANT_FEMALE;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_LUMEN_THE_BARMAID;
+    g_MonsterConfig[index].name = L"LUMEN_THE_BARMAID";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 256 - 술집마담 리아먼";
-    g_MonsterConfig[index].helmType = MODEL_MERCHANT_FEMALE_HEAD + 1;
-    g_MonsterConfig[index].armorType = MODEL_MERCHANT_FEMALE_UPPER + 1;
-    g_MonsterConfig[index].glovesType = MODEL_MERCHANT_FEMALE_LOWER + 1;
-    g_MonsterConfig[index].bootsType = MODEL_MERCHANT_FEMALE_BOOTS + 1;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LAHAP; // 256
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_NPC_SERBIS;
+    g_MonsterConfig[index].name = L"LAHAP";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ELF_SOLDIER; // 257
+    //* core
     g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"ELF_SOLDIER";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 257 - 페이아";
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LUKE_THE_HELPER; // 258
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"LUKE_THE_HELPER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ORACLE_LAYLA; // 259
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_ORACLE_LAYLA;
+    g_MonsterConfig[index].name = L"ORACLE_LAYLA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_ANGEL_5; // 260
-    g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
-    g_MonsterConfig[index].name = L"Death Angel";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_ANGEL;
+    g_MonsterConfig[index].name = L"DEATH_ANGEL_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_CENTURION_5; // 261
-    g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
-    g_MonsterConfig[index].name = L"Death Centurion";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"DEATH_CENTURION_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOOD_SOLDIER_5; // 262
-    g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
-    g_MonsterConfig[index].name = L"Blood Soldier";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"BLOOD_SOLDIER_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_AEGIS_5; // 263
-    g_MonsterConfig[index].modelType = MODEL_AEGIS;
-    g_MonsterConfig[index].name = L"Aegis";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"AEGIS_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ROGUE_CENTURION_5; // 264
-    g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
-    g_MonsterConfig[index].name = L"Rogue Centurion";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"ROGUE_CENTURION_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_NECRON_5; // 265
-    g_MonsterConfig[index].modelType = MODEL_NECRON;
-    g_MonsterConfig[index].name = L"Necron";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_NECRON;
+    g_MonsterConfig[index].name = L"NECRON_5";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SCHRIKER_5; // 266
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SCHRIKER_3;
+    g_MonsterConfig[index].name = L"SCHRIKER_5";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_OF_KUNDUN_5; // 267
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_OF_KUNDUN;
+    g_MonsterConfig[index].name = L"ILLUSION_OF_KUNDUN_5";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_ANGEL_6; // 268
-    g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
-    g_MonsterConfig[index].name = L"Death Angel";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_ANGEL;
+    g_MonsterConfig[index].name = L"DEATH_ANGEL_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_CENTURION_6; // 269
-    g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
-    g_MonsterConfig[index].name = L"Death Centurion";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"DEATH_CENTURION_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOOD_SOLDIER_6; // 270
-    g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
-    g_MonsterConfig[index].name = L"Blood Soldier";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"BLOOD_SOLDIER_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_AEGIS_6; // 271
-    g_MonsterConfig[index].modelType = MODEL_AEGIS;
-    g_MonsterConfig[index].name = L"Aegis";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"AEGIS_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ROGUE_CENTURION_6; // 272
-    g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
-    g_MonsterConfig[index].name = L"Rogue Centurion";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"ROGUE_CENTURION_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_NECRON_6; // 273
-    g_MonsterConfig[index].modelType = MODEL_NECRON;
-    g_MonsterConfig[index].name = L"Necron";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_NECRON;
+    g_MonsterConfig[index].name = L"NECRON_6";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SCHRIKER_6; // 274
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SCHRIKER_3;
+    g_MonsterConfig[index].name = L"SCHRIKER_6";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_OF_KUNDUN_7; // 275
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_OF_KUNDUN;
+    g_MonsterConfig[index].name = L"ILLUSION_OF_KUNDUN_7";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CASTLE_GATE1; // 277
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CASTLE_GATE1;
+    g_MonsterConfig[index].name = L"CASTLE_GATE1";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LIFE_STONE; // 278
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_LIFE_STONE;
+    g_MonsterConfig[index].name = L"LIFE_STONE";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GUARDIAN_STATUE; // 283
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GUARDIAN_STATUE;
+    g_MonsterConfig[index].name = L"GUARDIAN_STATUE";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GUARDIAN; // 285
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GUARDIAN_STATUE;
+    g_MonsterConfig[index].name = L"GUARDIAN";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BATTLE_GUARD1; // 286
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BATTLE_GUARD1;
+    g_MonsterConfig[index].name = L"BATTLE_GUARD1";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BATTLE_GUARD2; // 287
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BATTLE_GUARD2;
+    g_MonsterConfig[index].name = L"BATTLE_GUARD2";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CANON_TOWER; // 288
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CANON_TOWER;
+    g_MonsterConfig[index].name = L"CANON_TOWER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LIZARD_WARRIOR; // 290
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_LIZARD_WARRIOR;
+    g_MonsterConfig[index].name = L"LIZARD_WARRIOR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_FIRE_GOLEM; // 291
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_FIRE_GOLEM;
+    g_MonsterConfig[index].name = L"FIRE_GOLEM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_QUEEN_BEE; // 292
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_QUEEN_BEE;
+    g_MonsterConfig[index].name = L"QUEEN_BEE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_POISON_GOLEM; // 293
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_POISON_GOLEM;
+    g_MonsterConfig[index].name = L"POISON_GOLEM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_AXE_WARRIOR; // 294
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_AXE_HERO;
+    g_MonsterConfig[index].name = L"AXE_WARRIOR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_EROHIM; // 295
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_EROHIM;
+    g_MonsterConfig[index].name = L"EROHIM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_PK_DARK_KNIGHT; // 297
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_KNIGHT;
+    g_MonsterConfig[index].name = L"PK_DARK_KNIGHT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MUTANT_HERO; // 300
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MUTANT;
+    g_MonsterConfig[index].name = L"MUTANT_HERO";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_OMEGA_WING; // 301
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CRUST;
+    g_MonsterConfig[index].name = L"OMEGA_WING";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_AXE_HERO; // 302
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_AXE_HERO;
+    g_MonsterConfig[index].name = L"AXE_HERO";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIGAS_GOLEM; // 303
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"GIGAS_GOLEM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_WITCH_QUEEN; // 304
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_WITCH_QUEEN;
+    g_MonsterConfig[index].name = L"WITCH_QUEEN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLUE_GOLEM; // 305
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"BLUE_GOLEM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_RIDER; // 306
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_RIDER;
+    g_MonsterConfig[index].name = L"DEATH_RIDER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_FOREST_ORC; // 307
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_FOREST_ORC;
+    g_MonsterConfig[index].name = L"FOREST_ORC";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_TREE; // 308
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_TREE;
+    g_MonsterConfig[index].name = L"DEATH_TREE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HELL_MAINE; // 309
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_HELL_MAINE;
+    g_MonsterConfig[index].name = L"HELL_MAINE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HAMMER_SCOUT; // 310
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SCOUT;
+    g_MonsterConfig[index].name = L"HAMMER_SCOUT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LANCE_SCOUT; // 311
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SCOUT;
+    g_MonsterConfig[index].name = L"LANCE_SCOUT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BOW_SCOUT; // 312
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SCOUT;
+    g_MonsterConfig[index].name = L"BOW_SCOUT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_WEREWOLF; // 313
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_WEREWOLF2;
+    g_MonsterConfig[index].name = L"WEREWOLF";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
-    index = MONSTER_SCOUTHERO; // 314
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
+    index = MONSTER_SCOUT_HERO; // 314
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_SCOUT_HERO;
+    g_MonsterConfig[index].name = L"SCOUTHERO";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
-    index = MONSTER_WEREWOLFHERO; // 315
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
+
+    index = MONSTER_WEREWOLF_HERO; // 315
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_WEREWOLF_HERO;
+    g_MonsterConfig[index].name = L"WEREWOLFHERO";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_VALAM; // 316
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_VALAM;
+    g_MonsterConfig[index].name = L"VALAM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SOLAM; // 317
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SOLAM;
+    g_MonsterConfig[index].name = L"SOLAM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SCOUT; // 318
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_SCOUT_HERO;
+    g_MonsterConfig[index].name = L"SCOUT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_AEGIS_7; // 331
-    g_MonsterConfig[index].modelType = MODEL_AEGIS;
-    g_MonsterConfig[index].name = L"Aegis";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_AEGIS;
+    g_MonsterConfig[index].name = L"AEGIS_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ROGUE_CENTURION_7; // 332
-    g_MonsterConfig[index].modelType = MONSTER_DEATH_CENTURION_1;
-    g_MonsterConfig[index].name = L"Rogue Centurion";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"ROGUE_CENTURION_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOOD_SOLDIER_7; // 333
-    g_MonsterConfig[index].modelType = MODEL_BLOOD_SOLDIER;
-    g_MonsterConfig[index].name = L"Blood Soldier";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOOD_SOLDIER;
+    g_MonsterConfig[index].name = L"BLOOD_SOLDIER_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_ANGEL_7; // 334
-    g_MonsterConfig[index].modelType = MODEL_DEATH_ANGEL;
-    g_MonsterConfig[index].name = L"Death Angel";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_ANGEL;
+    g_MonsterConfig[index].name = L"DEATH_ANGEL_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_NECRON_7; // 335
-    g_MonsterConfig[index].modelType = MODEL_NECRON;
-    g_MonsterConfig[index].name = L"Necron";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_NECRON;
+    g_MonsterConfig[index].name = L"NECRON_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_CENTURION_7; // 336
-    g_MonsterConfig[index].modelType = MODEL_DEATH_CENTURION;
-    g_MonsterConfig[index].name = L"Death Centurion";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_CENTURION;
+    g_MonsterConfig[index].name = L"DEATH_CENTURION_7";
     g_MonsterConfig[index].kind = KIND_MONSTER;
     g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SCHRIKER_7; // 337
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SCHRIKER_3;
+    g_MonsterConfig[index].name = L"SCHRIKER_7";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_OF_KUNDUN_6; // 338
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_OF_KUNDUN;
+    g_MonsterConfig[index].name = L"ILLUSION_OF_KUNDUN_6";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
-    index = MONSTER_DARKELF; // 340
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
+    index = MONSTER_DARK_ELF; // 340
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_ELF;
+    g_MonsterConfig[index].name = L"DARKELF";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SORAM; // 341
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SORAM;
+    g_MonsterConfig[index].name = L"SORAM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BALRAM; // 344
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BALRAM;
+    g_MonsterConfig[index].name = L"BALRAM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_SPIRIT; // 345
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_SPIRIT;
+    g_MonsterConfig[index].name = L"DEATH_SPIRIT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BALLISTA; // 348
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BALLISTA;
+    g_MonsterConfig[index].name = L"BALLISTA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BALGASS; // 349
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BALGASS;
+    g_MonsterConfig[index].name = L"BALGASS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BERSERKER; // 350
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BERSERK;
+    g_MonsterConfig[index].name = L"BERSERKER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SPLINTER_WOLF; // 351
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPLINTER_WOLF;
+    g_MonsterConfig[index].name = L"SPLINTER_WOLF";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_IRON_RIDER; // 352
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_IRON_RIDER;
+    g_MonsterConfig[index].name = L"IRON_RIDER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SATYROS; // 353
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SATYROS;
+    g_MonsterConfig[index].name = L"SATYROS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLADE_HUNTER; // 354
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLADE_HUNTER;
+    g_MonsterConfig[index].name = L"BLADE_HUNTER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_KENTAUROS; // 355
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_KENTAUROS;
+    g_MonsterConfig[index].name = L"KENTAUROS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIGANTIS; // 356
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIGANTIS;
+    g_MonsterConfig[index].name = L"GIGANTIS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GENOCIDER; // 357
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GENOCIDER;
+    g_MonsterConfig[index].name = L"GENOCIDER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_PERSONA; // 358
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_PERSONA;
+    g_MonsterConfig[index].name = L"PERSONA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
-    index = MONSTER_TWIN_TALE; // 359
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
+    index = MONSTER_TWIN_TAIL; // 359
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_TWIN_TAIL;
+    g_MonsterConfig[index].name = L"TWIN_TALE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DREADFEAR; // 360
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DREADFEAR;
+    g_MonsterConfig[index].name = L"DREADFEAR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_NIGHTMARE; // 361
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPIDER;
+    g_MonsterConfig[index].name = L"NIGHTMARE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MAYA_HAND_LEFT; // 362
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MAYA_HAND_LEFT;
+    g_MonsterConfig[index].name = L"MAYA_HAND_LEFT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MAYA_HAND_RIGHT; // 363
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MAYA_HAND_RIGHT;
+    g_MonsterConfig[index].name = L"MAYA_HAND_RIGHT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MAYA; // 364
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MAYA;
+    g_MonsterConfig[index].name = L"MAYA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_POUCH_OF_BLESSING; // 365
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_POUCH_OF_BLESSING;
+    g_MonsterConfig[index].name = L"POUCH_OF_BLESSING";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GATEWAY_MACHINE; // 367
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"GATEWAY_MACHINE";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ELPHIS; // 368
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_SMELTING_NPC;
+    g_MonsterConfig[index].name = L"ELPHIS";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_OSBOURNE; // 369
+    //* core
     g_MonsterConfig[index].modelType = MODEL_REFINERY_NPC;
-	g_MonsterConfig[index].name = L"Osbourne";
-	g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].name = L"OSBOURNE";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_JERRIDON; // 370
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_RECOVERY_NPC;
+    g_MonsterConfig[index].name = L"JERRIDON";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LEO_THE_HELPER; // 371
-	g_MonsterConfig[index].modelType = MODEL_PLAYER;
-	g_MonsterConfig[index].name = L"Leo the Helper";
-	g_MonsterConfig[index].kind = KIND_NPC;
-	g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
-	g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
-	g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
-	g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
-	g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
-	g_MonsterConfig[index].weapon1Type = -1; // magic!
-	g_MonsterConfig[index].m_bpcroom = 1; // ?_?
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"LEO_THE_HELPER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ELITE_SKILL_SOLDIER; // 372
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"ELITE_SKILL_SOLDIER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_JACK_OLANTERN; // 373
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"JACK_OLANTERN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SANTA; // 374
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"SANTA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CARD_MASTER; // 375
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"CHAOS_CARD_MASTER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_PAMELA_THE_SUPPLIER; // 376
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_BC_NPC1;
+    g_MonsterConfig[index].name = L"PAMELA_THE_SUPPLIER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ANGELA_THE_SUPPLIER; // 377
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_BC_NPC2;
+    g_MonsterConfig[index].name = L"ANGELA_THE_SUPPLIER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GAMEMASTER; // 378
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"GAMEMASTER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_FIREWORKS_GIRL; // 379
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_WEDDING_NPC;
+    g_MonsterConfig[index].name = L"FIREWORKS_GIRL";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_STONE_STATUE; // 380
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_STATUE;
+    g_MonsterConfig[index].name = L"STONE_STATUE";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MU_ALLIES_GENERAL; // 381
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"MU_ALLIES_GENERAL";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_ELDER; // 382
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_OF_KUNDUN;
+    g_MonsterConfig[index].name = L"ILLUSION_ELDER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ALLIANCE_ITEM_STORAGE; // 383
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_STORAGE;
+    g_MonsterConfig[index].name = L"ALLIANCE_ITEM_STORAGE";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_ITEM_STORAGE; // 384
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_STORAGE;
+    g_MonsterConfig[index].name = L"ILLUSION_ITEM_STORAGE";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MIRAGE; // 385
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPIDER;
+    g_MonsterConfig[index].name = L"MIRAGE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT1_LIGHTNING; // 386
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT1_LIGHTNING";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT2_LIGHTNING; // 389
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT2_LIGHTNING";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT3_LIGHTNING; // 392
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT3_LIGHTNING";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT4_LIGHTNING; // 395
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT4_LIGHTNING";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT5_LIGHTNING; // 398
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT5_LIGHTNING";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT6_LIGHTNING; // 401
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT6_LIGHTNING";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT1_ICE; // 387
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_ICE;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT1_ICE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT2_ICE; // 390
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_ICE;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT2_ICE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT3_ICE; // 393
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_ICE;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT3_ICE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT4_ICE; // 396
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_ICE;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT4_ICE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT5_ICE; // 399
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_ICE;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT5_ICE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT6_ICE; // 402
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_ICE;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT6_ICE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT1_POISON; // 388
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_POISON;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT1_POISON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT2_POISON; // 391
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_POISON;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT2_POISON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT3_POISON; // 394
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_POISON;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT3_POISON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT4_POISON; // 397
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_POISON;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT4_POISON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT5_POISON; // 400
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_POISON;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT5_POISON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER_SPIRIT6_POISON; // 403
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_POISON;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER_SPIRIT6_POISON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MU_ALLIES; // 404
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPIDER;
+    g_MonsterConfig[index].name = L"MU_ALLIES";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ILLUSION_SORCERER; // 405
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING;
+    g_MonsterConfig[index].name = L"ILLUSION_SORCERER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_PRIEST_DEVIN; // 406
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_NPC_DEVIN;
+    g_MonsterConfig[index].name = L"PRIEST_DEVIN";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_WEREWOLF_QUARREL; // 407
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_NPC_QUARREL;
+    g_MonsterConfig[index].name = L"WEREWOLF_QUARREL";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GATEKEEPER; // 408
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_NPC_CASTLE_GATE;
+    g_MonsterConfig[index].name = L"GATEKEEPER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BALRAM_TRAINEE_SOLDIER; // 409
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BALRAM;
+    g_MonsterConfig[index].name = L"BALRAM_TRAINEE_SOLDIER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEATH_SPIRIT_TRAINEE_SOLDIER; // 410
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEATH_SPIRIT;
+    g_MonsterConfig[index].name = L"DEATH_SPIRIT_TRAINEE_SOLDIER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SORAM_TRAINEE_SOLDIER; // 411
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SORAM;
+    g_MonsterConfig[index].name = L"SORAM_TRAINEE_SOLDIER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_ELF_TRAINEE_SOLDIER; // 412
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_ELF_1;
+    g_MonsterConfig[index].name = L"DARK_ELF_TRAINEE_SOLDIER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LUNAR_RABBIT; // 413
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_LUNAR_RABBIT;
+    g_MonsterConfig[index].name = L"LUNAR_RABBIT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HELPER_ELLEN; // 414
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"HELPER_ELLEN";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SILVIA; // 415
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"SILVIA";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RHEA; // 416
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"RHEA";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MARCE; // 417
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"MARCE";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_STRANGE_RABBIT; // 418
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_RABBIT;
+    g_MonsterConfig[index].name = L"STRANGE_RABBIT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_POLLUTED_BUTTERFLY; // 419
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BUTTERFLY;
+    g_MonsterConfig[index].name = L"POLLUTED_BUTTERFLY";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HIDEOUS_RABBIT; // 420
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_HIDEOUS_RABBIT;
+    g_MonsterConfig[index].name = L"HIDEOUS_RABBIT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_WEREWOLF2; // 421
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_WEREWOLF2;
+    g_MonsterConfig[index].name = L"WEREWOLF2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CURSED_LICH; // 422
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CURSED_LICH;
+    g_MonsterConfig[index].name = L"CURSED_LICH";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_TOTEM_GOLEM; // 423
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_TOTEM_GOLEM;
+    g_MonsterConfig[index].name = L"TOTEM_GOLEM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GRIZZLY; // 424
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GRIZZLY;
+    g_MonsterConfig[index].name = L"GRIZZLY";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CAPTAIN_GRIZZLY; // 425
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CAPTAIN_GRIZZLY;
+    g_MonsterConfig[index].name = L"CAPTAIN_GRIZZLY";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_13; // 426
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
-    g_MonsterConfig[index].name = L"Chaos Castle Knight";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHAOSCASTLE_KNIGHT;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_13";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHAOS_CASTLE_14; // 427
-    g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // randType
-    g_MonsterConfig[index].name = L"Chaos Castle Elf";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CHAOSCASTLE_ELF;
+    g_MonsterConfig[index].name = L"CHAOS_CASTLE_14";
     g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].weapon1Type = -1; // magic!
-    g_MonsterConfig[index].weapon1Level = 0;
-    g_MonsterConfig[index].weapon2Type = -1; // magic!
-    g_MonsterConfig[index].weapon2Level = 0;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_WARRIOR_8; // 428
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORC_ARCHER;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_WARRIOR_8";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHIEF_SKELETON_ARCHER_8; // 429
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"CHIEF_SKELETON_ARCHER_8";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_SKULL_SOLDIER_8; // 430
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_SKULL_SOLDIER;
+    g_MonsterConfig[index].name = L"DARK_SKULL_SOLDIER_8";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIANT_OGRE_8; // 431
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIANT_OGRE;
+    g_MonsterConfig[index].name = L"GIANT_OGRE_8";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RED_SKELETON_KNIGHT_8; // 432
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_RED_SKELETON_KNIGHT;
+    g_MonsterConfig[index].name = L"RED_SKELETON_KNIGHT_8";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MAGIC_SKELETON_8; // 433
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MAGIC_SKELETON;
+    g_MonsterConfig[index].name = L"MAGIC_SKELETON_8";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIGANTIS2; // 434
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIGANTIS;
+    g_MonsterConfig[index].name = L"GIGANTIS2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BERSERK; // 435
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BERSERK;
+    g_MonsterConfig[index].name = L"BERSERK";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BALRAM_TRAINEE; // 436
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SORAM;
+    g_MonsterConfig[index].name = L"BALRAM_TRAINEE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SORAM_TRAINEE; // 437
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SORAM;
+    g_MonsterConfig[index].name = L"SORAM_TRAINEE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_PERSONA_DS7; // 438
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_PERSONA;
+    g_MonsterConfig[index].name = L"PERSONA_DS7";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DREADFEAR2; // 439
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DREADFEAR;
+    g_MonsterConfig[index].name = L"DREADFEAR2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_ELF; // 440
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_ELF;
+    g_MonsterConfig[index].name = L"DARK_ELF";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SAPIUNUS; // 441
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SAPIUNUS;
+    g_MonsterConfig[index].name = L"SAPIUNUS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SAPIDUO; // 442
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SAPIDUO;
+    g_MonsterConfig[index].name = L"SAPIDUO";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SAPITRES; // 443
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SAPITRES;
+    g_MonsterConfig[index].name = L"SAPITRES";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SHADOW_PAWN; // 444
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SHADOW_PAWN;
+    g_MonsterConfig[index].name = L"SHADOW_PAWN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SHADOW_KNIGHT; // 445
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SHADOW_KNIGHT;
+    g_MonsterConfig[index].name = L"SHADOW_KNIGHT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SHADOW_LOOK; // 446
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SHADOW_LOOK;
+    g_MonsterConfig[index].name = L"SHADOW_LOOK";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_THUNDER_NAPIN; // 447
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_NAPIN;
+    g_MonsterConfig[index].name = L"THUNDER_NAPIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GHOST_NAPIN; // 448
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GHOST_NAPIN;
+    g_MonsterConfig[index].name = L"GHOST_NAPIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLAZE_NAPIN; // 449
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLAZE_NAPIN;
+    g_MonsterConfig[index].name = L"BLAZE_NAPIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHERRY_BLOSSOM_SPIRIT; // 450
+    //* core
     g_MonsterConfig[index].modelType = MODEL_NPC_CHERRYBLOSSOM;
-	g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 450 - 벚꽃의정령";
-    g_MonsterConfig[index].scale = 0.65f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.08f;
+    g_MonsterConfig[index].name = L"CHERRY_BLOSSOM_SPIRIT";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHERRY_BLOSSOM_TREE; // 451
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_NPC_CHERRYBLOSSOMTREE;
+    g_MonsterConfig[index].name = L"CHERRY_BLOSSOM_TREE";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SEED_MASTER; // 452
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_SEED_MASTER;
+    g_MonsterConfig[index].name = L"SEED_MASTER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SEED_RESEARCHER; // 453
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_SEED_RESEARCHER;
+    g_MonsterConfig[index].name = L"SEED_RESEARCHER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ICE_WALKER; // 454
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ICE_WALKER;
+    g_MonsterConfig[index].name = L"ICE_WALKER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIANT_MAMMOTH; // 455
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIANT_MAMMOTH;
+    g_MonsterConfig[index].name = L"GIANT_MAMMOTH";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ICE_GIANT; // 456
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ICE_GIANT;
+    g_MonsterConfig[index].name = L"ICE_GIANT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_COOLUTIN; // 457
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_COOLUTIN;
+    g_MonsterConfig[index].name = L"COOLUTIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_IRON_KNIGHT; // 458
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_IRON_KNIGHT;
+    g_MonsterConfig[index].name = L"IRON_KNIGHT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SELUPAN; // 459
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SELUPAN;
+    g_MonsterConfig[index].name = L"SELUPAN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SPIDER_EGGS_1; // 460
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPIDER_EGGS_1;
+    g_MonsterConfig[index].name = L"SPIDER_EGGS_1";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SPIDER_EGGS_2; // 461
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPIDER_EGGS_2;
+    g_MonsterConfig[index].name = L"SPIDER_EGGS_2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SPIDER_EGGS_3; // 462
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPIDER_EGGS_3;
+    g_MonsterConfig[index].name = L"SPIDER_EGGS_3";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_FIRE_FLAME_GHOST; // 463
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_FIRE_FLAME_GHOST;
+    g_MonsterConfig[index].name = L"FIRE_FLAME_GHOST";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_REINIT_HELPER; // 464
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"REINIT_HELPER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SANTA_CLAUSE; // 465
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"SANTA_CLAUSE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_EVIL_GOBLIN; // 466
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_EVIL_GOBLIN;
+    g_MonsterConfig[index].name = L"EVIL_GOBLIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SNOWMAN; // 467
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPIDER;
+    g_MonsterConfig[index].name = L"SNOWMAN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LITTLE_SANTA_YELLOW; // 468
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_LITTLESANTA + (index - 468); // magic! ?_?
+    g_MonsterConfig[index].name = L"LITTLE_SANTA_YELLOW";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LITTLE_SANTA_GREEN; // 469
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_LITTLESANTA + (index - 468); // magic! ?_?
+    g_MonsterConfig[index].name = L"LITTLE_SANTA_GREEN";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LITTLE_SANTA_RED; // 470
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_LITTLESANTA + (index - 468); // magic! ?_?
+    g_MonsterConfig[index].name = L"LITTLE_SANTA_RED";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LITTLE_SANTA_BLUE; // 471
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_LITTLESANTA + (index - 468); // magic! ?_?
+    g_MonsterConfig[index].name = L"LITTLE_SANTA_BLUE";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LITTLE_SANTA_WHITE; // 472
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_LITTLESANTA + (index - 468); // magic! ?_?
+    g_MonsterConfig[index].name = L"LITTLE_SANTA_WHITE";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LITTLE_SANTA_BLACK; // 473
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_LITTLESANTA + (index - 468); // magic! ?_?
+    g_MonsterConfig[index].name = L"LITTLE_SANTA_BLACK";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LITTLE_SANTA_ORANGE; // 474
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_LITTLESANTA + (index - 468); // magic! ?_?
+    g_MonsterConfig[index].name = L"LITTLE_SANTA_ORANGE";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LITTLE_SANTA_PINK; // 475
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_LITTLESANTA + (index - 468); // magic! ?_?
+    g_MonsterConfig[index].name = L"LITTLE_SANTA_PINK";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CURSED_SANTA; // 476
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CURSED_SANTA;
+    g_MonsterConfig[index].name = L"CURSED_SANTA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_TRANSFORMED_SNOWMAN; // 477
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_XMAS2008_SNOWMAN;
+    g_MonsterConfig[index].name = L"TRANSFORMED_SNOWMAN";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DELGADO; // 478
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_NPC_SERBIS;
+    g_MonsterConfig[index].name = L"DELGADO";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GATEKEEPER_TITUS; // 479
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_DUEL_NPC_TITUS;
+    g_MonsterConfig[index].name = L"GATEKEEPER_TITUS";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ZOMBIE_FIGHTER; // 480
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ZOMBIE_FIGHTER;
+    g_MonsterConfig[index].name = L"ZOMBIE_FIGHTER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ZOMBIER; // 481
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ZOMBIE_FIGHTER;
+    g_MonsterConfig[index].name = L"ZOMBIER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GLADIATOR; // 482
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GLADIATOR;
+    g_MonsterConfig[index].name = L"GLADIATOR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HELL_GLADIATOR; // 483
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GLADIATOR;
+    g_MonsterConfig[index].name = L"HELL_GLADIATOR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SLAUGHTERER; // 484
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SLAUGTHERER;
+    g_MonsterConfig[index].name = L"SLAUGHTERER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ASH_SLAUGHTERER; // 485
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SLAUGTHERER;
+    g_MonsterConfig[index].name = L"ASH_SLAUGHTERER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOOD_ASSASSIN; // 486
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOOD_ASSASSIN;
+    g_MonsterConfig[index].name = L"BLOOD_ASSASSIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CRUEL_BLOOD_ASSASSIN; // 487
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CRUEL_BLOOD_ASSASSIN;
+    g_MonsterConfig[index].name = L"CRUEL_BLOOD_ASSASSIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_COLD_BLOODED_ASSASSIN; // 488
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOOD_ASSASSIN;
+    g_MonsterConfig[index].name = L"COLD_BLOODED_ASSASSIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BURNING_LAVA_GIANT; // 489
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BURNING_LAVA_GIANT;
+    g_MonsterConfig[index].name = L"BURNING_LAVA_GIANT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LAVA_GIANT; // 490
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_LAVA_GIANT;
+    g_MonsterConfig[index].name = L"LAVA_GIANT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RUTHLESS_LAVA_GIANT; // 491
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_LAVA_GIANT;
+    g_MonsterConfig[index].name = L"RUTHLESS_LAVA_GIANT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MOSS_THE_MERCHANT; // 492
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_MOSS_THE_MERCHANT;
+    g_MonsterConfig[index].name = L"MOSS_THE_MERCHANT";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_DARK_KNIGHT; // 493
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_KNIGHT;
+    g_MonsterConfig[index].name = L"GOLDEN_DARK_KNIGHT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_DEVIL; // 494
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEVIL;
+    g_MonsterConfig[index].name = L"GOLDEN_DEVIL";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_STONE_GOLEM; // 495
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GOLDEN_STONE_GOLEM;
+    g_MonsterConfig[index].name = L"GOLDEN_STONE_GOLEM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_CRUST; // 496
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CRUST;
+    g_MonsterConfig[index].name = L"GOLDEN_CRUST";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_SATYROS; // 497
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SATYROS;
+    g_MonsterConfig[index].name = L"GOLDEN_SATYROS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_TWIN_TAIL; // 498
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_TWIN_TAIL;
+    g_MonsterConfig[index].name = L"GOLDEN_TWIN_TAIL";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_IRON_KNIGHT; // 499
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_IRON_KNIGHT;
+    g_MonsterConfig[index].name = L"GOLDEN_IRON_KNIGHT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_NAPIN; // 500
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_NAPIN;
+    g_MonsterConfig[index].name = L"GOLDEN_NAPIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_GREAT_DRAGON; // 501
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DRAGON;
+    g_MonsterConfig[index].name = L"GOLDEN_GREAT_DRAGON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_RABBIT; // 502
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_RABBIT;
+    g_MonsterConfig[index].name = L"GOLDEN_RABBIT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_TRANSFORMED_PANDA; // 503
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SPIDER;
+    g_MonsterConfig[index].name = L"TRANSFORMED_PANDA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GAYION_THE_GLADIATOR; // 504
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GAYION;
+    g_MonsterConfig[index].name = L"GAYION_THE_GLADIATOR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_JERRY; // 505
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_JERRY;
+    g_MonsterConfig[index].name = L"JERRY";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RAYMOND; // 506
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_RAYMOND;
+    g_MonsterConfig[index].name = L"RAYMOND";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LUCAS; // 507
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_LUCAS;
+    g_MonsterConfig[index].name = L"LUCAS";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_FRED; // 508
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_FRED;
+    g_MonsterConfig[index].name = L"FRED";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HAMMERIZE; // 509
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_HAMMERIZE;
+    g_MonsterConfig[index].name = L"HAMMERIZE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DUAL_BERSERKER; // 510
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DUAL_BERSERKER;
+    g_MonsterConfig[index].name = L"DUAL_BERSERKER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEVIL_LORD; // 511
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEVIL_LORD;
+    g_MonsterConfig[index].name = L"DEVIL_LORD";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_QUARTER_MASTER; // 512
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_QUARTER_MASTER;
+    g_MonsterConfig[index].name = L"QUARTER_MASTER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_COMBAT_INSTRUCTOR; // 513
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_COMBAT_INSTRUCTOR;
+    g_MonsterConfig[index].name = L"COMBAT_INSTRUCTOR";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ATICLES_HEAD; // 514
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ATICLES_HEAD;
+    g_MonsterConfig[index].name = L"ATICLES_HEAD";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_GHOST; // 515
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_GHOST;
+    g_MonsterConfig[index].name = L"DARK_GHOST";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BANSHEE; // 516
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BANSHEE;
+    g_MonsterConfig[index].name = L"BANSHEE";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_HEAD_MOUNTER; // 517
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_HEAD_MOUNTER;
+    g_MonsterConfig[index].name = L"HEAD_MOUNTER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DEFENDER; // 518
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEFENDER;
+    g_MonsterConfig[index].name = L"DEFENDER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_FORSAKER; // 519
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_FORSAKER;
+    g_MonsterConfig[index].name = L"FORSAKER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_OCELOT_THE_LORD; // 520
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_OCELOT;
+    g_MonsterConfig[index].name = L"OCELOT_THE_LORD";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ERIC_THE_GUARD; // 521
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_ERIC_THE_GUARD;
+    g_MonsterConfig[index].name = L"ERIC_THE_GUARD";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ADVISER_JERINTEU; // 522
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"ADVISER_JERINTEU";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
-    //index = MONSTER_TRAP; // 
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_EVIL_GATE; // 524
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_EVIL_GATE;
+    g_MonsterConfig[index].name = L"EVIL_GATE";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LION_GATE; // 525
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_LION_GATE;
+    g_MonsterConfig[index].name = L"LION_GATE";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_STATUE; // 526
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_STATUE;
+    g_MonsterConfig[index].name = L"STATUE";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_STAR_GATE; // 527
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_STAR_GATE;
+    g_MonsterConfig[index].name = L"STAR_GATE";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_RUSH_GATE; // 528
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_RUSH_GATE;
+    g_MonsterConfig[index].name = L"RUSH_GATE";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_TERRIBLE_BUTCHER; // 529
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_TERRIBLE_BUTCHER;
+    g_MonsterConfig[index].name = L"TERRIBLE_BUTCHER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MAD_BUTCHER; // 530
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MAD_BUTCHER;
+    g_MonsterConfig[index].name = L"MAD_BUTCHER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ICE_WALKER2; // 531
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ICE_WALKER;
+    g_MonsterConfig[index].name = L"ICE_WALKER2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LARVA2; // 532
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_LARVA;
+    g_MonsterConfig[index].name = L"LARVA2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DOPPELGANGER; // 533
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"DOPPELGANGER";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DOPPELGANGER_ELF; // 534
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"DOPPELGANGER_ELF";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DOPPELGANGER_KNIGHT; // 535
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"DOPPELGANGER_KNIGHT";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DOPPELGANGER_WIZARD; // 536
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"DOPPELGANGER_WIZARD";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DOPPELGANGER_MG; // 537
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"DOPPELGANGER_MG";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DOPPELGANGER_DL; // 538
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"DOPPELGANGER_DL";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DOPPELGANGER_SUM; // 539
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"DOPPELGANGER_SUM";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
 
-    index = MONSTER_LUGARD; // 540
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
+    index = MONSTER_DOPPELGANGER_LUGARD; // 540
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_DOPPELGANGER_NPC_LUGARD;
+    g_MonsterConfig[index].name = L"LUGARD";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_COMPENSATION_BOX; // 541
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_DOPPELGANGER_NPC_BOX;
+    g_MonsterConfig[index].name = L"COMPENSATION_BOX";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLDEN_COMPENSATION_BOX; // 542
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_DOPPELGANGER_NPC_GOLDENBOX;
+    g_MonsterConfig[index].name = L"GOLDEN_COMPENSATION_BOX";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GENS_DUPRIAN; // 543
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_GENS_NPC_DUPRIAN;
+    g_MonsterConfig[index].name = L"GENS_DUPRIAN";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GENS_VANERT; // 544
-	g_MonsterConfig[index].modelType = MODAL_GENS_NPC_BARNERT;
-	g_MonsterConfig[index].name = L"NPC 544 - Gens Vanert";
-	g_MonsterConfig[index].kind = KIND_NPC;
-	g_MonsterConfig[index].scale = 1.0f;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_GENS_NPC_BARNERT;
+    g_MonsterConfig[index].name = L"GENS_VANERT";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CHRISTINE_THE_GENERAL_GOODS_MERCHANT; // 545
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_CHRISTINE_THE_GENERAL_GOODS_MERCHANT;
+    g_MonsterConfig[index].name = L"CHRISTINE_THE_GENERAL_GOODS_MERCHANT";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_JEWELER_RAUL; // 546
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_JEWELER_RAUL;
+    g_MonsterConfig[index].name = L"JEWELER_RAUL";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MARKET_UNION_MEMBER_JULIA; // 547
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_MARKET_UNION_MEMBER_JULIA;
+    g_MonsterConfig[index].name = L"MARKET_UNION_MEMBER_JULIA";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_TRANSFORMED_SKELETON; // 548
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"TRANSFORMED_SKELETON";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOODY_ORC; // 549
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOODY_ORC;
+    g_MonsterConfig[index].name = L"BLOODY_ORC";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOODY_DEATH_RIDER; // 550
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOODY_DEATH_RIDER;
+    g_MonsterConfig[index].name = L"BLOODY_DEATH_RIDER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOODY_GOLEM; // 551
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOODY_GOLEM;
+    g_MonsterConfig[index].name = L"BLOODY_GOLEM";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BLOODY_WITCH_QUEEN; // 552
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BLOODY_WITCH_QUEEN;
+    g_MonsterConfig[index].name = L"BLOODY_WITCH_QUEEN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BERSERKER_WARRIOR; // 553
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BERSERKER_WARRIOR;
+    g_MonsterConfig[index].name = L"BERSERKER_WARRIOR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_KENTAUROS_WARRIOR; // 554
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_KENTAUROS_WARRIOR;
+    g_MonsterConfig[index].name = L"KENTAUROS_WARRIOR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GIGANTIS_WARRIOR; // 555
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GIGANTIS_WARRIOR;
+    g_MonsterConfig[index].name = L"GIGANTIS_WARRIOR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GENOCIDER_WARRIOR; // 556
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GENOCIDER_WARRIOR;
+    g_MonsterConfig[index].name = L"GENOCIDER_WARRIOR";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SAPI_QUEEN; // 557
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SAPI_QUEEN;
+    g_MonsterConfig[index].name = L"SAPI_QUEEN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ICE_NAPIN; // 558
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ICE_NAPIN;
+    g_MonsterConfig[index].name = L"ICE_NAPIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SHADOW_MASTER; // 559
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SHADOW_MASTER;
+    g_MonsterConfig[index].name = L"SHADOW_MASTER";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_SAPI_QUEEN2; // 560
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_SAPI_QUEEN;
+    g_MonsterConfig[index].name = L"SAPI_QUEEN2";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MEDUSA; // 561
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_MEDUSA;
+    g_MonsterConfig[index].name = L"MEDUSA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_MAMMOTH; // 562
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_MAMMOTH;
+    g_MonsterConfig[index].name = L"DARK_MAMMOTH";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_GIANT; // 563
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_GIANT;
+    g_MonsterConfig[index].name = L"DARK_GIANT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_COOLUTIN; // 564
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_COOLUTIN;
+    g_MonsterConfig[index].name = L"DARK_COOLUTIN";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DARK_IRON_KNIGHT; // 565
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_IRON_KNIGHT;
+    g_MonsterConfig[index].name = L"DARK_IRON_KNIGHT";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_MERCENARY_GUILD_FELICIA; // 566
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_MERCENARY_GUILD_FELICIA;
+    g_MonsterConfig[index].name = L"MERCENARY_GUILD_FELICIA";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_PRIESTESS_VEINA; // 567
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PRIESTESS_VEINA;
+    g_MonsterConfig[index].name = L"PRIESTESS_VEINA";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_WANDERING_MERCHANT_ZYRO; // 568
-    g_MonsterConfig[index].modelType = MODEL_ZAIRO;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_WANDERING_MERCHANT_ZYRO;
+    g_MonsterConfig[index].name = L"WANDERING_MERCHANT_ZYRO";
     g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 568 - 떠돌이상인 자이로";
-    g_MonsterConfig[index].scale = 0.8f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.1f;
-    /*for (int i = 0; i < 6; i++)
-    {
-        Models[MODEL_ZAIRO].Actions[i].PlaySpeed = 0.33f;
-    }*/
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_VENOMOUS_CHAIN_SCORPION; // 569
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_VENOMOUS_CHAIN_SCORPION;
+    g_MonsterConfig[index].name = L"VENOMOUS_CHAIN_SCORPION";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_BONE_SCORPION; // 570
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_BONE_SCORPION;
+    g_MonsterConfig[index].name = L"BONE_SCORPION";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_ORCUS; // 571
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_ORCUS;
+    g_MonsterConfig[index].name = L"ORCUS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_GOLLOCK; // 572
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_GOLLOCK;
+    g_MonsterConfig[index].name = L"GOLLOCK";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CRYPTA; // 573
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CRYPTA;
+    g_MonsterConfig[index].name = L"CRYPTA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CRYPOS; // 574
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CRYPOS;
+    g_MonsterConfig[index].name = L"CRYPOS";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CONDRA; // 575
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_CONDRA;
+    g_MonsterConfig[index].name = L"CONDRA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_NARCONDRA; // 576
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_MODEL_NACONDRA;
+    g_MonsterConfig[index].name = L"NARCONDRA";
+    g_MonsterConfig[index].kind = KIND_MONSTER;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_LEINA_THE_GENERAL_GOODS_MERCHANT; // 577
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_KARUTAN_NPC_REINA;
+    g_MonsterConfig[index].name = L"LEINA_THE_GENERAL_GOODS_MERCHANT";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_WEAPONS_MERCHANT_BOLO; // 578
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_MERCHANT_MAN;
+    g_MonsterConfig[index].name = L"WEAPONS_MERCHANT_BOLO";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_DAVID; // 579
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_LUCKYITEM_NPC;
+    g_MonsterConfig[index].name = L"DAVID";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
+
+	index = 653; // 653
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"653";
+    g_MonsterConfig[index].kind = KIND_NPC;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
+
+    index = 654;
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_PLAYER;
+    g_MonsterConfig[index].name = L"654";
+    g_MonsterConfig[index].kind = KIND_TRAP;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CURSED_STATUE; // 658
+    //* core
+    g_MonsterConfig[index].modelType = MODEL_CURSEDTEMPLE_STATUE;
+    g_MonsterConfig[index].name = L"CURSED_STATUE";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CAPTURED_STONE_STATUE_1; // 659
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GOBLIN; // ?_?
+    g_MonsterConfig[index].name = L"CAPTURED_STONE_STATUE_1";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CAPTURED_STONE_STATUE_2; // 660
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GOBLIN; // ?_?
+    g_MonsterConfig[index].name = L"CAPTURED_STONE_STATUE_2";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CAPTURED_STONE_STATUE_3; // 661
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GOBLIN; // ?_?
+    g_MonsterConfig[index].name = L"CAPTURED_STONE_STATUE_3";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CAPTURED_STONE_STATUE_4; // 662
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GOBLIN; // ?_?
+    g_MonsterConfig[index].name = L"CAPTURED_STONE_STATUE_4";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CAPTURED_STONE_STATUE_5; // 663
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GOBLIN; // ?_?
+    g_MonsterConfig[index].name = L"CAPTURED_STONE_STATUE_5";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CAPTURED_STONE_STATUE_6; // 664
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GOBLIN; // ?_?
+    g_MonsterConfig[index].name = L"CAPTURED_STONE_STATUE_6";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CAPTURED_STONE_STATUE_7; // 665
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GOBLIN; // ?_?
+    g_MonsterConfig[index].name = L"CAPTURED_STONE_STATUE_7";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CAPTURED_STONE_STATUE_8; // 666
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GOBLIN; // ?_?
+    g_MonsterConfig[index].name = L"CAPTURED_STONE_STATUE_8";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
 
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel =
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
     index = MONSTER_CAPTURED_STONE_STATUE_9; // 667
+    //* core
+	g_MonsterConfig[index].modelType = MONSTER_GOBLIN; // ?_?
+    g_MonsterConfig[index].name = L"CAPTURED_STONE_STATUE_9";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
+    g_MonsterConfig[index].scale = 1.0f;
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel = ;
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
 
     index = MONSTER_CAPTURED_STONE_STATUE_10; // 668
-
-
-
-
-
-    ;// --- Populate data based on the original switch ---
-    index = MONSTER_GUARDSMAN; // 224
-    g_MonsterConfig[index].modelType = MODEL_NPC_CLERK;
-    g_MonsterConfig[index].name = L"Clerk";
+    //* core
+    g_MonsterConfig[index].modelType = MONSTER_GOBLIN; // ?_?
+    g_MonsterConfig[index].name = L"MONSTER_CAPTURED_STONE_STATUE_10";
+    g_MonsterConfig[index].kind = KIND_OPERATE;
     g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].notRotateOnMagicHit = true;
-    // c->Object.SubType = rand() % 2 + 10; // Logic for ApplyMonsterSpecificLogic
-    // c->Weapon[0].Type = -1; // Default in struct
-    // c->Weapon[1].Type = -1; // Default in struct
+    // */
+    /* equipment
+
+    g_MonsterConfig[index].weapon1Type =
+    g_MonsterConfig[index].weapon1Level =
+    g_MonsterConfig[index].weapon1ExcellentFlags =
+    g_MonsterConfig[index].weapon1AncientDiscriminator =
+
+    g_MonsterConfig[index].weapon2Type =
+    g_MonsterConfig[index].weapon2Level =
+    g_MonsterConfig[index].weapon2ExcellentFlags =
+    g_MonsterConfig[index].weapon2AncientDiscriminator =
+    g_MonsterConfig[index].helmType =
+    g_MonsterConfig[index].helmLevel =
+    g_MonsterConfig[index].armorType =
+    g_MonsterConfig[index].armorLevel =
+    g_MonsterConfig[index].pantsType =
+    g_MonsterConfig[index].pantsLevel =
+    g_MonsterConfig[index].bootsType =
+    g_MonsterConfig[index].glovesType =
+    g_MonsterConfig[index].glovesLevel =
+    g_MonsterConfig[index].wingsType =
+    g_MonsterConfig[index].wingsLevel =
+    // */
+
+    /* flags
+    g_MonsterConfig[index].notRotateOnMagicHit =
+    g_MonsterConfig[index].initialLevel = ;
+    g_MonsterConfig[index].intialSubType =
+    g_MonsterConfig[index].startsBloody =
+    g_MonsterConfig[index].m_bpcroom =
+    // */
 
-#ifdef ADD_ELF_SUMMON
-    index = 276;
-    g_MonsterConfig[index].modelType = MODEL_GOLDEN_TITAN; // Assumed model, verify
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.45f;
-    g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
-    g_MonsterConfig[index].weapon1Type = MODEL_DARK_BREAKER;
-    g_MonsterConfig[index].weapon1Level = 5; // Level affects appearance/glow
-#endif // ADD_ELF_SUMMON
-
-    // Kalima Gates (152-158)
-    for (index = MONSTER_GATE_TO_KALIMA_1; index <= MONSTER_GATE_TO_KALIMA_7; ++index) {
-        g_MonsterConfig[index].modelType = MODEL_WARCRAFT;
-        g_MonsterConfig[index].name = L"";
-        g_MonsterConfig[index].scale = 1.0f;
-        g_MonsterConfig[index].kind = KIND_NPC;
-        g_MonsterConfig[index].notRotateOnMagicHit = true;
-        g_MonsterConfig[index].enableShadow = true;
-        g_MonsterConfig[index].blendMesh = -1;
-        // o->PriorAnimationFrame = 10.f; // Logic for ApplyMonsterSpecificLogic
-        // o->AnimationFrame = 10;      // Logic for ApplyMonsterSpecificLogic
-    }
-
-    // Chaos Castle Knights (162, 164, 166, 168, 170, 172, 426)
-    int cc_knights[] = { MONSTER_CHAOS_CASTLE_1, MONSTER_CHAOS_CASTLE_3, MONSTER_CHAOS_CASTLE_5, MONSTER_CHAOS_CASTLE_7, MONSTER_CHAOS_CASTLE_9, MONSTER_CHAOS_CASTLE_11, MONSTER_CHAOS_CASTLE_13 };
-    for (int typeVal : cc_knights) {
-        index = typeVal;
-        g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_KNIGHT;
-        //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-        g_MonsterConfig[index].scale = 0.9f;
-        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
-        g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
-        g_MonsterConfig[index].weapon1Level = 0;
-        g_MonsterConfig[index].weapon2Type = MODEL_SWORD_OF_DESTRUCTION;
-        g_MonsterConfig[index].weapon2Level = 0;
-    }
-
-    // Chaos Castle Elf/Wizard (163, 165, 167, 169, 171, 173, 427)
-    int cc_others[] = { MONSTER_CHAOS_CASTLE_2, MONSTER_CHAOS_CASTLE_4, MONSTER_CHAOS_CASTLE_6, MONSTER_CHAOS_CASTLE_8, MONSTER_CHAOS_CASTLE_10, MONSTER_CHAOS_CASTLE_12, MONSTER_CHAOS_CASTLE_14 };
-    for (int typeVal : cc_others) {
-        index = typeVal;
-        // Original randomly picked model/weapon. This MUST be done in ApplyMonsterSpecificLogic
-        // Setting defaults here, override in ApplyMonsterSpecificLogic
-        g_MonsterConfig[index].modelType = MODEL_CHAOS_CASTLE_ELF; // Default model
-        //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-        g_MonsterConfig[index].scale = 0.9f;
-        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
-        // Weapon logic in ApplyMonsterSpecificLogic
-    }
-
-    // Magic Skeletons (89, 95, 112, 118, 124, 130, 143, ?)
-    int magic_skeletons[] = { MONSTER_MAGIC_SKELETON_1, MONSTER_MAGIC_SKELETON_2, MONSTER_MAGIC_SKELETON_3, MONSTER_MAGIC_SKELETON_4, MONSTER_MAGIC_SKELETON_5, MONSTER_MAGIC_SKELETON_6, MONSTER_MAGIC_SKELETON_7, MONSTER_MAGIC_SKELETON_8 };
-    for (int typeVal : magic_skeletons) {
-        index = typeVal;
-        g_MonsterConfig[index].modelType = MODEL_MAGIC_SKELETON;
-        g_MonsterConfig[index].name = L"마법해골";
-        g_MonsterConfig[index].scale = 1.2f;
-        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
-        g_MonsterConfig[index].weapon1Type = MODEL_STAFF;
-        g_MonsterConfig[index].weapon1Level = 11; // Level affects appearance/glow
-    }
-
-    index = MONSTER_CASTLE_GATE; // 131 (Different from Kalima Gate?)
-    g_MonsterConfig[index].modelType = MODEL_CASTLE_GATE;
-    g_MonsterConfig[index].name = L"성문";
-    g_MonsterConfig[index].scale = 0.8f;
-    g_MonsterConfig[index].kind = KIND_OPERATE; // Likely operate/trap? Check usage
-    g_MonsterConfig[index].notRotateOnMagicHit = true;
-    g_MonsterConfig[index].enableShadow = false;
-    g_MonsterConfig[index].isBloodCastleGateOrStatue = true;
-
-    // Saint Statues (132-134)
-    for (index = MONSTER_STATUE_OF_SAINT_1; index <= MONSTER_STATUE_OF_SAINT_3; ++index) {
-        g_MonsterConfig[index].modelType = MODEL_STATUE_OF_SAINT;
-        g_MonsterConfig[index].name = L"성자의석관";
-        g_MonsterConfig[index].scale = 0.8f;
-        g_MonsterConfig[index].kind = KIND_OPERATE; // Likely operate/trap?
-        g_MonsterConfig[index].notRotateOnMagicHit = true;
-        g_MonsterConfig[index].enableShadow = false;
-        g_MonsterConfig[index].isBloodCastleGateOrStatue = true;
-    }
-
-    // Chief Skeleton Warriors (84, 90, 96, 113, 119, 125, 138, ?)
-    int chief_skel_warr[] = { MONSTER_CHIEF_SKELETON_WARRIOR_1, MONSTER_CHIEF_SKELETON_WARRIOR_2, MONSTER_CHIEF_SKELETON_WARRIOR_3, MONSTER_CHIEF_SKELETON_WARRIOR_4, MONSTER_CHIEF_SKELETON_WARRIOR_5, MONSTER_CHIEF_SKELETON_WARRIOR_6, MONSTER_CHIEF_SKELETON_WARRIOR_7, MONSTER_CHIEF_SKELETON_WARRIOR_8 };
-    for (int typeVal : chief_skel_warr) {
-        index = typeVal;
-        g_MonsterConfig[index].modelType = MODEL_ORC;
-        //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-        g_MonsterConfig[index].scale = 1.1f;
-        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
-    }
-
-    // Chief Skeleton Archers (85, 91, 97, 114, 120, 126, 139, ?)
-    int chief_skel_arch[] = { MONSTER_CHIEF_SKELETON_ARCHER_1, MONSTER_CHIEF_SKELETON_ARCHER_2, MONSTER_CHIEF_SKELETON_ARCHER_3, MONSTER_CHIEF_SKELETON_ARCHER_4, MONSTER_CHIEF_SKELETON_ARCHER_5, MONSTER_CHIEF_SKELETON_ARCHER_6, MONSTER_CHIEF_SKELETON_ARCHER_7, MONSTER_CHIEF_SKELETON_ARCHER_8 };
-    for (int typeVal : chief_skel_arch) {
-        index = typeVal;
-        g_MonsterConfig[index].modelType = MODEL_ORC_ARCHER;
-        //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-        g_MonsterConfig[index].scale = 1.1f;
-        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
-        g_MonsterConfig[index].weapon2Type = MODEL_BATTLE_BOW; // Weapon 1 is right hand, weapon 2 is left (bows usually left)
-        g_MonsterConfig[index].weapon2Level = 1;
-    }
-
-    // Dark Skull Soldiers (86, 92, 98, 115, 121, 127, 140, ?)
-    int dark_skulls[] = { MONSTER_DARK_SKULL_SOLDIER_1, MONSTER_DARK_SKULL_SOLDIER_2, MONSTER_DARK_SKULL_SOLDIER_3, MONSTER_DARK_SKULL_SOLDIER_4, MONSTER_DARK_SKULL_SOLDIER_5, MONSTER_DARK_SKULL_SOLDIER_6, MONSTER_DARK_SKULL_SOLDIER_7, MONSTER_DARK_SKULL_SOLDIER_8 };
-    for (int typeVal : dark_skulls) {
-        index = typeVal;
-        g_MonsterConfig[index].modelType = MODEL_DARK_SKULL_SOLDIER;
-        g_MonsterConfig[index].name = L"흑해골전사";
-        g_MonsterConfig[index].scale = 1.0f;
-        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
-        g_MonsterConfig[index].weapon1Type = MODEL_CRESCENT_AXE;
-        g_MonsterConfig[index].weapon1Level = 0;
-        g_MonsterConfig[index].weapon2Type = MODEL_CRESCENT_AXE;
-        g_MonsterConfig[index].weapon2Level = 0;
-    }
-
-    // Giant Ogres (87, 93, 99, 116, 122, 128, 141, ?)
-    int giant_ogres[] = { MONSTER_GIANT_OGRE_1, MONSTER_GIANT_OGRE_2, MONSTER_GIANT_OGRE_3, MONSTER_GIANT_OGRE_4, MONSTER_GIANT_OGRE_5, MONSTER_GIANT_OGRE_6, MONSTER_GIANT_OGRE_7, MONSTER_GIANT_OGRE_8 };
-    for (int typeVal : giant_ogres) {
-        index = typeVal;
-        g_MonsterConfig[index].modelType = MODEL_GIANT_OGRE;
-        g_MonsterConfig[index].name = L"자이언트오우거";
-        g_MonsterConfig[index].scale = 0.8f;
-        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
-    }
-
-    // Red Skeleton Knights (88, 94, 111, 117, 123, 129, 142, ?)
-    int red_skel_knights[] = { MONSTER_RED_SKELETON_KNIGHT_1, MONSTER_RED_SKELETON_KNIGHT_2, MONSTER_RED_SKELETON_KNIGHT_3, MONSTER_RED_SKELETON_KNIGHT_4, MONSTER_RED_SKELETON_KNIGHT_5, MONSTER_RED_SKELETON_KNIGHT_6, MONSTER_RED_SKELETON_KNIGHT_7, MONSTER_RED_SKELETON_KNIGHT_8 };
-    for (int typeVal : red_skel_knights) {
-        index = typeVal;
-        g_MonsterConfig[index].modelType = MODEL_RED_SKELETON_KNIGHT;
-        g_MonsterConfig[index].name = L"붉은해골기사";
-        g_MonsterConfig[index].scale = 1.19f;
-        g_MonsterConfig[index].kind = KIND_MONSTER; // Assumed
-        g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_DRAGON_AXE;
-        // Level depends on BC level - needs logic in ApplyMonsterSpecificLogic
-        // g_MonsterConfig[index].weapon1Level = (!int((7 + (gMapManager.WorldActive - WD_11BLOODCASTLE_END)) / 3)) ? 8 : 0;
-    }
-
-    // Golden Monsters (78-83, 493-502) - Many need specific effect handling
-    index = MONSTER_GOLDEN_GOBLIN; // 78
-    g_MonsterConfig[index].modelType = MODEL_GOBLIN;
-    g_MonsterConfig[index].name = L"고블린"; // Should be Golden Goblin?
-    g_MonsterConfig[index].scale = 0.8f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].weapon1Type = MODEL_AXE;
-    g_MonsterConfig[index].weapon1Level = 9;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-
-    index = MONSTER_GOLDEN_DERKON; // 79
-    g_MonsterConfig[index].modelType = MODEL_DRAGON_;
-    g_MonsterConfig[index].name = L"드래곤"; // Should be Golden Dragon?
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-
-    index = MONSTER_GOLDEN_LIZARD_KING; // 80
-    g_MonsterConfig[index].modelType = MODEL_LIZARD;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.4f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].weapon1Type = MODEL_CHAOS_LIGHTNING_STAFF;
-    g_MonsterConfig[index].weapon1ExcellentFlags = 63;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-
-    index = MONSTER_GOLDEN_VEPAR; // 81
-    g_MonsterConfig[index].modelType = MODEL_VEPAR;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-
-    index = MONSTER_GOLDEN_TANTALLOS; // 82
-    g_MonsterConfig[index].modelType = MODEL_TANTALLOS;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.8f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].blendMesh = 2;
-    g_MonsterConfig[index].blendMeshLight = 1.0f;
-    g_MonsterConfig[index].weapon1Type = MODEL_SWORD_OF_DESTRUCTION;
-    g_MonsterConfig[index].weapon1ExcellentFlags = 63;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-    // CreateJoint(...) // Logic for ApplyMonsterSpecificLogic
-
-    index = MONSTER_GOLDEN_WHEEL; // 83
-    g_MonsterConfig[index].modelType = MODEL_GOLDEN_WHEEL;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.4f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].weapon1Type = MODEL_AQUAGOLD_CROSSBOW;
-    g_MonsterConfig[index].weapon1ExcellentFlags = 63;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-    // CreateJoint(...) // Logic for ApplyMonsterSpecificLogic
-
-    index = MONSTER_GOLDEN_DARK_KNIGHT; // 493
-    g_MonsterConfig[index].modelType = MODEL_DARK_KNIGHT;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 0.8f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].weapon1Type = MODEL_DOUBLE_BLADE;
-    // c->Level = 1; // Need initialLevel field in struct?
-    g_MonsterConfig[index].needsGoldenEffect = true;
-
-    index = MONSTER_GOLDEN_DEVIL; // 494
-    g_MonsterConfig[index].modelType = MODEL_DEVIL;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-
-    index = MONSTER_GOLDEN_STONE_GOLEM; // 495
-    g_MonsterConfig[index].modelType = MODEL_GOLDEN_STONE_GOLEM;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].scale = 1.35f;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-    g_MonsterConfig[index].bonesToRegister.push_back({ L"Monster101_L_Arm", 12 });
-    g_MonsterConfig[index].bonesToRegister.push_back({ L"Monster101_R_Arm", 20 });
-    g_MonsterConfig[index].bonesToRegister.push_back({ L"Monster101_Head", 6 });
-
-    index = MONSTER_GOLDEN_CRUST; // 496
-    g_MonsterConfig[index].modelType = MODEL_CRUST;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_BLADE;
-    g_MonsterConfig[index].weapon1Level = 5;
-    g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
-    g_MonsterConfig[index].weapon2Level = 0;
-    g_MonsterConfig[index].blendMesh = 1;
-    g_MonsterConfig[index].blendMeshLight = 1.0f;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-
-    index = MONSTER_GOLDEN_SATYROS; // 497
-    g_MonsterConfig[index].modelType = MODEL_SATYROS;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.3f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-
-    index = MONSTER_GOLDEN_TWIN_TAIL; // 498
-    g_MonsterConfig[index].modelType = MODEL_TWIN_TAIL;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.3f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-    g_MonsterConfig[index].bonesToRegister.push_back({ L"Twintail_Hair24", 16 });
-    g_MonsterConfig[index].bonesToRegister.push_back({ L"Twintail_Hair32", 24 });
-    // Angle/Gravity/Distance setup in ApplyMonsterSpecificLogic
-
-    index = MONSTER_GOLDEN_IRON_KNIGHT; // 499
-    g_MonsterConfig[index].modelType = MODEL_IRON_KNIGHT;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.5f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-
-    index = MONSTER_GOLDEN_NAPIN; // 500
-    g_MonsterConfig[index].modelType = MODEL_NAPIN;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 0.95f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-
-    index = MONSTER_GOLDEN_GREAT_DRAGON; // 501
-    g_MonsterConfig[index].modelType = MODEL_DRAGON_;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 0.88f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-
-    index = MONSTER_GOLDEN_RABBIT; // 502
-    g_MonsterConfig[index].modelType = MODEL_RABBIT;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.0f * 0.95f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].needsGoldenEffect = true;
-
-    // --- Continue for other monsters ---
-
-    index = MONSTER_MOLT; // 68
-    g_MonsterConfig[index].modelType = MODEL_MOLT;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.4f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-
-
-    index = MONSTER_ALQUAMOS; // 69
-    g_MonsterConfig[index].modelType = MODEL_ALQUAMOS;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].blendMesh = 0;
-
-    index = MONSTER_QUEEN_RAINER; // 70
-    g_MonsterConfig[index].modelType = MODEL_QUEEN_RAINER;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.3f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].blendMesh = -2; // Special blend mode
-    g_MonsterConfig[index].blendMeshLight = 1.0f;
-    g_MonsterConfig[index].enableShadow = false;
-
-    // Crust variants (71, 74, 301)
-    int crust_types[] = { MONSTER_OMEGA_WING, MONSTER_MEGA_CRUST, MONSTER_ALPHA_CRUST };
-    for (int typeVal : crust_types) {
-        index = typeVal;
-        g_MonsterConfig[index].modelType = MODEL_CRUST;
-        //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-        g_MonsterConfig[index].kind = KIND_MONSTER;
-        g_MonsterConfig[index].blendMesh = 1;
-        g_MonsterConfig[index].blendMeshLight = 1.0f;
-        if (MONSTER_MEGA_CRUST == typeVal) {
-            g_MonsterConfig[index].scale = 1.1f;
-            g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_BLADE;
-            g_MonsterConfig[index].weapon1Level = 5;
-            g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
-            g_MonsterConfig[index].weapon2Level = 0;
-        }
-        else { // Omega Wing, Alpha Crust
-            g_MonsterConfig[index].scale = 1.3f;
-            g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_BLADE;
-            g_MonsterConfig[index].weapon1Level = 9;
-            g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
-            g_MonsterConfig[index].weapon2Level = 9;
-        }
-        // Cloth logic in ApplyMonsterSpecificLogic
-    }
-
-    index = MONSTER_PHANTOM_KNIGHT; // 72
-    g_MonsterConfig[index].modelType = MODEL_PHANTOM_KNIGHT;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.45f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].weapon1Type = MODEL_DARK_BREAKER;
-    g_MonsterConfig[index].weapon1Level = 5;
-
-    // Drakan variants (73, 75)
-    int drakan_types[] = { MONSTER_DRAKAN, MONSTER_GREAT_DRAKAN };
-    for (int typeVal : drakan_types) {
-        index = typeVal;
-        g_MonsterConfig[index].modelType = MODEL_DRAKAN;
-        //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-        g_MonsterConfig[index].kind = KIND_MONSTER;
-        g_MonsterConfig[index].notRotateOnMagicHit = true;
-        g_MonsterConfig[index].scale = (typeVal == MONSTER_GREAT_DRAKAN) ? 1.0f : 0.8f;
-        // Mesh blend settings need ApplyMonsterSpecificLogic or direct manipulation after creation
-    }
-
-    index = MONSTER_DARK_PHOENIX; // 77
-    g_MonsterConfig[index].modelType = MODEL_DARK_PHEONIX_SHIELD; // Note: Uses shield model initially
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.0f;
-    g_MonsterConfig[index].kind = KIND_MONSTER;
-    g_MonsterConfig[index].notRotateOnMagicHit = true;
-    // StreamMesh setting needs ApplyMonsterSpecificLogic or direct manipulation
-    // Cloth logic in ApplyMonsterSpecificLogic
-    // Blend/Render logic in RenderCharacter needs adjustment
-
-    index = MONSTER_BULL_FIGHTER; // 0 (Already done above, but ensure defaults are covered)
-    if (g_MonsterConfig[index].modelType == -1) { // Check if default case needs setting
-        g_MonsterConfig[index].modelType = MODEL_BULL_FIGHTER;
-        g_MonsterConfig[index].name = L"소뿔전사";
-        g_MonsterConfig[index].scale = 0.8f;
-        g_MonsterConfig[index].kind = KIND_MONSTER;
-        g_MonsterConfig[index].weapon1Type = MODEL_NIKKEA_AXE;
-        g_MonsterConfig[index].hiddenMesh = 0;
-    }
-
-    // Traps (100-106, 103 is Meteorite, 106 is Laser)
-    index = MONSTER_LANCE_TRAP; // 100
-    g_MonsterConfig[index].modelType = 39; // Hardcoded model ID from switch
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].kind = KIND_TRAP;
-
-    index = MONSTER_IRON_STICK_TRAP; // 101
-    g_MonsterConfig[index].modelType = 40; // Hardcoded model ID from switch
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].kind = KIND_TRAP;
-
-    index = MONSTER_FIRE_TRAP; // 102
-    g_MonsterConfig[index].modelType = 51; // Hardcoded model ID from switch
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].kind = KIND_TRAP;
-
-    index = MONSTER_METEORITE_TRAP; // 103
-    g_MonsterConfig[index].modelType = 25; // Hardcoded model ID from switch
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].kind = KIND_TRAP;
-
-    index = MONSTER_LASER_TRAP; // 106
-    g_MonsterConfig[index].modelType = 51; // Hardcoded model ID from switch
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].kind = KIND_TRAP;
-
-    index = MONSTER_SOCCERBALL; // 200
-    g_MonsterConfig[index].modelType = MODEL_BALL;
-    //g_MonsterConfig[index].name = GetMonsterNameFromScript((EMonsterType)index);
-    g_MonsterConfig[index].scale = 1.8f;
-    g_MonsterConfig[index].kind = KIND_OPERATE; // Or KIND_ETC?
-    g_MonsterConfig[index].blendMesh = 2;
-    // c->Level = 1; // Need initialLevel field?
-
-    index = MONSTER_PET_TRAINER; // 226
-    g_MonsterConfig[index].modelType = MODEL_NPC_BREEDER;
-    g_MonsterConfig[index].name = L"조련사 NPC";
-    g_MonsterConfig[index].kind = KIND_NPC;
-
-#ifdef _PVP_MURDERER_HERO_ITEM
-    index = 227;
-    g_MonsterConfig[index].modelType = MODEL_MASTER;
-    g_MonsterConfig[index].name = L"살인마상점";
-    g_MonsterConfig[index].kind = KIND_NPC;
-
-    index = 228;
-    g_MonsterConfig[index].modelType = MODEL_HERO_SHOP;
-    g_MonsterConfig[index].name = L"영웅상점";
-    g_MonsterConfig[index].kind = KIND_NPC;
-#endif  
-
-    index = MONSTER_JERRIDON; // 370
-    g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].modelType = MODEL_RECOVERY_NPC;
-
-    index = MONSTER_LAHAP; // 256
-    g_MonsterConfig[index].modelType = MODEL_NPC_SERBIS;
-    g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 256 - 세르비스";
-    
-
-    index = MONSTER_WOLF_STATUS; // 204
-    g_MonsterConfig[index].modelType = MODEL_CRYWOLF_STATUE;
-    g_MonsterConfig[index].name = L"NPC 204 - 석상";
-    //g_MonsterConfig[index].live = false;
-
-    for (int i = 0; i < 5; i++) { // 205-209
-        index = MONSTER_WOLF_ALTAR1 + i;
-        g_MonsterConfig[MONSTER_WOLF_ALTAR1 + i].modelType = MODEL_CRYWOLF_ALTAR1 + i;
-        g_MonsterConfig[MONSTER_WOLF_ALTAR1 + i].name = L"제단 - NPC " + std::to_wstring(i + 1);
-        g_MonsterConfig[MONSTER_WOLF_ALTAR1 + i].hiddenMesh = -2;
-        //g_MonsterConfig[MONSTER_WOLF_ALTAR1 + i].position[2] -= 10.0f;
-        //g_MonsterConfig[MONSTER_WOLF_ALTAR1 + i].visible = false;
-        g_MonsterConfig[MONSTER_WOLF_ALTAR1 + i].enableShadow = false;
-    }
-
-    index = MONSTER_ELPHIS; // 368
-    g_MonsterConfig[index].modelType = MODEL_SMELTING_NPC;
-    g_MonsterConfig[index].name = L"NPC 368 - 제련의탑";
-    g_MonsterConfig[index].scale = 2.5f;
-    g_MonsterConfig[index].enableShadow = false;
-    g_MonsterConfig[index].m_bRenderShadow = false;
-
-    index = MONSTER_LEO_THE_HELPER; // 371
-    g_MonsterConfig[index].modelType = MODEL_BC_NPC1;
-	g_MonsterConfig[index].name = L"NPC 371 - BC_NPC1";
-	g_MonsterConfig[index].kind = KIND_NPC;
-	g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
-	g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
-	g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
-	g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
-	g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
-
-    index = MONSTER_FIREWORKS_GIRL; // 379
-    g_MonsterConfig[index].modelType = MODEL_WEDDING_NPC;
-    g_MonsterConfig[index].name = L"NPC 379 - WeddingNPC";
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].enableShadow = false;
-    g_MonsterConfig[index].m_bRenderShadow = false;
-
-
-    // 258, 371, 414
-    int helpers[] = { MONSTER_LUKE_THE_HELPER, MONSTER_LEO_THE_HELPER, MONSTER_HELPER_ELLEN };
-    for (int i = 0; i < sizeof(helpers) / sizeof(helpers[0]); i++) {
-        index = helpers[i];
-        g_MonsterConfig[index].name = L"NPC " + std::to_wstring(i + 1);
-        g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
-        g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
-        g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
-        g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
-        g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
-        g_MonsterConfig[index].weapon1Type = -1;
-        g_MonsterConfig[index].m_bpcroom = true;
-    }
-
-    index = MONSTER_ORACLE_LAYLA; // 259
-    g_MonsterConfig[index].modelType = MODEL_KALIMA_SHOP;
-    g_MonsterConfig[index].name = L"NPC 259 - KalimaShop";
-    //g_MonsterConfig[index].position[2] += 140.0f;
-
-    index = MONSTER_CHAOS_CARD_MASTER; // 375
-    g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].modelType = MODEL_PLAYER;
-    g_MonsterConfig[index].helmType = MODEL_VENOM_MIST_HELM;
-    g_MonsterConfig[index].armorType = MODEL_VENOM_MIST_ARMOR;
-    g_MonsterConfig[index].pantsType = MODEL_VENOM_MIST_PANTS;
-    g_MonsterConfig[index].glovesType = MODEL_VENOM_MIST_GLOVES;
-    g_MonsterConfig[index].bootsType = MODEL_VENOM_MIST_BOOTS;
-    g_MonsterConfig[index].wingsType = MODEL_WINGS_OF_HEAVEN;
-    int iLevel = 9;
-    g_MonsterConfig[index].helmLevel = iLevel;
-    g_MonsterConfig[index].armorLevel = iLevel;
-    g_MonsterConfig[index].pantsLevel = iLevel;
-    g_MonsterConfig[index].glovesLevel = iLevel;
-    g_MonsterConfig[index].bootsLevel = iLevel;
-    g_MonsterConfig[index].wingsLevel = iLevel;
-    g_MonsterConfig[index].weapon1Type = -1;
-
-    // 376, 377
-    int suppliers[] = { MONSTER_PAMELA_THE_SUPPLIER, MONSTER_ANGELA_THE_SUPPLIER };
-    for (int i = 0; i < sizeof(suppliers) / sizeof(suppliers[0]); i++) {
-        index = suppliers[i];
-        g_MonsterConfig[index].modelType = MODEL_BC_NPC1 + i;
-        g_MonsterConfig[index].name = L"공성 " + std::to_wstring(i + 1);
-        //g_MonsterConfig[index].angle[2] = 0.0f;
-        g_MonsterConfig[index].scale = 1.0f;
-        //g_MonsterConfig[index].blendMesh = 1;
-        //g_MonsterConfig[index].blendMeshLight = 1.0f;
-    }
-
-    index = MONSTER_PRIEST_DEVIN; // 406
-    g_MonsterConfig[index].modelType = MODEL_NPC_DEVIN;
-    g_MonsterConfig[index].name = L"NPC 406 - 사제데빈";
-
-    index = MONSTER_WEREWOLF_QUARREL; // 407
-    g_MonsterConfig[index].modelType = MODEL_NPC_QUARREL;
-    g_MonsterConfig[index].name = L"NPC 407 - 웨어울프쿼렐";
-    g_MonsterConfig[index].scale = 1.9f;
-
-    index = MONSTER_GATEKEEPER; // 408
-    g_MonsterConfig[index].modelType = MODEL_NPC_CASTLE_GATE;
-    g_MonsterConfig[index].name = L"NPC 408 - 성문";
-    //g_MonsterConfig[index].position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 240.f;
-    g_MonsterConfig[index].scale = 1.2f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.1f;
-    g_MonsterConfig[index].enableShadow = false;
-    g_MonsterConfig[index].m_bRenderShadow = false;
-
-    index = MONSTER_LUNAR_RABBIT; // 413
-    g_MonsterConfig[index].modelType = MONSTER_MODEL_LUNAR_RABBIT;
-    g_MonsterConfig[index].name = L"NPC 413 - 달토끼";
-    g_MonsterConfig[index].scale = 0.8f;
-    //g_MonsterConfig[index].weapon1Type = -1; // default
-    //g_MonsterConfig[index].weapon2Type = -1; // default
-    //g_MonsterConfig.m_iAnimation = 0;
-    //BoneManager::RegisterBone(c, L"Rabbit_1", 3);		// Bip01 Spine
-    //BoneManager::RegisterBone(c, L"Rabbit_2", 16);		// Bip01 Head
-    //BoneManager::RegisterBone(c, L"Rabbit_3", 15);		// Bip01 Neck1
-    //BoneManager::RegisterBone(c, L"Rabbit_4", 2);		// Bip01 Pelvis
-
-    index = MONSTER_CHERRY_BLOSSOM_TREE; // 451
-    g_MonsterConfig[index].modelType = MODEL_NPC_CHERRYBLOSSOMTREE;
-    g_MonsterConfig[index].name = L"NPC 451 - 벚꽃나무";
-    //g_MonsterConfig[index].scale = 1.0f; // default
-    g_MonsterConfig[index].m_fEdgeScale = 0.0f;
-    g_MonsterConfig[index].m_bRenderShadow = false;
-
-    index = MONSTER_DAVID; // 579
-    g_MonsterConfig[index].modelType = MODEL_LUCKYITEM_NPC;
-    g_MonsterConfig[index].name = L"NPC 579 - Lucy";
-    g_MonsterConfig[index].scale = 0.95f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.2f;
-    //Models[MODEL_LUCKYITEM_NPC].Actions[0].PlaySpeed = 0.45f;
-    //Models[MODEL_LUCKYITEM_NPC].Actions[1].PlaySpeed = 0.5f;
-
-    index = MONSTER_SEED_MASTER; // 452
-    g_MonsterConfig[index].modelType = MODEL_SEED_MASTER;
-    g_MonsterConfig[index].name = L"NPC 452 - 시드마스터";
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.2f;
-
-    index = MONSTER_SEED_RESEARCHER; // 453
-    g_MonsterConfig[index].modelType = MODEL_SEED_INVESTIGATOR;
-    g_MonsterConfig[index].name = L"NPC 453 - 시드연구가";
-    g_MonsterConfig[index].scale = 0.9f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.15f;
-
-    index = MONSTER_REINIT_HELPER; // 464
-    g_MonsterConfig[index].modelType = MODEL_PLAYER;
-    g_MonsterConfig[index].name = L"NPC 464 - 초기화 도우미";
-    //g_MonsterConfig[index].classType = 2;
-    g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
-    g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
-    g_MonsterConfig[index].pantsType = MODEL_PLATE_PANTS;
-    g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
-    g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
-    g_MonsterConfig[index].weapon1Type = MODEL_LIGHT_CROSSBOW;
-    g_MonsterConfig[index].weapon2Type = MODEL_BOLT;
-    g_MonsterConfig[index].m_fEdgeScale = 1.15f;
-
-    index = MONSTER_TRANSFORMED_SNOWMAN; // 477
-    g_MonsterConfig[index].modelType = MODEL_XMAS2008_SNOWMAN;
-    g_MonsterConfig[index].name = L"NPC 477";
-    g_MonsterConfig[index].scale = 1.3f;
-    //g_MonsterConfig[index].lifeTime = 100;
-
-#ifdef PJH_ADD_PANDA_CHANGERING
-    index = MONSTER_TRANSFORMED_PANDA; // 503
-    g_MonsterConfig[index].modelType = MODEL_PLAYER;
-    g_MonsterConfig[index].name = L"NPC 503";
-#endif //PJH_ADD_PANDA_CHANGERING
-
-    index = MONSTER_TRANSFORMED_SKELETON; // 548
-    g_MonsterConfig[index].modelType = MODEL_PLAYER;
-    g_MonsterConfig[index].name = L"NPC 549";
-
-    // 468 - 475
-    int little_santa[] = { MONSTER_LITTLE_SANTA_YELLOW, MONSTER_LITTLE_SANTA_GREEN,
-        MONSTER_LITTLE_SANTA_RED, MONSTER_LITTLE_SANTA_BLUE, MONSTER_LITTLE_SANTA_WHITE,
-        MONSTER_LITTLE_SANTA_BLACK, MONSTER_LITTLE_SANTA_ORANGE, MONSTER_LITTLE_SANTA_PINK };
-    for (int i = 0; i < sizeof(little_santa) / sizeof(little_santa[0]); i++) {
-        index = little_santa[i];
-        //int _Model_NpcIndex = MODEL_LITTLESANTA + (Type - 468); // ? 
-        g_MonsterConfig[index].modelType = MODEL_LITTLESANTA + i;
-        g_MonsterConfig[index].scale = 0.43f;
-
-        //for (int i = 0; i < 5; i++)
-        //{
-        //    if (i < 2 || i == 4)
-        //    {
-        //        //xmassanta_stand_1~2 || xmassanta_idle3
-        //        Models[_Model_NpcIndex].Actions[i].PlaySpeed = 0.4f;
-        //    }
-        //    else// if(i >= 2 && i < 4)
-        //    {
-        //        //xmassanta_idle1~2
-        //        Models[_Model_NpcIndex].Actions[i].PlaySpeed = 0.5f;
-        //    }
-        //}
-        g_MonsterConfig[index].name = L"NPC " + std::to_wstring(i + 1) + L" - LittleSanta";
-    }
-
-    index = MONSTER_DELGADO; // 478
-    g_MonsterConfig[index].modelType = MODEL_NPC_SERBIS;
-    g_MonsterConfig[index].name = L"NPC 478";
-
-    index = MONSTER_GATEKEEPER_TITUS; // 479
-    g_MonsterConfig[index].modelType = MODEL_DUEL_NPC_TITUS;
-    g_MonsterConfig[index].name = L"NPC 479";
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.2f;
-
-    index = MONSTER_MOSS_THE_MERCHANT; // 492
-    g_MonsterConfig[index].modelType = MODEL_GAMBLE_NPC_MOSS;
-    g_MonsterConfig[index].name = L"NPC 492";
-    g_MonsterConfig[index].scale = 0.8f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.1f;
-    //g_MonsterConfig[index].lifeTime = 100;
-    /*for (int i = 0; i < 6; i++)
-    {
-        Models[MODEL_GAMBLE_NPC_MOSS].Actions[i].PlaySpeed = 0.33f;
-    }*/
-
-    index = MONSTER_GOLDEN_RABBIT; // 502
-    g_MonsterConfig[index].modelType = MODEL_RABBIT;
-    g_MonsterConfig[index].name = L"NPC 502";
-    g_MonsterConfig[index].scale = 1.0f * 0.95;
-
-    index = MONSTER_GOLDEN_DARK_KNIGHT; // 493
-    g_MonsterConfig[index].modelType = MONSTER_MODEL_DARK_KNIGHT;
-    g_MonsterConfig[index].name = L"NPC 493";
-    g_MonsterConfig[index].scale = 0.8f;
-    g_MonsterConfig[index].initialLevel = 1;
-    g_MonsterConfig[index].weapon1Type = MODEL_DOUBLE_BLADE;
-
-    index = MONSTER_GOLDEN_DEVIL; // 494
-    g_MonsterConfig[index].modelType = MONSTER_MODEL_DEVIL;
-    g_MonsterConfig[index].name = L"NPC 494";
-    g_MonsterConfig[index].scale = 1.1f;
-
-    index = MONSTER_GOLDEN_STONE_GOLEM; // 495
-    g_MonsterConfig[index].modelType = MONSTER_MODEL_STONE_GOLEM;
-    g_MonsterConfig[index].name = L"NPC 495";
-    g_MonsterConfig[index].scale = 1.35;
-    //BoneManager::RegisterBone(c, L"Monster101_L_Arm", 12);
-    //BoneManager::RegisterBone(c, L"Monster101_R_Arm", 20);
-    //BoneManager::RegisterBone(c, L"Monster101_Head", 6);
-
-    index = MONSTER_GOLDEN_CRUST; // 496
-    g_MonsterConfig[index].modelType = MONSTER_MODEL_CRUST;
-    g_MonsterConfig[index].name = L"NPC 496";
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].weapon1Type = MODEL_THUNDER_BLADE;
-    g_MonsterConfig[index].weapon1Level = 5;
-    g_MonsterConfig[index].weapon2Type = MODEL_LEGENDARY_SHIELD;
-    g_MonsterConfig[index].weapon2Level = 0;
-    g_MonsterConfig[index].blendMesh = 1;
-    g_MonsterConfig[index].blendMeshLight = 1.0f;
-
-    index = MONSTER_GOLDEN_SATYROS; // 497
-    g_MonsterConfig[index].modelType = MODEL_SATYROS;
-    g_MonsterConfig[index].name = L"NPC 497";
-    g_MonsterConfig[index].scale = 1.3f;
-
-    index = MONSTER_GOLDEN_TWIN_TAIL; // 498
-    g_MonsterConfig[index].modelType = MONSTER_MODEL_TWIN_TAIL;
-    g_MonsterConfig[index].name = L"NPC 498";
-    g_MonsterConfig[index].scale = 1.3f;
-    //g_MonsterConfig[index].angle[0] = 0.0f;
-    //g_MonsterConfig[index].gravity = 0.0f;
-    //g_MonsterConfig[index].distance = (float)(rand() % 20) / 10.0f;
-    //BoneManager::RegisterBone(c, L"Twintail_Hair24", 16);
-    //BoneManager::RegisterBone(c, L"Twintail_Hair32", 24);
-
-    index = MONSTER_GOLDEN_IRON_KNIGHT; // 499
-    g_MonsterConfig[index].modelType = MONSTER_MODEL_IRON_KNIGHT;
-    g_MonsterConfig[index].name = L"NPC 499";
-    g_MonsterConfig[index].scale = 1.5f;
-
-    index = MONSTER_GOLDEN_NAPIN; // 500
-    g_MonsterConfig[index].modelType = MONSTER_MODEL_NAPIN;
-    g_MonsterConfig[index].name = L"NPC 500";
-    g_MonsterConfig[index].scale = 0.95f;
-
-    index = MONSTER_GOLDEN_GREAT_DRAGON; // 501
-    g_MonsterConfig[index].modelType = MONSTER_MODEL_DRAGON;
-    g_MonsterConfig[index].name = L"NPC 501";
-    g_MonsterConfig[index].scale = 0.88f;
-
-    index = MONSTER_LUGARD; // 540
-    g_MonsterConfig[index].modelType = MODEL_DOPPELGANGER_NPC_LUGARD;
-    g_MonsterConfig[index].name = L"NPC 540";
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.2f;
-
-    index = MONSTER_COMPENSATION_BOX; // 541
-    g_MonsterConfig[index].modelType = MODEL_DOPPELGANGER_NPC_BOX;
-    g_MonsterConfig[index].name = L"NPC 541";
-    g_MonsterConfig[index].scale = 2.3f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.1f;
-
-    index = MONSTER_GOLDEN_COMPENSATION_BOX; // 542
-    g_MonsterConfig[index].modelType = MODEL_DOPPELGANGER_NPC_BOX;
-    g_MonsterConfig[index].name = L"NPC 542";
-    g_MonsterConfig[index].scale = 3.3f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.1f;
-
-    index = MONSTER_GENS_DUPRIAN; // 543
-    g_MonsterConfig[index].modelType = MODAL_GENS_NPC_DUPRIAN;
-    g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 543";
-
-    index = MONSTER_CHRISTINE_THE_GENERAL_GOODS_MERCHANT; // 545
-    g_MonsterConfig[index].modelType = MODEL_UNITEDMARKETPLACE_CHRISTIN;
-    g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 545";
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.2f;
-
-    index = MONSTER_JEWELER_RAUL; // 546
-    g_MonsterConfig[index].modelType = MODEL_UNITEDMARKETPLACE_RAUL;
-    g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 546";
-    g_MonsterConfig[index].m_fEdgeScale = 1.15f;
-
-    index = MONSTER_MARKET_UNION_MEMBER_JULIA; // 547
-    g_MonsterConfig[index].modelType = MODEL_UNITEDMARKETPLACE_JULIA;
-    g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 547";
-    g_MonsterConfig[index].m_fEdgeScale = 1.1f;
-
-    index = MONSTER_MERCENARY_GUILD_FELICIA; // 566
-    g_MonsterConfig[index].modelType = MODEL_TERSIA;
-    g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 566 - 길드관리인 테르시아";
-    g_MonsterConfig[index].scale = 0.93f;
-
-    index = MONSTER_PRIESTESS_VEINA; // 567
-    g_MonsterConfig[index].modelType = MODEL_PLAYER;
-    g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 567 - 신녀 베이나";
-    //g_MonsterConfig[index].position[2] += 145.0f;
-
-    index = MONSTER_LEINA_THE_GENERAL_GOODS_MERCHANT; // 577
-    g_MonsterConfig[index].modelType = MODEL_KARUTAN_NPC_REINA;
-    g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 577 - 잡화상인 레이나";
-    g_MonsterConfig[index].scale = 1.1f;
-    g_MonsterConfig[index].m_fEdgeScale = 1.2f;
-
-    index = MONSTER_WEAPONS_MERCHANT_BOLO; // 578
-    g_MonsterConfig[index].modelType = MODEL_KARUTAN_NPC_VOLVO;
-    g_MonsterConfig[index].kind = KIND_NPC;
-    g_MonsterConfig[index].name = L"NPC 578 - 무기상인 볼로";
-    g_MonsterConfig[index].scale = 0.9f;
 }
 
 void ApplyMonsterSpecificLogic(CHARACTER* c, EMonsterType Type, const MonsterConfigData& config)
@@ -16903,397 +34235,1639 @@ void ApplyMonsterSpecificLogic(CHARACTER* c, EMonsterType Type, const MonsterCon
     if (!c) return;
     OBJECT* o = &c->Object;
 
-    // Use a switch for type-specific logic based on the original CreateMonster
     switch (Type)
     {
-    case MONSTER_GUARDSMAN: // 224
-        o->SubType = rand() % 2 + 10; // Set random SubType at runtime
-        break;
+        case MONSTER_BULL_FIGHTER: // 0
 
-        // Kalima Gates (Initial Animation State)
-	case MONSTER_GATE_TO_KALIMA_1: // 152
-	case MONSTER_GATE_TO_KALIMA_2: // 153
-	case MONSTER_GATE_TO_KALIMA_3: // 154
-	case MONSTER_GATE_TO_KALIMA_4: // 155
-	case MONSTER_GATE_TO_KALIMA_5: // 156
-	case MONSTER_GATE_TO_KALIMA_6: // 157
-	case MONSTER_GATE_TO_KALIMA_7: // 158
-        o->PriorAnimationFrame = 10.f;
-        o->AnimationFrame = 10.f; // Use float consistently
-        break;
+            break;
+        case MONSTER_HOUND: // 1
 
-        // Chaos Castle Elf/Wizard (Random Model/Weapon)
-	case MONSTER_CHAOS_CASTLE_2: // 163
-	case MONSTER_CHAOS_CASTLE_4: // 165
-	case MONSTER_CHAOS_CASTLE_6: // 167
-	case MONSTER_CHAOS_CASTLE_8: // 169
-	case MONSTER_CHAOS_CASTLE_10: // 171
-	case MONSTER_CHAOS_CASTLE_12: // 173
-	case MONSTER_CHAOS_CASTLE_14: // 427
-    {
-        int randType = rand() % 2;
-        // Note: CreateCharacter was already called with a default modelType (e.g., ELF)
-        // from the config. We override weapons here. Changing the model *might* require
-        // more complex handling (reallocating bones, etc.) depending on CreateCharacter.
-        // Having separate EMonsterType enums might be cleaner.
-        if (randType == 0) { // Elf variant
-            o->Type = MODEL_CHAOS_CASTLE_ELF; // Ensure correct model ID
-            c->Weapon[0].Type = MODEL_GREAT_REIGN_CROSSBOW;
-            c->Weapon[0].Level = 0;
-            c->Weapon[1].Type = -1; // Clear other weapon if needed
-            c->Weapon[1].Level = 0;
-        }
-        else { // Wizard variant
-            o->Type = MODEL_CHAOS_CASTLE_WIZARD; // Ensure correct model ID
-            c->Weapon[0].Type = MODEL_LEGENDARY_STAFF;
-            c->Weapon[0].Level = 0;
-            c->Weapon[1].Type = -1; // Clear other weapon if needed
-            c->Weapon[1].Level = 0;
-        }
-        // TODO: Verify if changing o->Type here causes issues with BoneTransform allocation.
-    }
-    break;
+            break;
+        case MONSTER_BUDGE_DRAGON: // 2
 
-    // Red Skeleton Knight (Conditional Weapon Level based on BC level)
-	case MONSTER_RED_SKELETON_KNIGHT_1: // 88
-	case MONSTER_RED_SKELETON_KNIGHT_2: // 94
-	case MONSTER_RED_SKELETON_KNIGHT_3: // 111
-	case MONSTER_RED_SKELETON_KNIGHT_4: // 117
-    case MONSTER_RED_SKELETON_KNIGHT_5: // 123
-	case MONSTER_RED_SKELETON_KNIGHT_6: // 129
-	case MONSTER_RED_SKELETON_KNIGHT_7: // 142
-	case MONSTER_RED_SKELETON_KNIGHT_8: // 432
-        // This logic depends on the global map manager state when the monster is created.
-        if (gMapManager.InBloodCastle()) // Check if currently in Blood Castle
-        {
-            // Assuming WD_11BLOODCASTLE_END is the end of the BC map range
-            if (!int((7 + (gMapManager.WorldActive - WD_11BLOODCASTLE_END)) / 3))
-                c->Weapon[0].Level = 8;
-            else
-                c->Weapon[0].Level = 0;
-        }
-        else {
-            // Default level if not in Blood Castle (or handle differently)
-            c->Weapon[0].Level = 0; // Or perhaps use config.weapon1Level?
-        }
-        break;
+            break;
+        case MONSTER_SPIDER: // 3
 
-        // Golden Monsters with Joint Effects
-    case MONSTER_GOLDEN_TANTALLOS: // 82
-    case MONSTER_GOLDEN_WHEEL:     // 83
-    case MONSTER_MUTANT_HERO:      // 66
-    case MONSTER_MUTANT:           // 67
-    case MONSTER_DEATH_BEAM_KNIGHT:// 76
-    case MONSTER_BEAM_KNIGHT:      // 65
-    case MONSTER_BLOODY_WOLF:      // 64
-    case MONSTER_GOLDEN_TITAN:     // 53
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
-        break;
+            break;
+        case MONSTER_ELITE_BULL_FIGHTER: // 4
 
-        // Tantallos/Zaikan specific setup
-    case MONSTER_TANTALLOS:        // 31
-    case MONSTER_ZAIKAN:           // 32
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
-        if (Type == MONSTER_ZAIKAN) {
-            o->SubType = 1;
-        }
-        // Note: Weapon for Tantallos/Zaikan is set in config now.
-        break;
+            break;
+        case MONSTER_HELL_HOUND: // 5
 
-        // Iron Wheel (Joint Effects)
-    case MONSTER_IRON_WHEEL:       // 33
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
-        CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
-        break;
+            break;
+        case MONSTER_LICH: // 6
 
-        // Drakan (Mesh Blend Settings - Modifies global model data, use with caution!)
-    case MONSTER_DRAKAN:           // 73
-    case MONSTER_GREAT_DRAKAN:     // 75
-        // WARNING: Modifying Models[] affects all instances of this model type.
-        // Consider if this effect is truly needed or can be achieved differently.
-        Models[o->Type].Meshs[0].NoneBlendMesh = true;
-        Models[o->Type].Meshs[1].NoneBlendMesh = false;
-        Models[o->Type].Meshs[2].NoneBlendMesh = false;
-        Models[o->Type].Meshs[3].NoneBlendMesh = true;
-        Models[o->Type].Meshs[4].NoneBlendMesh = true;
-        break;
+            break;
+        case MONSTER_GIANT: // 7
 
-        // Dark Phoenix (StreamMesh Setting - Modifies global model data)
-    case MONSTER_DARK_PHOENIX:     // 77
-        // WARNING: Modifying Models[] affects all instances of this model type.
-        Models[MODEL_DARK_PHEONIX_SHIELD].StreamMesh = 0;
-        break;
+            break;
+        case MONSTER_POISON_BULL: // 8
 
-        // Orc Archer variants (Hidden Mesh) - Already handled by config.hiddenMesh
-    case MONSTER_ORC_ARCHER:             // 5
-    case MONSTER_ORC_ARCHER_OF_DOOM:     // 58
-        // o->HiddenMesh = 1; // Set via config now
-        break;
-        // Elite Orc variants (Hidden Mesh) - Already handled by config.hiddenMesh
-    case MONSTER_ELITE_ORC:              // 6
-    case MONSTER_ORC_SOLDIER_OF_DOOM:    // 57
-        // o->HiddenMesh = 2; // Set via config now
-        break;
+            break;
+        case MONSTER_THUNDER_LICH: // 9
 
-        // Poison Bull (Apply Buff)
-    case MONSTER_POISON_BULL: // 8
-        g_CharacterRegisterBuff(o, eDeBuff_Poison); // Apply initial buff
-        break;
+            break;
+        case MONSTER_DARK_KNIGHT: // 10
 
-        // Ghost (Alpha Target, Blood)
-    case MONSTER_GHOST: // 11
-        o->AlphaTarget = 0.4f; // Set specific alpha
-        c->Blood = true;       // Set initial state flag (or use config.startsBloody)
-        c->MoveSpeed = 15;     // Override default move speed
-        break;
+            break;
+        case MONSTER_GHOST: // 11
 
-        // Player Model NPCs (Apply Body Parts, Scale, PK, etc.)
-    case MONSTER_CURSED_WIZARD: // 34
-    case MONSTER_MARLON: // 229
-    case MONSTER_ALEX: // 230
-    case MONSTER_CROSSBOW_GUARD: // 247
-    case MONSTER_WANDERING_MERCHANT_MARTIN: // 248
-    case MONSTER_BERDYSH_GUARD: // 249
-    case MONSTER_WANDERING_MERCHANT_HAROLD: // 250
-    case MONSTER_POTION_GIRL_AMY: // 253
-    case MONSTER_LUMEN_THE_BARMAID: // 255
-    //case MONSTER_ELF_SOLDIER: // 257 (Handled separately below due to MakeElfHelper)
-    case MONSTER_LUKE_THE_HELPER: // 258
-    case MONSTER_LEO_THE_HELPER: // 371
-    case MONSTER_HELPER_ELLEN: // 414
-    case MONSTER_CHAOS_CARD_MASTER: // 375
-    case MONSTER_REINIT_HELPER: // 464
-    case MONSTER_SKELETON_WARRIOR: // 14
-    case MONSTER_DEATH_KING:       // 55
-    case MONSTER_DEATH_BONE:       // 56
-    case MONSTER_SKELETON_ARCHER: // 15
-    case MONSTER_ELITE_SKELETON: // 16
-    case MONSTER_ELITE_SKILL_SOLDIER: // 372
-    case MONSTER_JACK_OLANTERN: // 373
-    case MONSTER_SANTA: // 374
-    case MONSTER_GAMEMASTER: // 378
-    case MONSTER_TRANSFORMED_PANDA: // 503
-    case MONSTER_TRANSFORMED_SKELETON: // 548
-    //case MONSTER_GOLDEN_ARCHER: // 236 (Handled separately below due to SubType)
-    {
-        // Apply BodyPart items from config data
-        if (config.helmType != -1) {
-            c->BodyPart[BODYPART_HELM].Type = config.helmType;
-            c->BodyPart[BODYPART_HELM].Level = config.helmLevel;
-        }
-        if (config.armorType != -1) {
-            c->BodyPart[BODYPART_ARMOR].Type = config.armorType;
-            c->BodyPart[BODYPART_ARMOR].Level = config.armorLevel;
-        }
-        if (config.pantsType != -1) {
-            c->BodyPart[BODYPART_PANTS].Type = config.pantsType;
-            c->BodyPart[BODYPART_PANTS].Level = config.pantsLevel;
-        }
-        if (config.glovesType != -1) {
-            c->BodyPart[BODYPART_GLOVES].Type = config.glovesType;
-            c->BodyPart[BODYPART_GLOVES].Level = config.glovesLevel;
-        }
-        if (config.bootsType != -1) {
-            c->BodyPart[BODYPART_BOOTS].Type = config.bootsType;
-            c->BodyPart[BODYPART_BOOTS].Level = config.bootsLevel;
-        }
-        if (config.wingsType != -1) {
-            c->Wing.Type = config.wingsType;
-            c->Wing.Level = config.wingsLevel;
-        }
+            break;
+        case MONSTER_LARVA: // 12
 
-        // Apply specific SubTypes for player models that use them
-        switch (Type) {
+            break;
+        case MONSTER_HELL_SPIDER: // 13
+
+            break;
         case MONSTER_SKELETON_WARRIOR: // 14
+
+            break;
+        case MONSTER_SKELETON_ARCHER: // 15
+
+            break;
+        case MONSTER_ELITE_SKELETON: // 16
+
+            break;
+        case MONSTER_CYCLOPS: // 17
+
+            break;
+        case MONSTER_GORGON: // 18
+
+            break;
+        case MONSTER_YETI: // 19
+
+            break;
+        case MONSTER_ELITE_YETI: // 20
+
+            break;
+        case MONSTER_ASSASSIN: // 21
+
+            break;
+        case MONSTER_ICE_MONSTER: // 22
+
+            break;
+        case MONSTER_HOMMERD: // 23
+
+            break;
+        case MONSTER_WORM: // 24
+
+            break;
+        case MONSTER_ICE_QUEEN: // 25
+
+            break;
+        case MONSTER_GOBLIN: // 26
+
+            break;
+        case MONSTER_CHAIN_SCORPION: // 27
+
+            break;
+        case MONSTER_BEETLE_MONSTER: // 28
+
+            break;
+        case MONSTER_HUNTER: // 29
+
+            break;
+        case MONSTER_FOREST_MONSTER: // 30
+
+            break;
+        case MONSTER_AGON: // 31
+
+            break;
+        case MONSTER_STONE_GOLEM: // 32
+
+            break;
+        case MONSTER_ELITE_GOBLIN: // 33
+
+            break;
+        case MONSTER_CURSED_WIZARD: // 34
+
+            break;
+        case MONSTER_DEATH_GORGON: // 35
+
+            break;
+        case MONSTER_SHADOW: // 36
+
+            break;
+        case MONSTER_DEVIL: // 37
+
+            break;
+        case MONSTER_BALROG: // 38
+
+            break;
+        case MONSTER_POISON_SHADOW: // 39
+
+            break;
+        case MONSTER_DEATH_KNIGHT: // 40
+
+            break;
+        case MONSTER_DEATH_COW: // 41
+
+            break;
+        case MONSTER_RED_DRAGON: // 42
+
+            break;
+        case MONSTER_GOLDEN_BUDGE_DRAGON: // 43
+
+            break;
+        case MONSTER_GOLDEN_DRAGON: // 44
+
+            break;
+        case MONSTER_BAHAMUT: // 45
+
+            break;
+        case MONSTER_VEPAR: // 46
+
+            break;
+        case MONSTER_VALKYRIE: // 47
+
+            break;
+        case MONSTER_LIZARD_KING: // 48
+
+            break;
+        case MONSTER_HYDRA: // 49
+
+            break;
+        case MONSTER_SEA_WORM: // 50
+
+            break;
+        case MONSTER_GREAT_BAHAMUT: // 51
+
+            break;
+        case MONSTER_SILVER_VALKYRIE: // 52
+
+            break;
+        case MONSTER_GOLDEN_TITAN: // 53
+
+            break;
+        case MONSTER_GOLDEN_SOLDIER: // 54
+
+            break;
         case MONSTER_DEATH_KING: // 55
-		case MONSTER_DEATH_BONE: // 56
-            o->SubType = MODEL_SKELETON1;
-            c->Blood = true; // Set blood flag for skeletons
-            break;
-		case MONSTER_SKELETON_ARCHER: // 15
-            o->SubType = MODEL_SKELETON2;
-            c->Blood = true;
-            break;
-		case MONSTER_ELITE_SKELETON: // 16
-            o->SubType = MODEL_SKELETON3;
-            c->Blood = true;
-            break;
-		case MONSTER_ELITE_SKILL_SOLDIER: // 372
-            o->SubType = MODEL_SKELETON_PCBANG;
-            break;
-		case MONSTER_JACK_OLANTERN: // 373
-            o->SubType = MODEL_HALLOWEEN;
-            break;
-		case MONSTER_SANTA: // 374
-            o->SubType = MODEL_XMAS_EVENT_CHANGE_GIRL;
-            break;
-		case MONSTER_GAMEMASTER: // 378
-            o->SubType = MODEL_GM_CHARACTER;
-            break;
-		case MONSTER_TRANSFORMED_PANDA: // 503
-            o->SubType = MODEL_PANDA;
-            break;
-		case MONSTER_TRANSFORMED_SKELETON: // 548
-            o->SubType = MODEL_SKELETON_CHANGED;
-            break;
-		case MONSTER_GOLDEN_ARCHER: // 236
-            o->SubType = MODEL_SKELETON2;
-            break;
-		case MONSTER_CHAOS_CARD_MASTER: // 375
-            o->SubType = Type; // Set SubType to match monster type
-            break;
-        }
 
-        // Apply other specific logic
-        if (Type == MONSTER_CURSED_WIZARD) {
-            c->PK = PVP_MURDERER2;
-            if (gMapManager.InDevilSquare()) {
-                o->Scale = 1.0f; // Override scale only in Devil Square
-            }
-        }
-        if (Type == MONSTER_LUKE_THE_HELPER || Type == MONSTER_LEO_THE_HELPER || Type == MONSTER_HELPER_ELLEN) {
-            o->m_bpcroom = true; // Set specific flag
-        }
+            break;
+        case MONSTER_DEATH_BONE: // 56
 
-        SetCharacterScale(c); // Call scale adjustment after setting parts
+            break;
+        case MONSTER_IRON_WHEEL: // 57
+
+            break;
+        case MONSTER_TANTALLOS: // 58
+
+            break;
+        case MONSTER_ZAIKAN: // 59
+
+            break;
+        case MONSTER_BLOODY_WOLF: // 60
+
+            break;
+        case MONSTER_BEAM_KNIGHT: // 61
+
+            break;
+        case MONSTER_MUTANT: // 62
+
+            break;
+        case MONSTER_DEATH_BEAM_KNIGHT: // 63
+
+            break;
+        case MONSTER_ORC_ARCHER: // 64
+
+            break;
+        case MONSTER_ELITE_ORC: // 65
+
+            break;
+        case MONSTER_CURSED_KING: // 66
+
+            break;
+        case MONSTER_METAL_BALROG: // 67
+
+            break;
+        case MONSTER_MOLT: // 68
+
+            break;
+        case MONSTER_ALQUAMOS: // 69
+
+            break;
+        case MONSTER_QUEEN_RAINER: // 70
+
+            break;
+        case MONSTER_MEGA_CRUST: // 71
+
+            break;
+        case MONSTER_PHANTOM_KNIGHT: // 72
+
+            break;
+        case MONSTER_DRAKAN: // 73
+
+            break;
+        case MONSTER_ALPHA_CRUST: // 74
+
+            break;
+        case MONSTER_GREAT_DRAKAN: // 75
+
+            break;
+        case MONSTER_DARK_PHOENIX_SHIELD: // 76
+
+            break;
+        case MONSTER_DARK_PHOENIX: // 77
+
+            break;
+        case MONSTER_GOLDEN_GOBLIN: // 78
+
+            break;
+        case MONSTER_GOLDEN_DERKON: // 79
+
+            break;
+        case MONSTER_GOLDEN_LIZARD_KING: // 80
+
+            break;
+        case MONSTER_GOLDEN_VEPAR: // 81
+
+            break;
+        case MONSTER_GOLDEN_TANTALLOS: // 82
+
+            break;
+        case MONSTER_GOLDEN_WHEEL: // 83
+
+            break;
+        case MONSTER_CHIEF_SKELETON_WARRIOR_1: // 84
+
+            break;
+        case MONSTER_CHIEF_SKELETON_ARCHER_1: // 85
+
+            break;
+        case MONSTER_DARK_SKULL_SOLDIER_1: // 86
+
+            break;
+        case MONSTER_GIANT_OGRE_1: // 87
+
+            break;
+        case MONSTER_RED_SKELETON_KNIGHT_1: // 88
+
+            break;
+        case MONSTER_MAGIC_SKELETON_1: // 89
+
+            break;
+        case MONSTER_CHIEF_SKELETON_WARRIOR_2: // 90
+
+            break;
+        case MONSTER_CHIEF_SKELETON_ARCHER_2: // 91
+
+            break;
+        case MONSTER_DARK_SKULL_SOLDIER_2: // 92
+
+            break;
+        case MONSTER_GIANT_OGRE_2: // 93
+
+            break;
+        case MONSTER_RED_SKELETON_KNIGHT_2: // 94
+
+            break;
+        case MONSTER_MAGIC_SKELETON_2: // 95
+
+            break;
+        case MONSTER_CHIEF_SKELETON_WARRIOR_3: // 96
+
+            break;
+        case MONSTER_CHIEF_SKELETON_ARCHER_3: // 97
+
+            break;
+        case MONSTER_DARK_SKULL_SOLDIER_3: // 98
+
+            break;
+        case MONSTER_GIANT_OGRE_3: // 99
+
+            break;
+        case MONSTER_LANCE_TRAP: // 100
+
+            break;
+        case MONSTER_IRON_STICK_TRAP: // 101
+
+            break;
+        case MONSTER_FIRE_TRAP: // 102
+
+            break;
+        case MONSTER_METEORITE_TRAP: // 103
+
+            break;
+        case MONSTER_TRAP: // 104
+
+            break;
+        case MONSTER_CANNON_TRAP: // 105
+
+            break;
+        case MONSTER_LASER_TRAP: // 106
+
+            break;
+        case MONSTER_RED_SKELETON_KNIGHT_3: // 111
+
+            break;
+        case MONSTER_MAGIC_SKELETON_3: // 112
+
+            break;
+        case MONSTER_CHIEF_SKELETON_WARRIOR_4: // 113
+
+            break;
+        case MONSTER_CHIEF_SKELETON_ARCHER_4: // 114
+
+            break;
+        case MONSTER_DARK_SKULL_SOLDIER_4: // 115
+
+            break;
+        case MONSTER_GIANT_OGRE_4: // 116
+
+            break;
+        case MONSTER_RED_SKELETON_KNIGHT_4: // 117
+
+            break;
+        case MONSTER_MAGIC_SKELETON_4: // 118
+
+            break;
+        case MONSTER_CHIEF_SKELETON_WARRIOR_5: // 119
+
+            break;
+        case MONSTER_CHIEF_SKELETON_ARCHER_5: // 120
+
+            break;
+        case MONSTER_DARK_SKULL_SOLDIER_5: // 121
+
+            break;
+        case MONSTER_GIANT_OGRE_5: // 122
+
+            break;
+        case MONSTER_RED_SKELETON_KNIGHT_5: // 123
+
+            break;
+        case MONSTER_MAGIC_SKELETON_5: // 124
+
+            break;
+        case MONSTER_CHIEF_SKELETON_WARRIOR_6: // 125
+
+            break;
+        case MONSTER_CHIEF_SKELETON_ARCHER_6: // 126
+
+            break;
+        case MONSTER_DARK_SKULL_SOLDIER_6: // 127
+
+            break;
+        case MONSTER_GIANT_OGRE_6: // 128
+
+            break;
+        case MONSTER_RED_SKELETON_KNIGHT_6: // 129
+
+            break;
+        case MONSTER_MAGIC_SKELETON_6: // 130
+
+            break;
+        case MONSTER_CASTLE_GATE: // 131
+
+            break;
+        case MONSTER_STATUE_OF_SAINT_1: // 132
+
+            break;
+        case MONSTER_STATUE_OF_SAINT_2: // 133
+
+            break;
+        case MONSTER_STATUE_OF_SAINT_3: // 134
+
+            break;
+        case MONSTER_WHITE_WIZARD: // 135
+
+            break;
+        case MONSTER_ORC_SOLDIER_OF_DOOM: // 136
+
+            break;
+        case MONSTER_ORC_ARCHER_OF_DOOM: // 137
+
+            break;
+        case MONSTER_CHIEF_SKELETON_WARRIOR_7: // 138
+
+            break;
+        case MONSTER_CHIEF_SKELETON_ARCHER_7: // 139
+
+            break;
+        case MONSTER_DARK_SKULL_SOLDIER_7: // 140
+
+            break;
+        case MONSTER_GIANT_OGRE_7: // 141
+
+            break;
+        case MONSTER_RED_SKELETON_KNIGHT_7: // 142
+
+            break;
+        case MONSTER_MAGIC_SKELETON_7: // 143
+
+            break;
+        case MONSTER_DEATH_ANGEL_1: // 144
+
+            break;
+        case MONSTER_DEATH_CENTURION_1: // 145
+
+            break;
+        case MONSTER_BLOOD_SOLDIER_1: // 146
+
+            break;
+        case MONSTER_AEGIS_1: // 147
+
+            break;
+        case MONSTER_ROGUE_CENTURION_1: // 148
+
+            break;
+        case MONSTER_NECRON_1: // 149
+
+            break;
+        case MONSTER_BALI: // 150
+
+            break;
+        case MONSTER_SOLDIER: // 151
+
+            break;
+        case MONSTER_GATE_TO_KALIMA_1: // 152
+
+            break;
+        case MONSTER_GATE_TO_KALIMA_2: // 153
+
+            break;
+        case MONSTER_GATE_TO_KALIMA_3: // 154
+
+            break;
+        case MONSTER_GATE_TO_KALIMA_4: // 155
+
+            break;
+        case MONSTER_GATE_TO_KALIMA_5: // 156
+
+            break;
+        case MONSTER_GATE_TO_KALIMA_6: // 157
+
+            break;
+        case MONSTER_GATE_TO_KALIMA_7: // 158
+
+            break;
+        case MONSTER_SCHRIKER_1: // 160
+
+            break;
+        case MONSTER_ILLUSION_OF_KUNDUN_1: // 161
+
+            break;
+        case MONSTER_CHAOS_CASTLE_1: // 162
+
+            break;
+        case MONSTER_CHAOS_CASTLE_2: // 163
+
+            break;
+        case MONSTER_CHAOS_CASTLE_3: // 164
+
+            break;
+        case MONSTER_CHAOS_CASTLE_4: // 165
+
+            break;
+        case MONSTER_CHAOS_CASTLE_5: // 166
+
+            break;
+        case MONSTER_CHAOS_CASTLE_6: // 167
+
+            break;
+        case MONSTER_CHAOS_CASTLE_7: // 168
+
+            break;
+        case MONSTER_CHAOS_CASTLE_8: // 169
+
+            break;
+        case MONSTER_CHAOS_CASTLE_9: // 170
+
+            break;
+        case MONSTER_CHAOS_CASTLE_10: // 171
+
+            break;
+        case MONSTER_CHAOS_CASTLE_11: // 172
+
+            break;
+        case MONSTER_CHAOS_CASTLE_12: // 173
+
+            break;
+        case MONSTER_DEATH_ANGEL_2: // 174
+
+            break;
+        case MONSTER_DEATH_CENTURION_2: // 175
+
+            break;
+        case MONSTER_BLOOD_SOLDIER_2: // 176
+
+            break;
+        case MONSTER_AEGIS_2: // 177
+
+            break;
+        case MONSTER_ROGUE_CENTURION_2: // 178
+
+            break;
+        case MONSTER_NECRON_2: // 179
+
+            break;
+        case MONSTER_SCHRIKER_2: // 180
+
+            break;
+        case MONSTER_ILLUSION_OF_KUNDUN_2: // 181
+
+            break;
+        case MONSTER_DEATH_ANGEL_3: // 182
+
+            break;
+        case MONSTER_DEATH_CENTURION_3: // 183
+
+            break;
+        case MONSTER_BLOOD_SOLDIER_3: // 184
+
+            break;
+        case MONSTER_AEGIS_3: // 185
+
+            break;
+        case MONSTER_ROGUE_CENTURION_3: // 186
+
+            break;
+        case MONSTER_NECRON_3: // 187
+
+            break;
+        case MONSTER_SCHRIKER_3: // 188
+
+            break;
+        case MONSTER_ILLUSION_OF_KUNDUN_3: // 189
+
+            break;
+        case MONSTER_DEATH_ANGEL_4: // 190
+
+            break;
+        case MONSTER_DEATH_CENTURION_4: // 191
+
+            break;
+        case MONSTER_BLOOD_SOLDIER_4: // 192
+
+            break;
+        case MONSTER_AEGIS_4: // 193
+
+            break;
+        case MONSTER_ROGUE_CENTURION_4: // 194
+
+            break;
+        case MONSTER_NECRON_4: // 195
+
+            break;
+        case MONSTER_SCHRIKER_4: // 196
+
+            break;
+        case MONSTER_ILLUSION_OF_KUNDUN_4: // 197
+
+            break;
+        case MONSTER_SOCCERBALL: // 200
+
+            break;
+        case MONSTER_WOLF_STATUS: // 204
+
+            break;
+        case MONSTER_CRYWOLF_ALTAR1: // 205
+
+            break;
+        case MONSTER_CRYWOLF_ALTAR2: // 206
+
+            break;
+        case MONSTER_CRYWOLF_ALTAR3: // 207
+
+            break;
+        case MONSTER_CRYWOLF_ALTAR4: // 208
+
+            break;
+        case MONSTER_CRYWOLF_ALTAR5: // 209
+
+            break;
+        case MONSTER_SHIELD: // 215
+
+            break;
+        case MONSTER_CROWN: // 216
+
+            break;
+        case MONSTER_CROWN_SWITCH1: // 217
+
+            break;
+        case MONSTER_CROWN_SWITCH2: // 218
+
+            break;
+        case MONSTER_CASTLE_GATE_SWITCH: // 219
+
+            break;
+        case MONSTER_GUARD: // 220
+
+            break;
+        case MONSTER_SLINGSHOT_ATTACK: // 221
+
+            break;
+        case MONSTER_SLINGSHOT_DEFENSE: // 222
+
+            break;
+        case MONSTER_SENIOR: // 223
+
+            break;
+        case MONSTER_GUARDSMAN: // 224
+
+            break;
+        case MONSTER_PET_TRAINER: // 226
+
+            break;
+        case MONSTER_MARLON: // 229
+
+            break;
+        case MONSTER_ALEX: // 230
+
+            break;
+        case MONSTER_THOMPSON_THE_MERCHANT: // 231
+
+            break;
+        case MONSTER_ARCHANGEL: // 232
+
+            break;
+        case MONSTER_MESSENGER_OF_ARCH: // 233
+
+            break;
+        case MONSTER_GOBLIN_GATE: // 234
+
+            break;
+        case MONSTER_SEVINA_THE_PRIESTESS: // 235
+
+            break;
+        case MONSTER_GOLDEN_ARCHER: // 236
+
+            break;
+        case MONSTER_CHARON: // 237
+
+            break;
+        case MONSTER_CHAOS_GOBLIN: // 238
+
+            break;
+        case MONSTER_ARENA_GUARD: // 239
+
+            break;
+        case MONSTER_BAZ_THE_VAULT_KEEPER: // 240
+
+            break;
+        case MONSTER_GUILD_MASTER: // 241
+
+            break;
+        case MONSTER_ELF_LALA: // 242
+
+            break;
+        case MONSTER_EO_THE_CRAFTSMAN: // 243
+
+            break;
+        case MONSTER_CAREN_THE_BARMAID: // 244
+
+            break;
+        case MONSTER_IZABEL_THE_WIZARD: // 245
+
+            break;
+        case MONSTER_ZIENNA_THE_WEAPONS_MERCHANT: // 246
+
+            break;
+        case MONSTER_CROSSBOW_GUARD: // 247
+
+            break;
+        case MONSTER_WANDERING_MERCHANT_MARTIN: // 248
+
+            break;
+        case MONSTER_BERDYSH_GUARD: // 249
+
+            break;
+        case MONSTER_WANDERING_MERCHANT_HAROLD: // 250
+
+            break;
+        case MONSTER_HANZO_THE_BLACKSMITH: // 251
+
+            break;
+        case MONSTER_POTION_GIRL_AMY: // 253
+
+            break;
+        case MONSTER_PASI_THE_MAGE: // 254
+
+            break;
+        case MONSTER_LUMEN_THE_BARMAID: // 255
+
+            break;
+        case MONSTER_LAHAP: // 256
+
+            break;
+        case MONSTER_ELF_SOLDIER: // 257
+
+            break;
+        case MONSTER_LUKE_THE_HELPER: // 258
+
+            break;
+        case MONSTER_ORACLE_LAYLA: // 259
+
+            break;
+        case MONSTER_DEATH_ANGEL_5: // 260
+
+            break;
+        case MONSTER_DEATH_CENTURION_5: // 261
+
+            break;
+        case MONSTER_BLOOD_SOLDIER_5: // 262
+
+            break;
+        case MONSTER_AEGIS_5: // 263
+
+            break;
+        case MONSTER_ROGUE_CENTURION_5: // 264
+
+            break;
+        case MONSTER_NECRON_5: // 265
+
+            break;
+        case MONSTER_SCHRIKER_5: // 266
+
+            break;
+        case MONSTER_ILLUSION_OF_KUNDUN_5: // 267
+
+            break;
+        case MONSTER_DEATH_ANGEL_6: // 268
+
+            break;
+        case MONSTER_DEATH_CENTURION_6: // 269
+
+            break;
+        case MONSTER_BLOOD_SOLDIER_6: // 270
+
+            break;
+        case MONSTER_AEGIS_6: // 271
+
+            break;
+        case MONSTER_ROGUE_CENTURION_6: // 272
+
+            break;
+        case MONSTER_NECRON_6: // 273
+
+            break;
+        case MONSTER_SCHRIKER_6: // 274
+
+            break;
+        case MONSTER_ILLUSION_OF_KUNDUN_7: // 275
+
+            break;
+        case MONSTER_CASTLE_GATE1: // 277
+
+            break;
+        case MONSTER_LIFE_STONE: // 278
+
+            break;
+        case MONSTER_GUARDIAN_STATUE: // 283
+
+            break;
+        case MONSTER_GUARDIAN: // 285
+
+            break;
+        case MONSTER_BATTLE_GUARD1: // 286
+
+            break;
+        case MONSTER_BATTLE_GUARD2: // 287
+
+            break;
+        case MONSTER_CANON_TOWER: // 288
+
+            break;
+        case MONSTER_LIZARD_WARRIOR: // 290
+
+            break;
+        case MONSTER_FIRE_GOLEM: // 291
+
+            break;
+        case MONSTER_QUEEN_BEE: // 292
+
+            break;
+        case MONSTER_POISON_GOLEM: // 293
+
+            break;
+        case MONSTER_AXE_WARRIOR: // 294
+
+            break;
+        case MONSTER_EROHIM: // 295
+
+            break;
+        case MONSTER_PK_DARK_KNIGHT: // 297
+
+            break;
+        case MONSTER_MUTANT_HERO: // 300
+
+            break;
+        case MONSTER_OMEGA_WING: // 301
+
+            break;
+        case MONSTER_AXE_HERO: // 302
+
+            break;
+        case MONSTER_GIGAS_GOLEM: // 303
+
+            break;
+        case MONSTER_WITCH_QUEEN: // 304
+
+            break;
+        case MONSTER_BLUE_GOLEM: // 305
+
+            break;
+        case MONSTER_DEATH_RIDER: // 306
+
+            break;
+        case MONSTER_FOREST_ORC: // 307
+
+            break;
+        case MONSTER_DEATH_TREE: // 308
+
+            break;
+        case MONSTER_HELL_MAINE: // 309
+
+            break;
+        case MONSTER_HAMMER_SCOUT: // 310
+
+            break;
+        case MONSTER_LANCE_SCOUT: // 311
+
+            break;
+        case MONSTER_BOW_SCOUT: // 312
+
+            break;
+        case MONSTER_WEREWOLF: // 313
+
+            break;
+        case MONSTER_SCOUT_HERO: // 314
+
+            break;
+        case MONSTER_WEREWOLF_HERO: // 315
+
+            break;
+        case MONSTER_VALAM: // 316
+
+            break;
+        case MONSTER_SOLAM: // 317
+
+            break;
+        case MONSTER_SCOUT: // 318
+
+            break;
+        case MONSTER_AEGIS_7: // 331
+
+            break;
+        case MONSTER_ROGUE_CENTURION_7: // 332
+
+            break;
+        case MONSTER_BLOOD_SOLDIER_7: // 333
+
+            break;
+        case MONSTER_DEATH_ANGEL_7: // 334
+
+            break;
+        case MONSTER_NECRON_7: // 335
+
+            break;
+        case MONSTER_DEATH_CENTURION_7: // 336
+
+            break;
+        case MONSTER_SCHRIKER_7: // 337
+
+            break;
+        case MONSTER_ILLUSION_OF_KUNDUN_6: // 338
+            break;
+        case MONSTER_SORAM: // 341
+
+            break;
+        case MONSTER_BALRAM: // 344
+
+            break;
+        case MONSTER_DEATH_SPIRIT: // 345
+
+            break;
+        case MONSTER_BALLISTA: // 348
+
+            break;
+        case MONSTER_BALGASS: // 349
+
+            break;
+        case MONSTER_BERSERKER: // 350
+
+            break;
+        case MONSTER_SPLINTER_WOLF: // 351
+
+            break;
+        case MONSTER_IRON_RIDER: // 352
+
+            break;
+        case MONSTER_SATYROS: // 353
+
+            break;
+        case MONSTER_BLADE_HUNTER: // 354
+
+            break;
+        case MONSTER_KENTAUROS: // 355
+
+            break;
+        case MONSTER_GIGANTIS: // 356
+
+            break;
+        case MONSTER_GENOCIDER: // 357
+
+            break;
+        case MONSTER_PERSONA: // 358
+
+            break;
+        case MONSTER_TWIN_TAIL: // 359
+
+            break;
+        case MONSTER_DREADFEAR: // 360
+
+            break;
+        case MONSTER_NIGHTMARE: // 361
+
+            break;
+        case MONSTER_MAYA_HAND_LEFT: // 362
+
+            break;
+        case MONSTER_MAYA_HAND_RIGHT: // 363
+
+            break;
+        case MONSTER_MAYA: // 364
+
+            break;
+        case MONSTER_POUCH_OF_BLESSING: // 365
+
+            break;
+        case MONSTER_GATEWAY_MACHINE: // 367
+
+            break;
+        case MONSTER_ELPHIS: // 368
+
+            break;
+        case MONSTER_OSBOURNE: // 369
+
+            break;
+        case MONSTER_JERRIDON: // 370
+
+            break;
+        case MONSTER_LEO_THE_HELPER: // 371
+
+            break;
+        case MONSTER_ELITE_SKILL_SOLDIER: // 372
+
+            break;
+        case MONSTER_JACK_OLANTERN: // 373
+
+            break;
+        case MONSTER_SANTA: // 374
+
+            break;
+        case MONSTER_CHAOS_CARD_MASTER: // 375
+
+            break;
+        case MONSTER_PAMELA_THE_SUPPLIER: // 376
+
+            break;
+        case MONSTER_ANGELA_THE_SUPPLIER: // 377
+
+            break;
+        case MONSTER_GAMEMASTER: // 378
+
+            break;
+        case MONSTER_FIREWORKS_GIRL: // 379
+
+            break;
+        case MONSTER_STONE_STATUE: // 380
+
+            break;
+        case MONSTER_MU_ALLIES_GENERAL: // 381
+
+            break;
+        case MONSTER_ILLUSION_ELDER: // 382
+
+            break;
+        case MONSTER_ALLIANCE_ITEM_STORAGE: // 383
+
+            break;
+        case MONSTER_ILLUSION_ITEM_STORAGE: // 384
+
+            break;
+        case MONSTER_MIRAGE: // 385
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT1_LIGHTNING: // 386
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT2_LIGHTNING: // 389
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT3_LIGHTNING: // 392
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT4_LIGHTNING: // 395
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT5_LIGHTNING: // 398
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT6_LIGHTNING: // 401
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT1_ICE: // 387
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT2_ICE: // 390
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT3_ICE: // 393
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT4_ICE: // 396
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT5_ICE: // 399
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT6_ICE: // 402
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT1_POISON: // 388
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT2_POISON: // 391
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT3_POISON: // 394
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT4_POISON: // 397
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT5_POISON: // 400
+
+            break;
+        case MONSTER_ILLUSION_SORCERER_SPIRIT6_POISON: // 403
+
+            break;
+        case MONSTER_MU_ALLIES: // 404
+
+            break;
+        case MONSTER_ILLUSION_SORCERER: // 405
+
+            break;
+        case MONSTER_PRIEST_DEVIN: // 406
+
+            break;
+        case MONSTER_WEREWOLF_QUARREL: // 407
+
+            break;
+        case MONSTER_GATEKEEPER: // 408
+
+            break;
+        case MONSTER_BALRAM_TRAINEE_SOLDIER: // 409
+
+            break;
+        case MONSTER_DEATH_SPIRIT_TRAINEE_SOLDIER: // 410
+
+            break;
+        case MONSTER_SORAM_TRAINEE_SOLDIER: // 411
+
+            break;
+        case MONSTER_DARK_ELF_TRAINEE_SOLDIER: // 412
+
+            break;
+        case MONSTER_LUNAR_RABBIT: // 413
+
+            break;
+        case MONSTER_HELPER_ELLEN: // 414
+
+            break;
+        case MONSTER_SILVIA: // 415
+
+            break;
+        case MONSTER_RHEA: // 416
+
+            break;
+        case MONSTER_MARCE: // 417
+
+            break;
+        case MONSTER_STRANGE_RABBIT: // 418
+
+            break;
+        case MONSTER_POLLUTED_BUTTERFLY: // 419
+
+            break;
+        case MONSTER_HIDEOUS_RABBIT: // 420
+
+            break;
+        case MONSTER_WEREWOLF2: // 421
+
+            break;
+        case MONSTER_CURSED_LICH: // 422
+
+            break;
+        case MONSTER_TOTEM_GOLEM: // 423
+
+            break;
+        case MONSTER_GRIZZLY: // 424
+
+            break;
+        case MONSTER_CAPTAIN_GRIZZLY: // 425
+
+            break;
+        case MONSTER_CHAOS_CASTLE_13: // 426
+
+            break;
+        case MONSTER_CHAOS_CASTLE_14: // 427
+
+            break;
+        case MONSTER_CHIEF_SKELETON_WARRIOR_8: // 428
+
+            break;
+        case MONSTER_CHIEF_SKELETON_ARCHER_8: // 429
+
+            break;
+        case MONSTER_DARK_SKULL_SOLDIER_8: // 430
+
+            break;
+        case MONSTER_GIANT_OGRE_8: // 431
+
+            break;
+        case MONSTER_RED_SKELETON_KNIGHT_8: // 432
+
+            break;
+        case MONSTER_MAGIC_SKELETON_8: // 433
+
+            break;
+        case MONSTER_GIGANTIS2: // 434
+
+            break;
+        case MONSTER_BERSERK: // 435
+
+            break;
+        case MONSTER_BALRAM_TRAINEE: // 436
+
+            break;
+        case MONSTER_SORAM_TRAINEE: // 437
+
+            break;
+        case MONSTER_PERSONA_DS7: // 438
+
+            break;
+        case MONSTER_DREADFEAR2: // 439
+
+            break;
+        case MONSTER_DARK_ELF: // 440
+
+            break;
+        case MONSTER_SAPIUNUS: // 441
+
+            break;
+        case MONSTER_SAPIDUO: // 442
+
+            break;
+        case MONSTER_SAPITRES: // 443
+
+            break;
+        case MONSTER_SHADOW_PAWN: // 444
+
+            break;
+        case MONSTER_SHADOW_KNIGHT: // 445
+
+            break;
+        case MONSTER_SHADOW_LOOK: // 446
+
+            break;
+        case MONSTER_THUNDER_NAPIN: // 447
+
+            break;
+        case MONSTER_GHOST_NAPIN: // 448
+
+            break;
+        case MONSTER_BLAZE_NAPIN: // 449
+
+            break;
+        case MONSTER_CHERRY_BLOSSOM_SPIRIT: // 450
+
+            break;
+        case MONSTER_CHERRY_BLOSSOM_TREE: // 451
+
+            break;
+        case MONSTER_SEED_MASTER: // 452
+
+            break;
+        case MONSTER_SEED_RESEARCHER: // 453
+
+            break;
+        case MONSTER_ICE_WALKER: // 454
+
+            break;
+        case MONSTER_GIANT_MAMMOTH: // 455
+
+            break;
+        case MONSTER_ICE_GIANT: // 456
+
+            break;
+        case MONSTER_COOLUTIN: // 457
+
+            break;
+        case MONSTER_IRON_KNIGHT: // 458
+
+            break;
+        case MONSTER_SELUPAN: // 459
+
+            break;
+        case MONSTER_SPIDER_EGGS_1: // 460
+
+            break;
+        case MONSTER_SPIDER_EGGS_2: // 461
+
+            break;
+        case MONSTER_SPIDER_EGGS_3: // 462
+
+            break;
+        case MONSTER_FIRE_FLAME_GHOST: // 463
+
+            break;
+        case MONSTER_REINIT_HELPER: // 464
+
+            break;
+        case MONSTER_SANTA_CLAUSE: // 465
+
+            break;
+        case MONSTER_EVIL_GOBLIN: // 466
+
+            break;
+        case MONSTER_SNOWMAN: // 467
+
+            break;
+        case MONSTER_LITTLE_SANTA_YELLOW: // 468
+
+            break;
+        case MONSTER_LITTLE_SANTA_GREEN: // 469
+
+            break;
+        case MONSTER_LITTLE_SANTA_RED: // 470
+
+            break;
+        case MONSTER_LITTLE_SANTA_BLUE: // 471
+
+            break;
+        case MONSTER_LITTLE_SANTA_WHITE: // 472
+
+            break;
+        case MONSTER_LITTLE_SANTA_BLACK: // 473
+
+            break;
+        case MONSTER_LITTLE_SANTA_ORANGE: // 474
+
+            break;
+        case MONSTER_LITTLE_SANTA_PINK: // 475
+
+            break;
+        case MONSTER_CURSED_SANTA: // 476
+
+            break;
+        case MONSTER_TRANSFORMED_SNOWMAN: // 477
+
+            break;
+        case MONSTER_DELGADO: // 478
+
+            break;
+        case MONSTER_GATEKEEPER_TITUS: // 479
+
+            break;
+        case MONSTER_ZOMBIE_FIGHTER: // 480
+
+            break;
+        case MONSTER_ZOMBIER: // 481
+
+            break;
+        case MONSTER_GLADIATOR: // 482
+
+            break;
+        case MONSTER_HELL_GLADIATOR: // 483
+
+            break;
+        case MONSTER_SLAUGHTERER: // 484
+
+            break;
+        case MONSTER_ASH_SLAUGHTERER: // 485
+
+            break;
+        case MONSTER_BLOOD_ASSASSIN: // 486
+
+            break;
+        case MONSTER_CRUEL_BLOOD_ASSASSIN: // 487
+
+            break;
+        case MONSTER_COLD_BLOODED_ASSASSIN: // 488
+
+            break;
+        case MONSTER_BURNING_LAVA_GIANT: // 489
+
+            break;
+        case MONSTER_LAVA_GIANT: // 490
+
+            break;
+        case MONSTER_RUTHLESS_LAVA_GIANT: // 491
+
+            break;
+        case MONSTER_MOSS_THE_MERCHANT: // 492
+
+            break;
+        case MONSTER_GOLDEN_DARK_KNIGHT: // 493
+
+            break;
+        case MONSTER_GOLDEN_DEVIL: // 494
+
+            break;
+        case MONSTER_GOLDEN_STONE_GOLEM: // 495
+
+            break;
+        case MONSTER_GOLDEN_CRUST: // 496
+
+            break;
+        case MONSTER_GOLDEN_SATYROS: // 497
+
+            break;
+        case MONSTER_GOLDEN_TWIN_TAIL: // 498
+
+            break;
+        case MONSTER_GOLDEN_IRON_KNIGHT: // 499
+
+            break;
+        case MONSTER_GOLDEN_NAPIN: // 500
+
+            break;
+        case MONSTER_GOLDEN_GREAT_DRAGON: // 501
+
+            break;
+        case MONSTER_GOLDEN_RABBIT: // 502
+
+            break;
+        case MONSTER_TRANSFORMED_PANDA: // 503
+
+            break;
+        case MONSTER_GAYION_THE_GLADIATOR: // 504
+
+            break;
+        case MONSTER_JERRY: // 505
+
+            break;
+        case MONSTER_RAYMOND: // 506
+
+            break;
+        case MONSTER_LUCAS: // 507
+
+            break;
+        case MONSTER_FRED: // 508
+
+            break;
+        case MONSTER_HAMMERIZE: // 509
+
+            break;
+        case MONSTER_DUAL_BERSERKER: // 510
+
+            break;
+        case MONSTER_DEVIL_LORD: // 511
+
+            break;
+        case MONSTER_QUARTER_MASTER: // 512
+
+            break;
+        case MONSTER_COMBAT_INSTRUCTOR: // 513
+
+            break;
+        case MONSTER_ATICLES_HEAD: // 514
+
+            break;
+        case MONSTER_DARK_GHOST: // 515
+
+            break;
+        case MONSTER_BANSHEE: // 516
+
+            break;
+        case MONSTER_HEAD_MOUNTER: // 517
+
+            break;
+        case MONSTER_DEFENDER: // 518
+
+            break;
+        case MONSTER_FORSAKER: // 519
+
+            break;
+        case MONSTER_OCELOT_THE_LORD: // 520
+
+            break;
+        case MONSTER_ERIC_THE_GUARD: // 521
+
+            break;
+        case MONSTER_ADVISER_JERINTEU: // 522
+
+            break;
+        case MONSTER_EVIL_GATE: // 524
+
+            break;
+        case MONSTER_LION_GATE: // 525
+
+            break;
+        case MONSTER_STATUE: // 526
+
+            break;
+        case MONSTER_STAR_GATE: // 527
+
+            break;
+        case MONSTER_RUSH_GATE: // 528
+
+            break;
+        case MONSTER_TERRIBLE_BUTCHER: // 529
+
+            break;
+        case MONSTER_MAD_BUTCHER: // 530
+
+            break;
+        case MONSTER_ICE_WALKER2: // 531
+
+            break;
+        case MONSTER_LARVA2: // 532
+
+            break;
+        case MONSTER_DOPPELGANGER: // 533
+
+            break;
+        case MONSTER_DOPPELGANGER_ELF: // 534
+
+            break;
+        case MONSTER_DOPPELGANGER_KNIGHT: // 535
+
+            break;
+        case MONSTER_DOPPELGANGER_WIZARD: // 536
+
+            break;
+        case MONSTER_DOPPELGANGER_MG: // 537
+
+            break;
+        case MONSTER_DOPPELGANGER_DL: // 538
+
+            break;
+        case MONSTER_DOPPELGANGER_SUM: // 539
+
+            break;
+        case MONSTER_DOPPELGANGER_LUGARD: // 540
+
+            break;
+        case MONSTER_COMPENSATION_BOX: // 541
+
+            break;
+        case MONSTER_GOLDEN_COMPENSATION_BOX: // 542
+
+            break;
+        case MONSTER_GENS_DUPRIAN: // 543
+
+            break;
+        case MONSTER_GENS_VANERT: // 544
+
+            break;
+        case MONSTER_CHRISTINE_THE_GENERAL_GOODS_MERCHANT: // 545
+
+            break;
+        case MONSTER_JEWELER_RAUL: // 546
+
+            break;
+        case MONSTER_MARKET_UNION_MEMBER_JULIA: // 547
+
+            break;
+        case MONSTER_TRANSFORMED_SKELETON: // 548
+
+            break;
+        case MONSTER_BLOODY_ORC: // 549
+
+            break;
+        case MONSTER_BLOODY_DEATH_RIDER: // 550
+
+            break;
+        case MONSTER_BLOODY_GOLEM: // 551
+
+            break;
+        case MONSTER_BLOODY_WITCH_QUEEN: // 552
+
+            break;
+        case MONSTER_BERSERKER_WARRIOR: // 553
+
+            break;
+        case MONSTER_KENTAUROS_WARRIOR: // 554
+
+            break;
+        case MONSTER_GIGANTIS_WARRIOR: // 555
+
+            break;
+        case MONSTER_GENOCIDER_WARRIOR: // 556
+
+            break;
+        case MONSTER_SAPI_QUEEN: // 557
+
+            break;
+        case MONSTER_ICE_NAPIN: // 558
+
+            break;
+        case MONSTER_SHADOW_MASTER: // 559
+
+            break;
+        case MONSTER_SAPI_QUEEN2: // 560
+
+            break;
+        case MONSTER_MEDUSA: // 561
+
+            break;
+        case MONSTER_DARK_MAMMOTH: // 562
+
+            break;
+        case MONSTER_DARK_GIANT: // 563
+
+            break;
+        case MONSTER_DARK_COOLUTIN: // 564
+
+            break;
+        case MONSTER_DARK_IRON_KNIGHT: // 565
+
+            break;
+        case MONSTER_MERCENARY_GUILD_FELICIA: // 566
+
+            break;
+        case MONSTER_PRIESTESS_VEINA: // 567
+
+            break;
+        case MONSTER_WANDERING_MERCHANT_ZYRO: // 568
+
+            break;
+        case MONSTER_VENOMOUS_CHAIN_SCORPION: // 569
+
+            break;
+        case MONSTER_BONE_SCORPION: // 570
+
+            break;
+        case MONSTER_ORCUS: // 571
+
+            break;
+        case MONSTER_GOLLOCK: // 572
+
+            break;
+        case MONSTER_CRYPTA: // 573
+
+            break;
+        case MONSTER_CRYPOS: // 574
+
+            break;
+        case MONSTER_CONDRA: // 575
+
+            break;
+        case MONSTER_NARCONDRA: // 576
+
+            break;
+        case MONSTER_LEINA_THE_GENERAL_GOODS_MERCHANT: // 577
+
+            break;
+        case MONSTER_WEAPONS_MERCHANT_BOLO: // 578
+
+            break;
+        case MONSTER_DAVID: // 579
+
+            break;
+        case MONSTER_CURSED_STATUE: // 658
+
+            break;
+        case MONSTER_CAPTURED_STONE_STATUE_1: // 659
+
+            break;
+        case MONSTER_CAPTURED_STONE_STATUE_2: // 660
+
+            break;
+        case MONSTER_CAPTURED_STONE_STATUE_3: // 661
+
+            break;
+        case MONSTER_CAPTURED_STONE_STATUE_4: // 662
+
+            break;
+        case MONSTER_CAPTURED_STONE_STATUE_5: // 663
+
+            break;
+        case MONSTER_CAPTURED_STONE_STATUE_6: // 664
+
+            break;
+        case MONSTER_CAPTURED_STONE_STATUE_7: // 665
+
+            break;
+        case MONSTER_CAPTURED_STONE_STATUE_8: // 666
+
+            break;
+        case MONSTER_CAPTURED_STONE_STATUE_9: // 667
+
+            break;
+        case MONSTER_CAPTURED_STONE_STATUE_10: // 668
+
+            break;
+        default:
+			break;
+
+        g_ConsoleDebug->Write(MCD_ERROR, L"monster type: %d", Type);
+
     }
-    break;
 
-    // Elf Helper (Special setup function + Joint)
-    case MONSTER_ELF_SOLDIER: // 257 - Handled separately because it uses MakeElfHelper first
-		o->SubType = MODEL_ELF_WIZARD; // Set SubType for Elf Helper
-		o->m_bpcroom = true; // Set specific flag
-        MakeElfHelper(c); // Call the helper function to set up equipment/wings
-        CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 42, o, 15.f); // Create joint effect
-        SetCharacterScale(c); // Apply scale after equipment is set
-        break;    
 
-    // Wolf Altars (Position, Visibility, HiddenMesh)
-    case MONSTER_WOLF_ALTAR1: // 205
-    case MONSTER_WOLF_ALTAR2: // 206
-    case MONSTER_WOLF_ALTAR3: // 207
-    case MONSTER_WOLF_ALTAR4: // 208
-    case MONSTER_WOLF_ALTAR5: // 209
-        o->Position[2] -= 10.0f; // Adjust Z position
-        o->HiddenMesh = -2;      // Set specific hidden mesh value
-        o->Visible = false;      // Start invisible
-        break;
-
-    // NPCs requiring CreateObject
-    case MONSTER_PAMELA_THE_SUPPLIER: // 376
-        o->Angle[2] = 0.f; // Set specific angle
-        CreateObject(MODEL_BC_BOX, o->Position, o->Angle); // Create associated object
-        break;
-    case MONSTER_ANGELA_THE_SUPPLIER: // 377
-        o->Angle[2] = 90.f; // Set specific angle
-        CreateObject(MODEL_BC_BOX, o->Position, o->Angle); // Create associated object
-        break;
-
-    case MONSTER_GOLDEN_ARCHER: // 236 - Handled separately because it uses player model but isn't a standard NPC setup
-        o->SubType = MODEL_SKELETON2;
-        // Scale and Level are set in config
-        break;
-
-        // Goblin Gate (Set initial action)
-    case MONSTER_GOBLIN_GATE: // 234
-        SetAction(o, 0); // Set initial action to idle/closed?
-        break;
-
-        // Elf Lala (Position Adjustment)
-    case MONSTER_ELF_LALA: // 242
-        o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 140.f;
-        break;
-
-        // Wolf Statue (Set Live to false)
-    case MONSTER_WOLF_STATUS: // 204
-        o->Live = false; // Make it non-interactive/targetable?
-        break;
-
-        // Gatekeeper (Position Adjustment)
-    case MONSTER_GATEKEEPER: // 408
-        o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 240.f;
-        break;
-
-        // Lunar Rabbit (SubType, Bone Registration)
-    case MONSTER_LUNAR_RABBIT: // 413
-        o->SubType = rand() % 3; // Random SubType
-        o->m_iAnimation = 0;     // Set initial animation index
-        // Bone registration (Do this AFTER ApplyMonsterSpecificLogic in CreateMonster)
-        // BoneManager::RegisterBone(c, L"Rabbit_1", 3);
-        // BoneManager::RegisterBone(c, L"Rabbit_2", 16);
-        // BoneManager::RegisterBone(c, L"Rabbit_3", 15);
-        // BoneManager::RegisterBone(c, L"Rabbit_4", 2);
-        break;
-
-        // NPCs with Position Adjustments
-    case MONSTER_ORACLE_LAYLA: // 259
-        o->Position[2] += 140.0f;
-        break;
-    case MONSTER_PRIESTESS_VEINA: // 567
-        o->Position[2] += 145.0f;
-        break;
-    case MONSTER_CHERRY_BLOSSOM_SPIRIT: // 450
-        o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 170.f;
-        break;
-
-        // NPCs/Monsters with Lifetime
-    case MONSTER_TRANSFORMED_SNOWMAN: // 477
-    case MONSTER_WANDERING_MERCHANT_ZYRO: // 568
-    case MONSTER_MOSS_THE_MERCHANT: // 492
-        o->LifeTime = 100; // Set initial lifetime
-        break;
-
-        // NPCs/Monsters with Global PlaySpeed Modifications (Keep separate if possible)
-    case MONSTER_DAVID: // 579
-        // WARNING: Modifies global model data
-        // Models[MODEL_LUCKYITEM_NPC].Actions[0].PlaySpeed = 0.45f;
-        // Models[MODEL_LUCKYITEM_NPC].Actions[1].PlaySpeed = 0.5f;
-        break;
-    case MONSTER_LITTLE_SANTA_YELLOW: // 468 to 475
-    case MONSTER_LITTLE_SANTA_GREEN:
-    case MONSTER_LITTLE_SANTA_RED:
-    case MONSTER_LITTLE_SANTA_BLUE:
-    case MONSTER_LITTLE_SANTA_WHITE:
-    case MONSTER_LITTLE_SANTA_BLACK:
-    case MONSTER_LITTLE_SANTA_ORANGE:
-    case MONSTER_LITTLE_SANTA_PINK:
-        // WARNING: Modifies global model data
-        // int modelIndex = MODEL_LITTLESANTA + (Type - 468);
-        // Models[modelIndex].Actions[...].PlaySpeed = ...;
-        break;
-
-        // Golden Twin Tail (Runtime State & Bone Registration)
-    case MONSTER_GOLDEN_TWIN_TAIL: // 498
-        o->Angle[0] = 0.0f; // Set initial angle
-        o->Gravity = 0.0f;  // Set initial gravity
-        o->Distance = (float)(rand() % 20) / 10.0f; // Set random distance
-        // Bone registration (Do this AFTER ApplyMonsterSpecificLogic in CreateMonster)
-        // BoneManager::RegisterBone(c, L"Twintail_Hair24", 16);
-        // BoneManager::RegisterBone(c, L"Twintail_Hair32", 24);
-        break;
-
-        // Golden Stone Golem (Bone Registration)
-    case MONSTER_GOLDEN_STONE_GOLEM: // 495
-        // Bone registration (Do this AFTER ApplyMonsterSpecificLogic in CreateMonster)
-        // BoneManager::RegisterBone(c, L"Monster101_L_Arm", 12);
-        // BoneManager::RegisterBone(c, L"Monster101_R_Arm", 20);
-        // BoneManager::RegisterBone(c, L"Monster101_Head", 6);
-        break;
-
-        // Red Dragon (Bounding Box Override)
-    case MONSTER_RED_DRAGON: // 57
-        Vector(200.f, 150.f, 280.f, o->BoundingBoxMax); // Override bounding box
-        break;
-
-        // Default case for monsters not explicitly handled above
-    default:
-        // Add any default logic needed after config application, if any.
-        // For example, if initialSubType was set to -1 in config, handle rand() here.
-        // if (config.initialSubType == -1 /* Or another indicator */) {
-        //     // Handle random SubType assignment if needed for other types
-        // }
-        break;
-    }
 }
