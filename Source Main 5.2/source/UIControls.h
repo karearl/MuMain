@@ -737,20 +737,17 @@ class IUIRenderText
 public:
     virtual bool Create(HDC hDC) = 0;
     virtual void Release() = 0;
-
+    virtual bool Resize(HDC hDC, int width, int height) = 0;
     virtual HDC GetFontDC() const = 0;
     virtual BYTE* GetFontBuffer() const = 0;
-
     virtual DWORD GetTextColor() const = 0;
     virtual DWORD GetBgColor() const = 0;
-
     virtual void SetTextColor(BYTE byRed, BYTE byGreen, BYTE byBlue, BYTE byAlpha) = 0;
     virtual void SetTextColor(DWORD dwColor) = 0;
     virtual void SetBgColor(BYTE byRed, BYTE byGreen, BYTE byBlue, BYTE byAlpha) = 0;
     virtual void SetBgColor(DWORD dwColor) = 0;
-
     virtual void SetFont(HFONT hFont) = 0;
-
+    virtual int GetLineHeight() const = 0;
     virtual void RenderText(int iPos_x, int iPos_y, const wchar_t* pszText, int iBoxWidth = 0, int iBoxHeight = 0,
         int iSort = RT3_SORT_LEFT, OUT SIZE* lpTextSize = NULL) = 0;
 };
@@ -759,36 +756,39 @@ typedef std::multimap<int, RENDER_TEXT_DATA, std::less<int> > RTMap;
 
 class CUIRenderTextOriginal : public IUIRenderText
 {
-    HDC	m_hFontDC;
+    HFONT m_hCurrentFont;
+    int   m_iLineHeight;
+    HDC   m_hFontDC;
     HBITMAP m_hBitmap;
     BYTE* m_pFontBuffer;
     DWORD m_dwTextColor, m_dwBackColor;
+    int   m_iCurrentBitmapWidth;
+    int   m_iCurrentBitmapHeight;
+
 public:
     CUIRenderTextOriginal();
     virtual ~CUIRenderTextOriginal();
 
     bool Create(HDC hDC);
     void Release();
-
+    bool Resize(HDC hDC, int width, int height);
     HDC GetFontDC() const;
     BYTE* GetFontBuffer() const;
-
     DWORD GetTextColor() const;
     DWORD GetBgColor() const;
-
     void SetTextColor(BYTE byRed, BYTE byGreen, BYTE byBlue, BYTE byAlpha);
     void SetTextColor(DWORD dwColor);
     void SetBgColor(BYTE byRed, BYTE byGreen, BYTE byBlue, BYTE byAlpha);
     void SetBgColor(DWORD dwColor);
-
     void SetFont(HFONT hFont);
-
+    int GetLineHeight() const;
     void RenderText(int iPos_x, int iPos_y, const wchar_t* pszText, int iBoxWidth = 0, int iBoxHeight = 0,
         int iSort = RT3_SORT_LEFT, OUT SIZE* lpTextSize = NULL);
 
 protected:
     void WriteText(int iOffset, int iWidth, int iHeight);
     void UploadText(int sx, int sy, int Width, int Height);
+    bool CreateInternalBitmap(HDC hDC, int width, int height);
 };
 
 class CUIRenderText
@@ -799,6 +799,8 @@ class CUIRenderText
     int m_iRenderTextType;
 
 public:
+    bool Resize(HDC hDC, int width, int height);
+    int GetLineHeight() const;
     virtual ~CUIRenderText();
 
     static CUIRenderText* GetInstance();

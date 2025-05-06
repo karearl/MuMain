@@ -11,11 +11,6 @@
 #include "NewUIManager.h"
 #include "NewUIMyInventory.h"
 
-
-
-
-
-
 namespace SEASON3B
 {
 
@@ -28,7 +23,7 @@ namespace SEASON3B
         {
             int Width;
             int Height;
-            wchar_t Text[32];  // For display in the UI
+            wchar_t Text[32]; // For display in the UI
         };
 
         enum IMAGE_LIST
@@ -102,7 +97,7 @@ namespace SEASON3B
         void RenderButtons();
 
         void ApplyResolutionChange();
-
+        int GetCurrentResolutionIndex();
     private:
         CNewUIManager* m_pNewUIMng;
         POINT						m_Pos;

@@ -93,7 +93,7 @@ extern unsigned int GenID();
 extern GLvoid KillGLWindow(GLvoid);
 extern void DestroyWindow();
 extern void DestroySound();
-
+void DeleteGameFonts();
 //#if defined _DEBUG || defined PBG_LOG_PACKET_WINSOCKERROR
 //	#include "./Utilities/Log/DebugAngel.h"
 //#define ExecutionLog	DebugAngel_Write

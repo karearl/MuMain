@@ -1718,10 +1718,12 @@ void CUIChatPalListBox::RenderInterface()
 
 int CUIChatPalListBox::GetRenderLinePos_y(int iLineNumber)
 {
+    int lineHeight = g_pRenderText->GetLineHeight();
+
     if (GetLineNum() > m_iNumRenderLine)
-        return (m_iPos_y - m_iHeight + (m_iNumRenderLine - 1) * 13 - iLineNumber * 13 + 3);
+        return (m_iPos_y - m_iHeight + (m_iNumRenderLine - 1) * lineHeight - iLineNumber * lineHeight + 3);
     else
-        return (m_iPos_y - m_iHeight + (GetLineNum() - 1) * 13 - iLineNumber * 13 + 3);
+        return (m_iPos_y - m_iHeight + (GetLineNum() - 1) * lineHeight - iLineNumber * lineHeight + 3);
 }
 
 BOOL CUIChatPalListBox::RenderDataLine(int iLineNumber)
@@ -2114,10 +2116,13 @@ void CUILetterListBox::RenderInterface()
 
 int CUILetterListBox::GetRenderLinePos_y(int iLineNumber)
 {
+    int lineHeight = g_pRenderText->GetLineHeight();
+    if (lineHeight <= 0) lineHeight = 13;
+
     if (GetLineNum() > m_iNumRenderLine)
-        return (m_iPos_y - m_iHeight + (m_iNumRenderLine - 1) * 13 - iLineNumber * 13 + 3);
+        return (m_iPos_y - m_iHeight + (m_iNumRenderLine - 1) * lineHeight - iLineNumber * lineHeight + 3);
     else
-        return (m_iPos_y - m_iHeight + (GetLineNum() - 1) * 13 - iLineNumber * 13 + 3);
+        return (m_iPos_y - m_iHeight + (GetLineNum() - 1) * lineHeight - iLineNumber * lineHeight + 3);
 }
 
 BOOL CUILetterListBox::RenderDataLine(int iLineNumber)
@@ -2603,10 +2608,9 @@ void CUIRenderText::SetBgColor(DWORD dwColor)
         m_pRenderText->SetBgColor(dwColor);
 }
 
-void CUIRenderText::SetFont(HFONT hFont)
+void CUIRenderText::SetFont(HFONT hFont) // Pass through
 {
-    if (m_pRenderText)
-        m_pRenderText->SetFont(hFont);
+    if (m_pRenderText) m_pRenderText->SetFont(hFont);
 }
 
 void CUIRenderText::RenderText(int iPos_x, int iPos_y, const wchar_t* pszText, int iBoxWidth /* = 0 */, int iBoxHeight /* = 0 */, int iSort /* = RT3_SORT_LEFT */, OUT SIZE* lpTextSize /* = NULL */)
@@ -2621,53 +2625,93 @@ CUIRenderTextOriginal::CUIRenderTextOriginal()
     m_hFontDC = nullptr;
     m_hBitmap = nullptr;
     m_pFontBuffer = nullptr;
-    m_dwTextColor = m_dwBackColor = 0;
+    m_dwTextColor = 0xFFFFFFFF;
+    m_dwBackColor = 0;
+    m_hCurrentFont = NULL;
+    m_iLineHeight = 13;
+    m_iCurrentBitmapWidth = 0;
+    m_iCurrentBitmapHeight = 0;
+}
+int CUIRenderTextOriginal::GetLineHeight() const
+{
+    return (m_iLineHeight > 0) ? m_iLineHeight : 13;
 }
 CUIRenderTextOriginal::~CUIRenderTextOriginal() { Release(); }
-
-bool CUIRenderTextOriginal::Create(HDC hDC)
+bool CUIRenderTextOriginal::CreateInternalBitmap(HDC hDC, int width, int height)
 {
-    BITMAPINFO* DIB_INFO;
-    DIB_INFO = (BITMAPINFO*)new BYTE[sizeof(BITMAPINFOHEADER) + sizeof(PALETTEENTRY) * 256];
+    // Release existing resources first
+    if (m_hFontDC) { DeleteDC(m_hFontDC); m_hFontDC = nullptr; }
+    if (m_hBitmap) { DeleteObject(m_hBitmap); m_hBitmap = nullptr; }
+    m_pFontBuffer = nullptr; // DIBSection buffer is managed by the HBITMAP
+
+    if (!hDC) return false;
+
+    BITMAPINFO* DIB_INFO = (BITMAPINFO*)new BYTE[sizeof(BITMAPINFOHEADER) + sizeof(PALETTEENTRY) * 256];
+    if (!DIB_INFO) return false;
+
     memset(DIB_INFO, 0x00, sizeof(BITMAPINFOHEADER));
     DIB_INFO->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    DIB_INFO->bmiHeader.biWidth = 640 * g_fScreenRate_x;		//. 640
-    DIB_INFO->bmiHeader.biHeight = -(480 * g_fScreenRate_y);		//. 480
+    // Use actual width/height needed for the buffer (might be screen size or a fixed texture size)
+    // Using screen size might be large; consider a fixed size texture atlas approach if performance is an issue.
+    // For now, let's use the screen size like the original code.
+    m_iCurrentBitmapWidth = width;
+    m_iCurrentBitmapHeight = height;
+    DIB_INFO->bmiHeader.biWidth = m_iCurrentBitmapWidth;
+    DIB_INFO->bmiHeader.biHeight = -m_iCurrentBitmapHeight; // Negative for top-down DIB
     DIB_INFO->bmiHeader.biPlanes = 1;
-    DIB_INFO->bmiHeader.biBitCount = 24;
+    DIB_INFO->bmiHeader.biBitCount = 24; // Still using 24-bit? Might want 32 for alpha consistency.
     DIB_INFO->bmiHeader.biCompression = BI_RGB;
 
     m_hBitmap = CreateDIBSection(hDC, DIB_INFO, DIB_RGB_COLORS, (void**)&m_pFontBuffer, nullptr, NULL);
-    m_hFontDC = CreateCompatibleDC(hDC);
-    SelectObject(m_hFontDC, m_hBitmap);
-    SelectObject(m_hFontDC, g_hFont);
-    m_dwBackColor = 0;				//. Default Background Color;
-    m_dwTextColor = 0xFFFFFFFF;		//. Default Text Color
-
     delete[] DIB_INFO;
 
-    if (nullptr == m_hFontDC || nullptr == m_hBitmap)
-    {
-        Release();
-        return false;
+    if (!m_hBitmap) {
+        g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal: CreateDIBSection failed!");
+        Release(); return false;
     }
+
+    m_hFontDC = CreateCompatibleDC(hDC);
+    if (!m_hFontDC) {
+        g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal: CreateCompatibleDC failed!");
+        Release(); return false;
+    }
+
+    SelectObject(m_hFontDC, m_hBitmap); // Select the DIB section into the memory DC
+    g_ConsoleDebug->Write(MCD_NORMAL, L"CUIRenderTextOriginal: Created internal bitmap/DC (%dx%d)", m_iCurrentBitmapWidth, m_iCurrentBitmapHeight);
     return true;
+}
+bool CUIRenderTextOriginal::Create(HDC hDC)
+{
+    Release(); // Ensure clean state
+    // Create with initial screen dimensions
+    return CreateInternalBitmap(hDC, (int)(640 * g_fScreenRate_x), (int)(480 * g_fScreenRate_y));
 }
 void CUIRenderTextOriginal::Release()
 {
-    if (m_hFontDC != nullptr)
-    {
-        DeleteDC(m_hFontDC);
-        m_hFontDC = nullptr;
-        m_pFontBuffer = nullptr;
-    }
-    if (m_hBitmap != nullptr)
-    {
-        DeleteObject(m_hBitmap);
-        m_hBitmap = nullptr;
-    }
+    if (m_hFontDC) { DeleteDC(m_hFontDC); m_hFontDC = nullptr; }
+    if (m_hBitmap) { DeleteObject(m_hBitmap); m_hBitmap = nullptr; }
+    m_pFontBuffer = nullptr;
+    m_hCurrentFont = NULL;
+    m_iLineHeight = 13;
+    m_iCurrentBitmapWidth = 0;
+    m_iCurrentBitmapHeight = 0;
 }
-
+bool CUIRenderTextOriginal::Resize(HDC hDC, int width, int height)
+{
+    g_ConsoleDebug->Write(MCD_NORMAL, L"CUIRenderTextOriginal::Resize called (%dx%d)", width, height);
+    // Recreate bitmap/DC with new dimensions
+    if (!CreateInternalBitmap(hDC, width, height)) {
+        return false;
+    }
+    // Reapply the currently stored font and update metrics
+    if (m_hCurrentFont) {
+        SetFont(m_hCurrentFont); // Call SetFont again to select font and update metrics
+    }
+    else {
+        SetFont(g_hFont); // Fallback to global font if current isn't set
+    }
+    return true;
+}
 HDC CUIRenderTextOriginal::GetFontDC() const { return m_hFontDC; }
 BYTE* CUIRenderTextOriginal::GetFontBuffer() const { return m_pFontBuffer; }
 
@@ -2685,7 +2729,80 @@ void CUIRenderTextOriginal::SetBgColor(BYTE byRed, BYTE byGreen, BYTE byBlue, BY
 }
 void CUIRenderTextOriginal::SetBgColor(DWORD dwColor) { m_dwBackColor = dwColor; }
 
-void CUIRenderTextOriginal::SetFont(HFONT hFont) { SelectObject(m_hFontDC, hFont); }
+void CUIRenderTextOriginal::SetFont(HFONT hFont)
+{
+    // Check if font is already set (optimization)
+    if (hFont == m_hCurrentFont && m_hCurrentFont != NULL) { // Added NULL check for safety
+        // Ensure it's still selected in the DC in case something else changed it
+        SelectObject(m_hFontDC, m_hCurrentFont);
+        return;
+    }
+
+    g_ConsoleDebug->Write(MCD_NORMAL, L"CUIRenderTextOriginal::SetFont - Attempting to set HFONT=0x%p", hFont);
+
+    // Store the new font handle FIRST
+    m_hCurrentFont = hFont;
+
+    // --- Safety Checks ---
+    if (!m_hFontDC) {
+        g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal::SetFont - m_hFontDC is NULL!");
+        m_iLineHeight = 13; // Use default
+        return;
+    }
+    // Check if DC is valid using GetObjectType (specific to GDI objects)
+    if (GetObjectType(m_hFontDC) == 0) { // 0 indicates error or invalid handle type
+        DWORD dwError = GetLastError(); // Get error code if GetObjectType fails
+        g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal::SetFont - m_hFontDC appears invalid! GetObjectType=0, GLE=%d", dwError);
+        m_iLineHeight = 13;
+        return;
+    }
+    if (!m_hCurrentFont) {
+        g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal::SetFont - hFont passed is NULL!");
+        m_iLineHeight = 13; // Use default
+        return;
+    }
+    // --- End Safety Checks ---
+
+
+    // Select the new font into the DC
+    HGDIOBJ hOldFont = SelectObject(m_hFontDC, m_hCurrentFont);
+
+    // Check for failure (NULL for fonts indicates failure)
+    if (hOldFont == NULL) // Removed HGDI_ERROR check as it's for regions
+    {
+        DWORD dwError = GetLastError(); // Check error code immediately
+        g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal::SetFont - SelectObject FAILED! Error: %d. Font Handle: 0x%p, DC: 0x%p", dwError, m_hCurrentFont, m_hFontDC);
+        m_iLineHeight = 13; // Use default line height on failure
+        // Do not proceed to GetTextMetrics if selection failed
+    }
+    else
+    {
+        // Selection succeeded, NOW get metrics for the newly selected font
+        TEXTMETRIC tm;
+        if (GetTextMetrics(m_hFontDC, &tm))
+        {
+            m_iLineHeight = tm.tmHeight + tm.tmExternalLeading; // Update line height
+            // Log only on actual success
+            // g_ConsoleDebug->Write(MCD_NORMAL, L"CUIRenderTextOriginal::SetFont - Updated metrics. New Line Height: %d", m_iLineHeight);
+        }
+        else {
+            DWORD dwError = GetLastError();
+            g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal::SetFont - GetTextMetrics failed AFTER successful SelectObject! Error: %d", dwError);
+            m_iLineHeight = 13; // Fallback
+        }
+        // Keep the new font selected in m_hFontDC
+    }
+}
+int CUIRenderText::GetLineHeight() const
+{
+    if (m_pRenderText) return m_pRenderText->GetLineHeight();
+    return 13;
+}
+bool CUIRenderText::Resize(HDC hDC, int width, int height)
+{
+    if (m_pRenderText) return m_pRenderText->Resize(hDC, width, height);
+    return false;
+}
 
 /// \brief Reads the Picture created by GDI and copies it to the texture bitmap.
 void CUIRenderTextOriginal::WriteText(int iOffset, int iWidth, int iHeight)

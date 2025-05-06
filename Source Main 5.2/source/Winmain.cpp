@@ -90,10 +90,10 @@ HWND      g_hWnd = NULL;
 HINSTANCE g_hInst = NULL;
 HDC       g_hDC = NULL;
 HGLRC     g_hRC = NULL;
-HFONT     g_hFont = NULL;
-HFONT     g_hFontBold = NULL;
-HFONT     g_hFontBig = NULL;
-HFONT     g_hFixFont = NULL;
+extern HFONT     g_hFont = NULL;
+extern HFONT     g_hFontBold = NULL;
+extern HFONT     g_hFontBig = NULL;
+extern HFONT     g_hFixFont = NULL;
 
 CTimer* g_pTimer = new CTimer();    // performance counter.
 bool      Destroy = false;
@@ -383,7 +383,7 @@ void DestroyWindow()
     leaf::CRegKey regkey;
     regkey.SetKey(leaf::CRegKey::_HKEY_CURRENT_USER, L"SOFTWARE\\Webzen\\Mu\\Config");
     regkey.WriteDword(L"VolumeLevel", g_pOption->GetVolumeLevel());
-
+    DeleteGameFonts();
     CUIMng::Instance().Release();
 
 #ifdef MOVIE_DIRECTSHOW
@@ -487,10 +487,137 @@ int g_iMousePopPosition_y = 0;
 extern int TimeRemain;
 extern bool EnableFastInput;
 
+void ResizeOpenGLView(int width, int height)
+{
+    if (height <= 0) { // Prevent division by zero
+        height = 1;
+    }
+
+    // 1. Set Viewport (Covers the entire new client area)
+    glViewport(0, 0, width, height);
+    g_ConsoleDebug->Write(MCD_NORMAL, L"ResizeOpenGLView: Set glViewport(%d, %d)", width, height);
+
+    // 2. Set Projection Matrix
+    glMatrixMode(GL_PROJECTION); // Switch to the projection matrix stack
+    glLoadIdentity();            // Reset the projection matrix
+
+    // Calculate the new aspect ratio
+    float aspect = (float)width / (float)height;
+
+    // *** YOU MUST FIND AND REPLACE THESE VALUES ***
+    // Look in your graphics initialization code for the original call
+    // to gluPerspective (or glOrtho/glFrustum) and use those values here.
+    double fovY = 60.0;     // EXAMPLE Field of View (Degrees) - FIND YOURS
+    double zNear = 10.0;    // EXAMPLE Near Plane - FIND YOURS
+    double zFar = 20000.0;  // EXAMPLE Far Plane - FIND YOURS
+    // *********************************************
+
+    // Assuming you use gluPerspective:
+    gluPerspective(fovY, (GLdouble)aspect, zNear, zFar);
+    g_ConsoleDebug->Write(MCD_NORMAL, L"ResizeOpenGLView: Set gluPerspective(FOV=%.1f, Aspect=%.2f, Near=%.1f, Far=%.1f)", fovY, aspect, zNear, zFar);
+
+    // If you use glOrtho instead (e.g., for 2D):
+    // glOrtho(0.0, (double)width, 0.0, (double)height, -1.0, 1.0); // Adjust parameters as needed
+    // g_ConsoleDebug->Write(MCD_NORMAL, L"ResizeOpenGLView: Set glOrtho(0, %d, 0, %d, -1, 1)", width, height);
+
+    // 3. Switch back to ModelView Matrix (Important!)
+    glMatrixMode(GL_MODELVIEW);
+    // Usually, glLoadIdentity() for ModelView is done at the start of the rendering frame.
+}
+
+void DeleteGameFonts() {
+    if (g_hFont) { DeleteObject((HGDIOBJ)g_hFont); g_hFont = NULL; }
+    if (g_hFontBold) { DeleteObject((HGDIOBJ)g_hFontBold); g_hFontBold = NULL; }
+    if (g_hFontBig) { DeleteObject((HGDIOBJ)g_hFontBig); g_hFontBig = NULL; }
+    if (g_hFixFont) { DeleteObject((HGDIOBJ)g_hFixFont); g_hFixFont = NULL; }
+    g_ConsoleDebug->Write(MCD_NORMAL, L"Deleted existing game fonts.");
+}
+
+void CreateGameFonts() {
+    // Calculate new font sizes based on the CURRENT WindowHeight global
+    int FontHeight = static_cast<int>(std::ceil(12 + ((WindowHeight - 480) / 200.f)));
+    int iFontSize = FontHeight - 1;
+    int nFixFontHeight = WindowHeight <= 600 ? 14 : 15; // Or adjust as needed
+    int nFixFontSize = nFixFontHeight - 1;
+    g_ConsoleDebug->Write(MCD_NORMAL, L"CreateGameFonts: WindowHeight=%d, FontHeight=%d, iFontSize=%d, nFixFontSize=%d", WindowHeight, FontHeight, iFontSize, nFixFontSize);
+
+    // Create the new fonts and CHECK return values
+    g_hFont = CreateFont(iFontSize, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Tahoma");
+    if (!g_hFont) g_ConsoleDebug->Write(MCD_ERROR, L"CreateGameFonts: CreateFont for g_hFont FAILED!");
+
+    g_hFontBold = CreateFont(iFontSize, 0, 0, 0, FW_SEMIBOLD, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Tahoma");
+    if (!g_hFontBold) g_ConsoleDebug->Write(MCD_ERROR, L"CreateGameFonts: CreateFont for g_hFontBold FAILED!");
+
+    g_hFontBig = CreateFont(iFontSize * 2, 0, 0, 0, FW_SEMIBOLD, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Tahoma");
+     if (!g_hFontBig) g_ConsoleDebug->Write(MCD_ERROR, L"CreateGameFonts: CreateFont for g_hFontBig FAILED!");
+
+    g_hFixFont = CreateFont(nFixFontSize, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Tahoma");
+     if (!g_hFixFont) g_ConsoleDebug->Write(MCD_ERROR, L"CreateGameFonts: CreateFont for g_hFixFont FAILED!");
+
+    g_ConsoleDebug->Write(MCD_NORMAL, L"CreateGameFonts: New g_hFont=0x%p", g_hFont);
+}
+
 LONG FAR PASCAL WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
     {
+    case WM_SIZE:
+    {
+        int newClientWidth = LOWORD(lParam);
+        int newClientHeight = HIWORD(lParam);
+        g_ConsoleDebug->Write(MCD_NORMAL, L"WM_SIZE received: %dx%d", newClientWidth, newClientHeight);
+
+        if (wParam == SIZE_MINIMIZED || newClientWidth <= 0 || newClientHeight <= 0) {
+            g_ConsoleDebug->Write(MCD_NORMAL, L"WM_SIZE: Minimized or invalid size, skipping graphics update.");
+            return 0;
+        }
+        WindowWidth = newClientWidth;
+        WindowHeight = newClientHeight;
+        g_fScreenRate_x = (float)WindowWidth / 640.f;
+        g_fScreenRate_y = (float)WindowHeight / 480.f;
+        // --- Update Graphics Context ---
+
+        // 1. Update OpenGL Viewport
+        glViewport(0, 0, newClientWidth, newClientHeight);
+        g_ConsoleDebug->Write(MCD_NORMAL, L"WM_SIZE: glViewport called.");
+
+
+        // 2. Update Projection Matrix (CRITICAL!)
+        // You MUST recalculate your projection matrix based on the new aspect ratio
+        // Find where this is done initially and call that logic again.
+        // EXAMPLE: If you have a function for this:
+        // ResizeOpenGLProjection(newClientWidth, newClientHeight);
+        g_ConsoleDebug->Write(MCD_NORMAL, L"WM_SIZE: *** NEED TO UPDATE PROJECTION MATRIX HERE ***");
+        ResizeOpenGLView(newClientWidth, newClientHeight);
+
+        // 3. Recreate Fonts and Update Text Renderer (Removed the height check)
+        g_ConsoleDebug->Write(MCD_NORMAL, L"WM_SIZE: Updating globals and recreating fonts for %dx%d.", newClientWidth, newClientHeight);
+
+
+        DeleteGameFonts();   // Delete the old fonts
+        CreateGameFonts();   // Create new fonts with the updated WindowHeight
+
+        if (g_pRenderText && g_hDC) { // Ensure renderer and DC exist
+            if (!g_pRenderText->Resize(g_hDC, WindowWidth, WindowHeight)) { // Pass main DC and new SIZE
+                g_ConsoleDebug->Write(MCD_ERROR, L"WM_SIZE: Failed to resize g_pRenderText!");
+            }
+            else {
+                g_ConsoleDebug->Write(MCD_NORMAL, L"WM_SIZE: Resized and updated g_pRenderText.");
+            }
+            // Note: Resize should internally call SetFont again or handle metrics.
+            // If Resize doesn't handle SetFont internally, you might still need:
+            // g_pRenderText->SetFont(g_hFont);
+        }
+
+
+        // 4. Update UI System Layout (IF NEEDED)
+        // if (g_pNewUISystem) { g_pNewUISystem->Resize(newClientWidth, newClientHeight); }
+        g_ConsoleDebug->Write(MCD_NORMAL, L"WM_SIZE: *** NEED TO UPDATE UI LAYOUT HERE (if not automatic) ***");
+
+
+        return 0;
+    }
+    break; // End WM_SIZE
     case WM_SYSKEYDOWN:
     {
         return 0;
@@ -1044,7 +1171,7 @@ BOOL OpenInitFile()
         g_strSelectedML = g_aszMLSelection;
     }
     RegCloseKey(hKey);
-
+    g_bUseWindowMode = TRUE;
     switch (m_Resolution)
     {
     case 0:
@@ -1397,6 +1524,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
         }
     }
 
+    CreateGameFonts();
     g_ErrorReport.Write(L"\r\n");
     g_ErrorReport.WriteLogBegin();
     g_ErrorReport.AddSeparator();
@@ -1430,10 +1558,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
     }
 
     pMultiLanguage = new CMultiLanguage(g_strSelectedML);
-
-    if (g_iChatInputType == 1)
-        ShowCursor(FALSE);
-
+        
     g_ErrorReport.Write(L"> Enum display settings.\r\n");
     DEVMODE DevMode;
     DEVMODE* pDevmodes;
