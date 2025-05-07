@@ -132,6 +132,7 @@ void COptionWin::UpdateDisplay()
     m_aBtn[OW_BTN_AUTO_ATTACK].SetCheck(g_pOption->IsAutoAttack());
     m_aBtn[OW_BTN_WHISPER_ALARM].SetCheck(g_pOption->IsWhisperSound());
     m_aBtn[OW_BTN_SLIDE_HELP].SetCheck(g_pOption->IsSlideHelp());
+    m_aBtn[OW_BTN_FULLSCREEN].SetCheck(g_pOption->GetFullscreen());
     m_aSlider[OW_SLD_EFFECT_VOL].SetSlidePos(g_pOption->GetVolumeLevel());
     m_aSlider[OW_SLD_RENDER_LV].SetSlidePos(g_pOption->GetRenderLevel());
 }
@@ -158,6 +159,10 @@ void COptionWin::UpdateWhileActive(double dDeltaTick)
         CUIMng::Instance().HideWin(this);
         CUIMng::Instance().SetSysMenuWinShow(false);
     }
+	else if (m_aBtn[OW_BTN_FULLSCREEN].IsClick())
+	{
+		g_pOption->SetFullscreen(m_aBtn[OW_BTN_FULLSCREEN].IsCheck());
+	}
     else if (m_aSlider[OW_SLD_EFFECT_VOL].GetState())
     {
         int nSlidePos = m_aSlider[OW_SLD_EFFECT_VOL].GetSlidePos();

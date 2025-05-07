@@ -80,11 +80,15 @@ namespace SEASON3B
         void SetRenderAllEffects(bool bRenderAllEffects);
         bool GetRenderAllEffects();
 
+        void SetFullscreen(bool bFullscreen);
+        bool GetFullscreen();
 
         void SetResolutionIndex(int iIndex);
         int GetResolutionIndex();
         RESOLUTION_INFO GetCurrentResolution();
         void PopulateResolutionList();
+
+        bool LoadOptionsFromRegistry();
 
     private:
         void LoadImages();
@@ -110,6 +114,7 @@ namespace SEASON3B
         int m_iVolumeLevel;		// 볼륨조절
         int m_iRenderLevel;		// 효과제한
         bool m_bRenderAllEffects;
+		bool m_bFullscreen;	// Fullscreen mode
 
 
         int m_iResolutionIndex;           // Current resolution index

@@ -581,13 +581,6 @@ LONG FAR PASCAL WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         glViewport(0, 0, newClientWidth, newClientHeight);
         g_ConsoleDebug->Write(MCD_NORMAL, L"WM_SIZE: glViewport called.");
 
-
-        // 2. Update Projection Matrix (CRITICAL!)
-        // You MUST recalculate your projection matrix based on the new aspect ratio
-        // Find where this is done initially and call that logic again.
-        // EXAMPLE: If you have a function for this:
-        // ResizeOpenGLProjection(newClientWidth, newClientHeight);
-        g_ConsoleDebug->Write(MCD_NORMAL, L"WM_SIZE: *** NEED TO UPDATE PROJECTION MATRIX HERE ***");
         ResizeOpenGLView(newClientWidth, newClientHeight);
 
         // 3. Recreate Fonts and Update Text Renderer (Removed the height check)
@@ -604,16 +597,7 @@ LONG FAR PASCAL WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             else {
                 g_ConsoleDebug->Write(MCD_NORMAL, L"WM_SIZE: Resized and updated g_pRenderText.");
             }
-            // Note: Resize should internally call SetFont again or handle metrics.
-            // If Resize doesn't handle SetFont internally, you might still need:
-            // g_pRenderText->SetFont(g_hFont);
         }
-
-
-        // 4. Update UI System Layout (IF NEEDED)
-        // if (g_pNewUISystem) { g_pNewUISystem->Resize(newClientWidth, newClientHeight); }
-        g_ConsoleDebug->Write(MCD_NORMAL, L"WM_SIZE: *** NEED TO UPDATE UI LAYOUT HERE (if not automatic) ***");
-
 
         return 0;
     }
@@ -770,20 +754,10 @@ LONG FAR PASCAL WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
     break;
     case WM_SETCURSOR:
-        ShowCursor(false);
-        break;
-        //-----------------------------
-    default:
-        //if (msg >= WM_CHATROOMMSG_BEGIN && msg < WM_CHATROOMMSG_END)
-        //	g_pChatRoomSocketList->ProcessSocketMessage(msg - WM_CHATROOMMSG_BEGIN, WSAGETSELECTEVENT(lParam));
-        break;
-    }
-
-    MouseLButtonDBClick = false;
-    if (MouseLButtonPop == true && (g_iMousePopPosition_x != MouseX || g_iMousePopPosition_y != MouseY))
-        MouseLButtonPop = false;
-    switch (msg)
     {
+        ShowCursor(false);
+    }
+    break;
     case WM_MOUSEMOVE:
     {
         MouseX = (float)LOWORD(lParam) / g_fScreenRate_x;
@@ -908,6 +882,12 @@ LONG FAR PASCAL WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         TheBuffStateSystem().HandleWindowMessage(msg, wParam, lParam, result);
     }
 
+    MouseLButtonDBClick = false;
+    if (MouseLButtonPop == true && (g_iMousePopPosition_x != MouseX || g_iMousePopPosition_y != MouseY))
+    {
+        MouseLButtonPop = false;
+    }
+
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
@@ -990,12 +970,13 @@ HWND StartWindow(HINSTANCE hInstance, int nCmdShow)
 
     if (!RegisterClass(&wndClass))
     {
-        MessageBox(NULL, L"Windows aplication error!", L"Aplication Error", MB_ICONERROR);
+        MessageBox(NULL, L"Windows application error!", L"Application Error", MB_ICONERROR);
         return 0;
     }
 
     if (g_bUseWindowMode == TRUE)
     {
+        // Windowed mode - uses the specified game resolution with window decorations
         RECT rc = { 0, 0, WindowWidth, WindowHeight };
         AdjustWindowRect(&rc, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_BORDER | WS_CLIPCHILDREN, NULL);
         hWnd = CreateWindow(
@@ -1009,15 +990,23 @@ HWND StartWindow(HINSTANCE hInstance, int nCmdShow)
     }
     else
     {
+        // Fullscreen mode - use the current screen resolution, not the game's internal resolution
+        int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+        int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+        g_ConsoleDebug->Write(MCD_NORMAL, L"Starting in fullscreen mode with screen resolution: %dx%d",
+            screenWidth, screenHeight);
+
         hWnd = CreateWindowEx(
             WS_EX_TOPMOST | WS_EX_APPWINDOW,
             windowName, windowName,
             WS_POPUP,
             0, 0,
-            WindowWidth,
-            WindowHeight,
+            screenWidth,
+            screenHeight,
             NULL, NULL, hInstance, NULL);
     }
+
     return hWnd;
 }
 
@@ -1134,11 +1123,13 @@ BOOL OpenInitFile()
         }
         dwSize = sizeof(int);
         if (RegQueryValueEx(hKey, L"Resolution", 0, NULL, (LPBYTE)&m_Resolution, &dwSize) != ERROR_SUCCESS)
+        {
             m_Resolution = 1;
-
+        }
         if (0 == m_Resolution)
+        {
             m_Resolution = 1;
-
+        }
         dwSize = sizeof(int);
         if (RegQueryValueEx(hKey, L"ColorDepth", 0, NULL, (LPBYTE)&m_nColorDepth, &dwSize) != ERROR_SUCCESS)
         {
@@ -1171,7 +1162,7 @@ BOOL OpenInitFile()
         g_strSelectedML = g_aszMLSelection;
     }
     RegCloseKey(hKey);
-    g_bUseWindowMode = TRUE;
+
     switch (m_Resolution)
     {
     case 0:
@@ -1182,34 +1173,34 @@ BOOL OpenInitFile()
         WindowWidth = 800;
         WindowHeight = 600;
         break;
-    case 2:
-        WindowWidth = 1024;
-        WindowHeight = 768;
-        break;
+    //case 2:
+    //    WindowWidth = 1024;
+    //    WindowHeight = 768;
+    //    break;
     case 3:
         WindowWidth = 1280;
         WindowHeight = 1024;
         break;
-    case 4:
-        WindowWidth = 1600;
-        WindowHeight = 1200;
-        break;
-    case 5:
-        WindowWidth = 1864;
-        WindowHeight = 1400;
-        break;
-    case 6:
-        WindowWidth = 1600;
-        WindowHeight = 900;
-        break;
-    case 7:
-        WindowWidth = 1600;
-        WindowHeight = 1280;
-        break;
-    case 8:
-        WindowWidth = 1680;
-        WindowHeight = 1050;
-        break;
+    //case 4:
+    //    WindowWidth = 1600;
+    //    WindowHeight = 1200;
+    //    break;
+    //case 5:
+    //    WindowWidth = 1864;
+    //    WindowHeight = 1400;
+    //    break;
+    //case 6:
+    //    WindowWidth = 1600;
+    //    WindowHeight = 900;
+    //    break;
+    //case 7:
+    //    WindowWidth = 1600;
+    //    WindowHeight = 1280;
+    //    break;
+    //case 8:
+    //    WindowWidth = 1680;
+    //    WindowHeight = 1050;
+    //    break;
     case 9:
         WindowWidth = 1920;
         WindowHeight = 1080;

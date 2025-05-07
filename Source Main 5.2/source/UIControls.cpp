@@ -2732,15 +2732,15 @@ void CUIRenderTextOriginal::SetBgColor(DWORD dwColor) { m_dwBackColor = dwColor;
 void CUIRenderTextOriginal::SetFont(HFONT hFont)
 {
     // Check if font is already set (optimization)
-    if (hFont == m_hCurrentFont && m_hCurrentFont != NULL) { // Added NULL check for safety
+    if (hFont == m_hCurrentFont && m_hCurrentFont != NULL) {
         // Ensure it's still selected in the DC in case something else changed it
-        SelectObject(m_hFontDC, m_hCurrentFont);
+        if (m_hFontDC) {
+            SelectObject(m_hFontDC, m_hCurrentFont);
+        }
         return;
     }
 
-    g_ConsoleDebug->Write(MCD_NORMAL, L"CUIRenderTextOriginal::SetFont - Attempting to set HFONT=0x%p", hFont);
-
-    // Store the new font handle FIRST
+    // Store the new font handle
     m_hCurrentFont = hFont;
 
     // --- Safety Checks ---
@@ -2749,13 +2749,15 @@ void CUIRenderTextOriginal::SetFont(HFONT hFont)
         m_iLineHeight = 13; // Use default
         return;
     }
-    // Check if DC is valid using GetObjectType (specific to GDI objects)
-    if (GetObjectType(m_hFontDC) == 0) { // 0 indicates error or invalid handle type
-        DWORD dwError = GetLastError(); // Get error code if GetObjectType fails
+
+    // Check if DC is valid using GetObjectType
+    if (GetObjectType(m_hFontDC) == 0) {
+        DWORD dwError = GetLastError();
         g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal::SetFont - m_hFontDC appears invalid! GetObjectType=0, GLE=%d", dwError);
         m_iLineHeight = 13;
         return;
     }
+
     if (!m_hCurrentFont) {
         g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal::SetFont - hFont passed is NULL!");
         m_iLineHeight = 13; // Use default
@@ -2763,34 +2765,25 @@ void CUIRenderTextOriginal::SetFont(HFONT hFont)
     }
     // --- End Safety Checks ---
 
-
     // Select the new font into the DC
     HGDIOBJ hOldFont = SelectObject(m_hFontDC, m_hCurrentFont);
-
-    // Check for failure (NULL for fonts indicates failure)
-    if (hOldFont == NULL) // Removed HGDI_ERROR check as it's for regions
-    {
-        DWORD dwError = GetLastError(); // Check error code immediately
-        g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal::SetFont - SelectObject FAILED! Error: %d. Font Handle: 0x%p, DC: 0x%p", dwError, m_hCurrentFont, m_hFontDC);
-        m_iLineHeight = 13; // Use default line height on failure
-        // Do not proceed to GetTextMetrics if selection failed
+    if (hOldFont == NULL) {
+        // Selection failed
+        DWORD dwError = GetLastError();
+        g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal::SetFont - SelectObject failed! Error: %d", dwError);
+        m_iLineHeight = 13; // Fallback
+        return;
     }
-    else
-    {
-        // Selection succeeded, NOW get metrics for the newly selected font
-        TEXTMETRIC tm;
-        if (GetTextMetrics(m_hFontDC, &tm))
-        {
-            m_iLineHeight = tm.tmHeight + tm.tmExternalLeading; // Update line height
-            // Log only on actual success
-            // g_ConsoleDebug->Write(MCD_NORMAL, L"CUIRenderTextOriginal::SetFont - Updated metrics. New Line Height: %d", m_iLineHeight);
-        }
-        else {
-            DWORD dwError = GetLastError();
-            g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal::SetFont - GetTextMetrics failed AFTER successful SelectObject! Error: %d", dwError);
-            m_iLineHeight = 13; // Fallback
-        }
-        // Keep the new font selected in m_hFontDC
+
+    // Selection succeeded, get metrics for the newly selected font
+    TEXTMETRIC tm;
+    if (GetTextMetrics(m_hFontDC, &tm)) {
+        m_iLineHeight = tm.tmHeight + tm.tmExternalLeading;
+    }
+    else {
+        DWORD dwError = GetLastError();
+        g_ConsoleDebug->Write(MCD_ERROR, L"CUIRenderTextOriginal::SetFont - GetTextMetrics failed! Error: %d", dwError);
+        m_iLineHeight = 13; // Fallback
     }
 }
 int CUIRenderText::GetLineHeight() const
@@ -2801,6 +2794,7 @@ int CUIRenderText::GetLineHeight() const
 bool CUIRenderText::Resize(HDC hDC, int width, int height)
 {
     if (m_pRenderText) return m_pRenderText->Resize(hDC, width, height);
+
     return false;
 }
 
