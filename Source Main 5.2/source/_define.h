@@ -93,75 +93,75 @@ enum EPathDirection
     NORTHWEST = 0x8,
 };
 
-#define CUSTOM_CAMERA_DISTANCE1  200
-#define CUSTOM_CAMERA_DISTANCE2  -150
-#define RENDER_ITEMVIEW_FAR   2000.f
-#define RENDER_ITEMVIEW_NEAR  20.f
+constexpr auto CUSTOM_CAMERA_DISTANCE1  = 200;
+constexpr auto CUSTOM_CAMERA_DISTANCE2  = -150;
+constexpr auto RENDER_ITEMVIEW_FAR      = 2000.f;
+constexpr auto RENDER_ITEMVIEW_NEAR     = 20.f;
 
-#define MAX_MODEL_MONSTER	400
+constexpr auto MAX_MODEL_MONSTER	    = 400;
 
-#define MODEL_BODY_NUM               24
-#define MODEL_ITEM_COMMON_NUM		2
-#define MODEL_ITEM_COMMONCNT_RAGEFIGHTER	4
-#define DARKSIDE_TARGET_MAX		5
+constexpr auto MODEL_BODY_NUM           = 24;
+constexpr auto MODEL_ITEM_COMMON_NUM    = 2;
+constexpr auto MODEL_ITEM_COMMONCNT_RAGEFIGHTER	= 4;
+constexpr auto DARKSIDE_TARGET_MAX      = 5;
 
 //struct
-#define MAX_BOIDS         40
-#define MAX_FISHS         10
-#define MAX_MOUNTS    10
+constexpr auto MAX_BOIDS        = 40;
+constexpr auto MAX_FISHS        = 10;
+constexpr auto MAX_MOUNTS       = 10;
 //bodypart
-#define BODYPART_HEAD   0
-#define BODYPART_HELM   1
-#define BODYPART_ARMOR  2
-#define BODYPART_PANTS  3
-#define BODYPART_GLOVES 4
-#define BODYPART_BOOTS  5
-#define MAX_BODYPART    6
+constexpr auto BODYPART_HEAD    = 0;
+constexpr auto BODYPART_HELM    = 1;
+constexpr auto BODYPART_ARMOR   = 2;
+constexpr auto BODYPART_PANTS   = 3;
+constexpr auto BODYPART_GLOVES  = 4;
+constexpr auto BODYPART_BOOTS   = 5;
+constexpr auto MAX_BODYPART     = 6;
 
-#define TELEPORT_NONE   0
-#define TELEPORT_BEGIN  1 
-#define TELEPORT        2
-#define TELEPORT_END    3
-#define KIND_PLAYER  1
-#define KIND_MONSTER 2
-#define KIND_NPC     4
-#define KIND_TRAP    8
-#define KIND_OPERATE 16
-#define KIND_EDIT    32
-#define KIND_PET     64
-#define KIND_TMP     128
-#define MAX_OPERATES 200
-#define MAX_ITEMS 1000
+constexpr auto TELEPORT_NONE    = 0;
+constexpr auto TELEPORT_BEGIN   = 1;
+constexpr auto TELEPORT         = 2;
+constexpr auto TELEPORT_END     = 3;
+constexpr auto KIND_PLAYER      = 1;
+constexpr auto KIND_MONSTER     = 2;
+constexpr auto KIND_NPC         = 4;
+constexpr auto KIND_TRAP        = 8;
+constexpr auto KIND_OPERATE     = 16;
+constexpr auto KIND_EDIT        = 32;
+constexpr auto KIND_PET         = 64;
+constexpr auto KIND_TMP         = 128;
+constexpr auto MAX_OPERATES     = 200;
+constexpr auto MAX_ITEMS        = 1000;
 
-#define MAX_GUILD_LINE   14
-#define MAX_GUILDS       80
+constexpr auto MAX_GUILD_LINE   = 14;
+constexpr auto MAX_GUILDS       = 80;
 
-#define MAX_MARKS   2000
-#define MARK_EDIT   1999
+constexpr auto MAX_MARKS        = 2000;
+constexpr auto MARK_EDIT        = 1999;
 
-#define MAX_PARTYS   5
+constexpr auto MAX_PARTYS       = 5;
 
-#define TRADE_BUY    0
-#define TRADE_SELL   1
-#define TRADE_REPAIR 2
+constexpr auto TRADE_BUY        = 0;
+constexpr auto TRADE_SELL       = 1;
+constexpr auto TRADE_REPAIR     = 2;
 
-#define INVENTORY_SCALE        20
-#define COLUMN_INVENTORY       8
-#define ROW_INVENTORY          8
-#define COLUMN_SHOP_INVENTORY  8
-#define ROW_SHOP_INVENTORY     15
-#define COLUMN_TRADE_INVENTORY 8
-#define ROW_TRADE_INVENTORY    4
-#define COLUMN_MIX_INVENTORY   8
-#define ROW_MIX_INVENTORY      4
-#define ROW_INVENTORY_EXT      4
-#define MAX_INVENTORY_EXT_COUNT 4
-#define MAX_INVENTORY          (COLUMN_INVENTORY*ROW_INVENTORY)
-#define MAX_INVENTORY_EXT_ONE  (COLUMN_INVENTORY*ROW_INVENTORY_EXT)
-#define MAX_INVENTORY_EXT      (MAX_INVENTORY_EXT_ONE*MAX_INVENTORY_EXT_COUNT)
-#define MAX_SHOP_INVENTORY     (COLUMN_SHOP_INVENTORY*ROW_SHOP_INVENTORY)
-#define MAX_TRADE_INVENTORY    (COLUMN_TRADE_INVENTORY*ROW_TRADE_INVENTORY)
-#define MAX_MIX_INVENTORY      (COLUMN_MIX_INVENTORY*ROW_MIX_INVENTORY)
+constexpr auto INVENTORY_SCALE          = 20;
+constexpr auto COLUMN_INVENTORY         = 8;
+constexpr auto ROW_INVENTORY            = 8;
+constexpr auto COLUMN_SHOP_INVENTORY    = 8;
+constexpr auto ROW_SHOP_INVENTORY       = 15;
+constexpr auto COLUMN_TRADE_INVENTORY   = 8;
+constexpr auto ROW_TRADE_INVENTORY      = 4;
+constexpr auto COLUMN_MIX_INVENTORY     = 8;
+constexpr auto ROW_MIX_INVENTORY        = 4;
+constexpr auto ROW_INVENTORY_EXT        = 4;
+constexpr auto MAX_INVENTORY_EXT_COUNT  = 4;
+constexpr auto MAX_INVENTORY = COLUMN_INVENTORY * ROW_INVENTORY;
+constexpr auto MAX_INVENTORY_EXT_ONE = COLUMN_INVENTORY * ROW_INVENTORY_EXT;
+constexpr auto MAX_INVENTORY_EXT = MAX_INVENTORY_EXT_ONE * MAX_INVENTORY_EXT_COUNT;
+constexpr auto MAX_SHOP_INVENTORY = COLUMN_SHOP_INVENTORY * ROW_SHOP_INVENTORY;
+constexpr auto MAX_TRADE_INVENTORY = COLUMN_TRADE_INVENTORY * ROW_TRADE_INVENTORY;
+constexpr auto MAX_MIX_INVENTORY = COLUMN_MIX_INVENTORY * ROW_MIX_INVENTORY;
 
 /**
  * \brief Types of storage where items can be moved from/to.
@@ -188,19 +188,19 @@ enum struct STORAGE_TYPE
     LUCKYITEM_REFINERY = 16,
 };
 
-#define EQUIPMENT_WEAPON_RIGHT 0
-#define EQUIPMENT_WEAPON_LEFT  1
-#define EQUIPMENT_HELM         2
-#define EQUIPMENT_ARMOR        3
-#define EQUIPMENT_PANTS        4
-#define EQUIPMENT_GLOVES       5
-#define EQUIPMENT_BOOTS        6
-#define EQUIPMENT_WING         7
-#define EQUIPMENT_HELPER       8
-#define EQUIPMENT_AMULET       9
-#define EQUIPMENT_RING_RIGHT   10
-#define EQUIPMENT_RING_LEFT    11
-#define MAX_EQUIPMENT          12
+constexpr auto EQUIPMENT_WEAPON_RIGHT = 0;
+constexpr auto EQUIPMENT_WEAPON_LEFT  = 1;
+constexpr auto EQUIPMENT_HELM         = 2;
+constexpr auto EQUIPMENT_ARMOR        = 3;
+constexpr auto EQUIPMENT_PANTS        = 4;
+constexpr auto EQUIPMENT_GLOVES       = 5;
+constexpr auto EQUIPMENT_BOOTS        = 6;
+constexpr auto EQUIPMENT_WING         = 7;
+constexpr auto EQUIPMENT_HELPER       = 8;
+constexpr auto EQUIPMENT_AMULET       = 9;
+constexpr auto EQUIPMENT_RING_RIGHT   = 10;
+constexpr auto EQUIPMENT_RING_LEFT    = 11;
+constexpr auto MAX_EQUIPMENT          = 12;
 
 #define MAX_EQUIPMENT_INDEX			MAX_EQUIPMENT
 #define MAX_MY_INVENTORY_INDEX		(MAX_EQUIPMENT_INDEX + MAX_INVENTORY)
