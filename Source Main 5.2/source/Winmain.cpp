@@ -1654,6 +1654,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 #endif // !FOR_WORK
 #endif // PROTECT_SYSTEMKEY && NDEBUG
 
+	InitializeMonsterData();
+
     std::thread cpuUsageRecorder(RecordCpuUsage);
     const MSG msg = MainLoop();
 
