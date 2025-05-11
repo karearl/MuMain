@@ -18,6 +18,7 @@ extern std::vector<int> g_FreeCharacterIndices;
 struct MonsterConfigData {
     // Core Identification & Appearance
     int         modelType = MONSTER_MODEL_UNDEFINED;         // The MODEL_XXX ID for rendering
+	int         monsterModelType = MONSTER_MODEL_UNDEFINED; // The MODEL_XXX ID for monster type
     std::wstring name = L"";            // Default monster name
     float       scale = 1.0f;           // Default scale
 
@@ -37,16 +38,28 @@ struct MonsterConfigData {
     // Armor (for player-model NPCs like Marlon, Guards, Cursed Wizard)
     short       helmType = -1;
     short       helmLevel = 0;
+    BYTE        helmExcellentFlags = 0;
+    BYTE        helmAncientDiscriminator = 0;
     short       armorType = -1;
     short       armorLevel = 0;
+    BYTE        armorExcellentFlags = 0;
+    BYTE        armorAncientDiscriminator = 0;
     short       pantsType = -1;
     short       pantsLevel = 0;
+    BYTE        pantsExcellentFlags = 0;
+    BYTE        pantsAncientDiscriminator = 0;
     short       glovesType = -1;
     short       glovesLevel = 0;
+    BYTE        glovesExcellentFlags = 0;
+    BYTE        glovesAncientDiscriminator = 0;
     short       bootsType = -1;
     short       bootsLevel = 0;
+    BYTE        bootsExcellentFlags = 0;
+    BYTE        bootsAncientDiscriminator = 0;
     short       wingsType = -1;
     short       wingsLevel = 0;
+    BYTE        wingsExcellentFlags = 0;
+    BYTE        wingsAncientDiscriminator = 0;
     // Note: Helper/Pet type might be too complex for static config if it involves creating separate objects.
 
     // Rendering & Visual Flags/Settings
@@ -63,11 +76,14 @@ struct MonsterConfigData {
     int         initialLevel = 0;       // If monster level needs to be set
     int         initialSubType = 0;     // If SubType needs specific init (Use -1 if needs rand())
     bool        startsBloody = false;   // If it starts with the 'blood' effect
+    int         moveSpeed = 10;
     bool        m_bpcroom = false;      // PC Room flag for helpers?
+    bool        lightEnable = true;
 
     // Special Effect Flags (used to trigger logic in ApplyMonsterSpecificLogic or RenderCharacter)
     bool        needsGoldenEffect = false; // Flag for golden monster rendering logic
     bool        isBloodCastleGateOrStatue = false; // Flag for specific BC gate/statue logic
+    int         PKLevel = PVP_NEUTRAL;
 
     // Optional: Store bone names and IDs for registration
     std::vector<std::pair<const wchar_t*, int>> bonesToRegister;
@@ -76,7 +92,7 @@ struct MonsterConfigData {
     MonsterConfigData() = default;
 };
 
-void ApplyMonsterSpecificLogic(CHARACTER* c, EMonsterType Type, const MonsterConfigData& config);
+void ApplyMonsterSpecificLogic(CHARACTER* c, EMonsterType Type, const MonsterConfigData& config, int PositionX, int PositionY, int Key);
 void InitializeMonsterData();
 
 const int MAX_MONSTER_TYPE_INDEX = MONSTER_END + 1;
