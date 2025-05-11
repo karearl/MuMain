@@ -97,16 +97,17 @@ extern float g_fSpecialHeight;
 
 short   g_shCameraLevel = 0;
 
-/*#ifdef _DEBUG
+#ifdef _DEBUG
 bool EnableEdit    = true;
 #else
 bool EnableEdit    = false;
-#endif*/
+#endif
 
 int g_iLengthAuthorityCode = 20;
 
 wchar_t* szServerIpAddress = L"127.127.127.127";
 //char *szServerIpAddress = "210.181.89.215";
+//WORD g_ServerPort = 44405;
 WORD g_ServerPort = 55904;
 
 #ifdef MOVIE_DIRECTSHOW
@@ -1777,7 +1778,29 @@ bool MoveMainCamera()
         }
         else
         {
-            CameraAngle[0] = -48.5f;
+            if (Camera3DFov >= -10 && Camera3DFov < -5) // Range: [-12, -6]
+            {
+                CameraAngle[0] = -68.5f;
+                CameraDistance = 550.0f;
+                CameraPosition[2] = 525.0f;
+            }
+            else if (Camera3DFov >= -13 && Camera3DFov < -10) // Explicitly handle Range: [-14, -13]
+            {
+                // Define what should happen here, e.g.,
+                CameraAngle[0] = -72.0f;    // Example value
+                CameraDistance = 575.0f;    // Example value
+                CameraPosition[2] = 500.0f;   // Example value
+            }
+            else if (Camera3DFov <= -14) // Range: (... , -15]
+            {
+                CameraAngle[0] = -75.5f;
+                CameraDistance = 600.0f;
+                CameraPosition[2] = 470.0f;
+            }
+            else // This now clearly handles Camera3DFov >= -8 (Range: [-8, ...)
+            {
+                CameraAngle[0] = -48.5f;
+            }
         }
 
         CameraAngle[0] += EarthQuake;
@@ -1849,6 +1872,8 @@ bool MoveMainCamera()
     {
         if (MouseWheel)
         {
+            if (Camera3DFov >= 15) { Camera3DFov = 15; }
+            if (Camera3DFov <= -15) { Camera3DFov = -15; }
             Camera3DFov += MouseWheel;
             MouseWheel = 0;
         }
@@ -2443,7 +2468,7 @@ void MainScene(HDC hDC)
 
         g_PhysicsManager.Render();
 
-#ifndef  defined(_DEBUG) || defined(LDS_FOR_DEVELOPMENT_TESTMODE) || defined(LDS_UNFIXED_FIXEDFRAME_FORDEBUG)
+#ifndef defined(_DEBUG) || defined(LDS_FOR_DEVELOPMENT_TESTMODE) || defined(LDS_UNFIXED_FIXEDFRAME_FORDEBUG)
         BeginBitmap();
         wchar_t szDebugText[128];
         swprintf(szDebugText, L"FPS: %.1f Vsync: %d CPU: %.1f%%", FPS_AVG, IsVSyncEnabled(), CPU_AVG);
@@ -2454,9 +2479,9 @@ void MainScene(HDC hDC)
         g_pRenderText->SetFont(g_hFontBold);
         g_pRenderText->SetBgColor(0, 0, 0, 100);
         g_pRenderText->SetTextColor(255, 255, 255, 200);
-        g_pRenderText->RenderText(10, 26, szDebugText);
-        g_pRenderText->RenderText(10, 36, szMousePos);
-        g_pRenderText->RenderText(10, 46, szCamera3D);
+        g_pRenderText->RenderText(10, 390, szDebugText);
+        g_pRenderText->RenderText(10, 400, szMousePos);
+        g_pRenderText->RenderText(10, 410, szCamera3D);
         g_pRenderText->SetFont(g_hFont);
         EndBitmap();
 #endif // defined(_DEBUG) || defined(LDS_FOR_DEVELOPMENT_TESTMODE) || defined(LDS_UNFIXED_FIXEDFRAME_FORDEBUG)
