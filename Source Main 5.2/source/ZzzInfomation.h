@@ -62,7 +62,7 @@ public:
     CHARACTER_ATTRIBUTE Character;
     ITEM				Equipment[MAX_EQUIPMENT];
     DWORD				Gold;
-    int                 StorageGold;
+    uint64_t            StorageGold;
     MONSTER             Enemy;
     //output
     WORD    AttackDamageRight;

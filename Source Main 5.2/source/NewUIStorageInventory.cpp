@@ -200,7 +200,7 @@ void CNewUIStorageInventory::RenderBackImage()
 void CNewUIStorageInventory::RenderText()
 {
     wchar_t szTemp[128];
-    int nTempZen;
+    uint64_t nTempZen;
 
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->SetBgColor(0);

@@ -122,7 +122,7 @@ typedef struct
 {
     BYTE Code;
     BYTE Size;
-    BYTE byBuffer[255];
+    BYTE byBuffer[255]; 
 } PBMSG_ENCRYPTED, * LPPBMSG_ENCRYPTED;
 
 typedef struct
@@ -1121,10 +1121,10 @@ typedef struct {
 //receive gold
 typedef struct
 {
-    PBMSG_HEADER Header;
-    BYTE         Result;
-    DWORD        StorageGold;
-    DWORD        Gold;
+    PBMSG_HEADER    Header;
+    BYTE            Result;
+    uint64_t        StorageGold;
+    DWORD           Gold;
 } PRECEIVE_STORAGE_GOLD, * LPPRECEIVE_STORAGE_GOLD;
 
 //receive soccer time

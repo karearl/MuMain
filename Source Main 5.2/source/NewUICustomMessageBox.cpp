@@ -4506,7 +4506,7 @@ CALLBACK_RESULT SEASON3B::CZenReceiptMsgBoxLayout::ProcessOk(class CNewUIMessage
         return CALLBACK_CONTINUE;
     }
 
-    if (iInputZen <= (int)CharacterMachine->Gold)
+    if (iInputZen <= (DWORD)CharacterMachine->Gold)
     {
         SocketClient->ToGameServer()->SendVaultMoveMoneyRequest(0, iInputZen);
     }
@@ -4559,6 +4559,8 @@ CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::OkBtnDown(class CNewUIMessage
 
 CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
+    int maxIntValue = 2147483647;
+    long maxLongValue = 9223372036854775807;
     auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
@@ -4573,12 +4575,15 @@ CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::ProcessOk(class CNewUIMessage
         return CALLBACK_CONTINUE;
     }
 
-    if (iInputZen <= CharacterMachine->StorageGold && CharacterMachine->Gold + iInputZen <= 2000000000
-        )
+    if (iInputZen <= CharacterMachine->StorageGold)
     {
         if (!g_pStorageInventory->IsStorageLocked()
             || g_pStorageInventory->IsCorrectPassword())
         {
+            if (CharacterMachine->Gold + iInputZen > maxIntValue)
+            {
+                iInputZen = maxIntValue - CharacterMachine->Gold;
+            }
             SocketClient->ToGameServer()->SendVaultMoveMoneyRequest(1, iInputZen);
         }
         else
@@ -4587,7 +4592,7 @@ CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::ProcessOk(class CNewUIMessage
             SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CPasswordKeyPadMsgBoxLayout));
         }
     }
-    else if (CharacterMachine->Gold + iInputZen > 2000000000)
+    else if (CharacterMachine->Gold + iInputZen > maxLongValue)
     {
     }
     else

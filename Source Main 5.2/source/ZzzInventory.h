@@ -146,7 +146,7 @@ void AutoEquipmentChange(int sx, int sy, ITEM* Inv, int InvWidth, int InvHeight)
 #endif // AUTO_CHANGE_ITEM
 
 int CompareItem(ITEM item1, ITEM item2);
-void ConvertGold(double dGold, wchar_t* szText, int iDecimals = 0);
+void ConvertGold(uint64_t dGold, wchar_t* szText, int iDecimals = 0);
 void ConvertGold64(__int64 Gold, wchar_t* Text);
 void ConvertTaxGold(DWORD Gold, wchar_t* Text);
 void ConvertChaosTaxGold(DWORD Gold, wchar_t* Text);
@@ -184,7 +184,13 @@ void RenderRepairInfo(int sz, int sy, ITEM* ip, bool Sell);
 void RenderSkillInfo(int sx, int sy, int Type, int SkillNum = 0, int iRenderPoint = STRP_NONE);
 void RequireClass(ITEM_ATTRIBUTE* p);
 bool IsRequireClassRenderItem(const short sType);
-unsigned int getGoldColor(DWORD Gold);
+constexpr unsigned int MakeARGB(unsigned char a, unsigned char r, unsigned char g, unsigned char b) {
+    return (static_cast<unsigned int>(a) << 24) | // Alpha component
+        (static_cast<unsigned int>(r) << 16) | // Red component
+        (static_cast<unsigned int>(g) << 8) | // Green component
+        static_cast<unsigned int>(b);          // Blue component
+}
+unsigned int getGoldColor(uint64_t Gold);
 
 bool IsPartChargeItem(ITEM* pItem);
 bool IsHighValueItem(ITEM* pItem);

@@ -1,6 +1,7 @@
 ﻿///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cstdint>
 #include "stdafx.h"
 #include "UIManager.h"
 #include "ZzzOpenglUtil.h"
@@ -1095,29 +1096,76 @@ void ComputeItemInfo(int iHelpItem)
     }
 }
 
-unsigned int getGoldColor(DWORD Gold)
+// --- Define Gold Thresholds (from lowest to highest for clarity here, but checked highest to lowest in function) ---
+// You can adjust these values as needed for your game's economy.
+constexpr uint64_t GOLD_THRESHOLD_LOW = 100000ULL;           // 100 Thousand
+constexpr uint64_t GOLD_THRESHOLD_MEDIUM = 1000000ULL;          // 1 Million
+constexpr uint64_t GOLD_THRESHOLD_HIGH = 10000000ULL;         // 10 Million
+constexpr uint64_t GOLD_THRESHOLD_VERY_HIGH = 100000000ULL;        // 100 Million
+constexpr uint64_t GOLD_THRESHOLD_LEGENDARY = 1000000000ULL;       // 1 Billion
+constexpr uint64_t GOLD_THRESHOLD_MYTHIC = 100000000000ULL;     // 100 Billion (New)
+constexpr uint64_t GOLD_THRESHOLD_DIVINE = 10000000000000ULL;   // 10 Trillion (New)
+constexpr uint64_t GOLD_THRESHOLD_COSMIC = 1000000000000000ULL; // 1 Quadrillion (New)
+
+// --- Define Thematic Color Scheme for Gold Tiers ---
+// Colors progress to look more valuable/epic. Feel free to change these ARGB values!
+constexpr unsigned int COLOR_DEFAULT_WEALTH = MakeARGB(255, 230, 210, 150); // Very Pale/Dull Gold (Basic)
+constexpr unsigned int COLOR_LOW_RICHES = MakeARGB(255, 205, 127, 50);  // Bronze/Dull Gold (Modest Wealth)
+constexpr unsigned int COLOR_MEDIUM_RICHES = MakeARGB(255, 255, 255, 100); // Pale Bright Yellow (Prosperous)
+constexpr unsigned int COLOR_HIGH_RICHES = MakeARGB(255, 255, 215, 0);   // Rich Gold (Classic Gold color)
+constexpr unsigned int COLOR_VERY_HIGH_RICHES = MakeARGB(255, 255, 165, 0);   // Fiery Orange/Gold (Intense Wealth)
+constexpr unsigned int COLOR_LEGENDARY_RICHES = MakeARGB(255, 170, 0, 255); // Bright Purple (Epic/Magical Wealth)
+constexpr unsigned int COLOR_MYTHIC_TREASURE = MakeARGB(255, 0, 200, 200); // Vibrant Teal (Mythical Rarity) (New)
+constexpr unsigned int COLOR_DIVINE_FORTUNE = MakeARGB(255, 225, 225, 235); // Silvery White/Platinum (Divine Glow) (New)
+constexpr unsigned int COLOR_COSMIC_WEALTH = MakeARGB(255, 255, 0, 180); // Bright Cosmic Magenta (Ultimate Rarity) (New)
+
+
+unsigned int getGoldColor(uint64_t Gold)
 {
-    if (Gold >= 10000000)
+    // Check from the highest tier downwards
+    if (Gold >= GOLD_THRESHOLD_COSMIC)
     {
-        return  (255 << 24) + (0 << 16) + (0 << 8) + (255);
+        return COLOR_COSMIC_WEALTH;
     }
-    else if (Gold >= 1000000)
+    else if (Gold >= GOLD_THRESHOLD_DIVINE)
     {
-        return  (255 << 24) + (0 << 16) + (150 << 8) + (255);
+        return COLOR_DIVINE_FORTUNE;
     }
-    else if (Gold >= 100000)
+    else if (Gold >= GOLD_THRESHOLD_MYTHIC)
     {
-        return  (255 << 24) + (24 << 16) + (201 << 8) + (0);
+        return COLOR_MYTHIC_TREASURE;
+    }
+    else if (Gold >= GOLD_THRESHOLD_LEGENDARY)
+    {
+        return COLOR_LEGENDARY_RICHES;
+    }
+    else if (Gold >= GOLD_THRESHOLD_VERY_HIGH)
+    {
+        return COLOR_VERY_HIGH_RICHES;
+    }
+    else if (Gold >= GOLD_THRESHOLD_HIGH)
+    {
+        return COLOR_HIGH_RICHES;
+    }
+    else if (Gold >= GOLD_THRESHOLD_MEDIUM)
+    {
+        return COLOR_MEDIUM_RICHES;
+    }
+    else if (Gold >= GOLD_THRESHOLD_LOW)
+    {
+        return COLOR_LOW_RICHES;
     }
 
-    return  (255 << 24) + (150 << 16) + (220 << 8) + (255);
+    // Default color for gold amounts below the lowest defined threshold
+    return COLOR_DEFAULT_WEALTH;
 }
 
-void ConvertGold(double dGold, wchar_t* szText, int iDecimals /*= 0*/)
+
+void ConvertGold(uint64_t dGold, wchar_t* szText, int iDecimals /*= 0*/)
 {
     wchar_t szTemp[256];
     int iCipherCnt = 0;
-    auto dwValueTemp = (DWORD)dGold;
+    auto dwValueTemp = (uint64_t)dGold;
 
     while (dwValueTemp / 1000 > 0)
     {
@@ -1129,7 +1177,7 @@ void ConvertGold(double dGold, wchar_t* szText, int iDecimals /*= 0*/)
 
     while (iCipherCnt > 0)
     {
-        dwValueTemp = (DWORD)dGold;
+        dwValueTemp = (uint64_t)dGold;
         dwValueTemp = (dwValueTemp % (int)pow(10.f, (float)iCipherCnt)) / (int)pow(10.f, (float)(iCipherCnt - 3));
         swprintf(szTemp, L",%03d", dwValueTemp);
         wcscat(szText, szTemp);
