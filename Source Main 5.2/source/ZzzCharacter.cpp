@@ -14921,7 +14921,18 @@ void InitializeMonsterData()
     index = MONSTER_MARLON; // 229
     g_MonsterConfig[index].modelType = MODEL_PLAYER;
     g_MonsterConfig[index].name = L"MARLON";
-    g_MonsterConfig[index].kind = KIND_PLAYER;
+    g_MonsterConfig[index].kind = KIND_NPC;
+
+    g_MonsterConfig[index].weapon1Type = MODEL_BERDYSH;
+    g_MonsterConfig[index].weapon1Level = 8;
+    g_MonsterConfig[index].helmType = MODEL_PLATE_HELM;
+    g_MonsterConfig[index].helmLevel = 7;
+    g_MonsterConfig[index].armorType = MODEL_PLATE_ARMOR;
+    g_MonsterConfig[index].armorLevel = 7;
+    g_MonsterConfig[index].glovesType = MODEL_PLATE_GLOVES;
+    g_MonsterConfig[index].glovesLevel = 7;
+    g_MonsterConfig[index].bootsType = MODEL_PLATE_BOOTS;
+    g_MonsterConfig[index].bootsLevel = 7;
 
     index = MONSTER_ALEX; // 230
     g_MonsterConfig[index].modelType = MODEL_MERCHANT_MAN;
