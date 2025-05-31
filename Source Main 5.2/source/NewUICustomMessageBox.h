@@ -76,6 +76,7 @@ namespace SEASON3B
         void SetInputBoxOption(int iOption);
         void SetInputBoxPosition(int x, int y);
         void SetInputBoxSize(int width, int height);
+        int m_StatIndex;
 
     private:
         int SeparateText(const type_string& strMsg, DWORD dwColor, BYTE byFontType);
@@ -1067,6 +1068,17 @@ namespace SEASON3B
     };
 
     class CZenPaymentMsgBoxLayout : public TMsgBoxLayout<CNewUITextInputMsgBox>
+    {
+    public:
+        bool SetLayout();
+        static CALLBACK_RESULT ReturnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam);
+        static CALLBACK_RESULT OkBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam);
+        static CALLBACK_RESULT CancelBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam);
+    private:
+        static CALLBACK_RESULT ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam);
+    };
+
+    class CAddMultipleStatsMsgBoxLayout : public TMsgBoxLayout<CNewUITextInputMsgBox>
     {
     public:
         bool SetLayout();

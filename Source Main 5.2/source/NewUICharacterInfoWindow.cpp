@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "NewUICharacterInfoWindow.h"
+#include "NewUICustomMessageBox.h"
 #include "NewUISystem.h"
 #include "CharacterManager.h"
 #include "CSItemOption.h"
@@ -143,7 +144,12 @@ bool SEASON3B::CNewUICharacterInfoWindow::BtnProcess()
         {
             if (m_BtnStat[i].UpdateMouseEvent() == true)
             {
-                SocketClient->ToGameServer()->SendIncreaseCharacterStatPoint(i);
+                CreateMessageBox(MSGBOX_LAYOUT_CLASS(CAddMultipleStatsMsgBoxLayout));
+                auto* pMsgBox = CAddMultipleStatsMsgBoxLayout::GetMsgBox();
+                if (pMsgBox) 
+                {
+                    pMsgBox->m_StatIndex = i;
+                }
                 PlayBuffer(SOUND_CLICK01);
                 return true;
             }
