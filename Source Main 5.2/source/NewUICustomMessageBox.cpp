@@ -4651,12 +4651,6 @@ CALLBACK_RESULT SEASON3B::CAddMultipleStatsMsgBoxLayout::ProcessOk(class CNewUIM
         return CALLBACK_CONTINUE;
 
     uint32_t iInputAmount = _wtoi(strText);
-    if (iInputAmount == 0 || CharacterAttribute->LevelUpPoint == 0)
-    {
-        SEASON3B::CreateOkMessageBox(L"You have no attribute points left to add.");
-        return CALLBACK_BREAK;
-    }
-
     if (iInputAmount > CharacterAttribute->LevelUpPoint)
     {
         iInputAmount = CharacterAttribute->LevelUpPoint;
@@ -4677,8 +4671,6 @@ CALLBACK_RESULT SEASON3B::CAddMultipleStatsMsgBoxLayout::ProcessOk(class CNewUIM
 
     return CALLBACK_BREAK;
 }
-
-
 
 CALLBACK_RESULT SEASON3B::CAddMultipleStatsMsgBoxLayout::CancelBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
