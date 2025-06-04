@@ -31,6 +31,7 @@ using namespace SEASON3B;
 SEASON3B::CNewUITextInputMsgBox::CNewUITextInputMsgBox()
 {
     m_pInputBox = NULL;
+    m_StatIndex = -1;
 }
 
 SEASON3B::CNewUITextInputMsgBox::~CNewUITextInputMsgBox()
@@ -4602,6 +4603,76 @@ CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::ProcessOk(class CNewUIMessage
 }
 
 CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::CancelBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
+{
+    PlayBuffer(SOUND_CLICK01);
+    g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
+
+    return CALLBACK_BREAK;
+}
+
+bool SEASON3B::CAddMultipleStatsMsgBoxLayout::SetLayout()
+{
+    CNewUITextInputMsgBox* pMsgBox = GetMsgBox();
+    if (0 == pMsgBox)
+        return false;
+
+    if (false == pMsgBox->Create(MSGBOX_COMMON_TYPE_OKCANCEL, INPUTBOX_TYPE_NUMBER, INPUTBOX_WIDTH, INPUTBOX_HEIGHT, INPUTBOX_TEXTLIMIT))
+        return false;
+
+    pMsgBox->SetInputBoxOption(UIOPTION_NUMBERONLY | UIOPTION_PAINTBACK);
+    pMsgBox->AddMsg(L"Input the amount you wish to add.");
+    pMsgBox->AddCallbackFunc(CAddMultipleStatsMsgBoxLayout::ReturnDown, MSGBOX_EVENT_PRESSKEY_RETURN);
+    pMsgBox->AddCallbackFunc(CAddMultipleStatsMsgBoxLayout::OkBtnDown, MSGBOX_EVENT_USER_COMMON_OK);
+    pMsgBox->AddCallbackFunc(CAddMultipleStatsMsgBoxLayout::CancelBtnDown, MSGBOX_EVENT_USER_COMMON_CANCEL);
+
+    return true;
+}
+
+CALLBACK_RESULT SEASON3B::CAddMultipleStatsMsgBoxLayout::ReturnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
+{
+    return ProcessOk(pOwner, xParam);
+}
+
+CALLBACK_RESULT SEASON3B::CAddMultipleStatsMsgBoxLayout::OkBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
+{
+    return ProcessOk(pOwner, xParam);
+}
+
+CALLBACK_RESULT SEASON3B::CAddMultipleStatsMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
+{
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    if (!pMsgBox)
+        return CALLBACK_CONTINUE;
+
+    wchar_t strText[MAX_TEXT_LENGTH] = {};
+    pMsgBox->GetInputBoxText(strText);
+
+    if (wcslen(strText) == 0)
+        return CALLBACK_CONTINUE;
+
+    uint32_t iInputAmount = _wtoi(strText);
+    if (iInputAmount > CharacterAttribute->LevelUpPoint)
+    {
+        iInputAmount = CharacterAttribute->LevelUpPoint;
+    }
+
+    static const wchar_t* statCmds[] = { L"str", L"agi", L"vit", L"ene", L"cmd" };
+    if (pMsgBox->m_StatIndex < 0 || pMsgBox->m_StatIndex >= _countof(statCmds))
+        return CALLBACK_CONTINUE;
+
+    std::wstring command = L"/add ";
+    command += statCmds[pMsgBox->m_StatIndex];
+    command += L" " + std::to_wstring(iInputAmount);
+
+    SocketClient->ToGameServer()->SendPublicChatMessage(Hero->ID, command.c_str());
+
+    PlayBuffer(SOUND_CLICK01);
+    g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
+
+    return CALLBACK_BREAK;
+}
+
+CALLBACK_RESULT SEASON3B::CAddMultipleStatsMsgBoxLayout::CancelBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
